@@ -9,17 +9,25 @@ import java.util.Scanner;
 public interface DataReader {
 
 	/**
-	 * <p>Outputs the {@link LinkedList} of {@code long} elements.</p>
-	 * <p>Use when the data is consisted of integer numbers.</p>
+	 * <p>Creates the {@code String} variable which is a path to the text file.</p>
 	 */
 
-	static LinkedList<Long> readLongArray(int day) {
-		LinkedList<Long> table = new LinkedList<>();
+	static String createFilePath(int day){
 		String filePath;
 		if (day < 10)
 			filePath = "src\\main\\resources\\day0" + day + ".txt";
 		else
 			filePath = "src\\main\\resources\\day" + day + ".txt";
+		return filePath;
+	}
+
+	/**
+	 * <p>Outputs the {@link LinkedList} of {@code long} elements.</p>
+	 * <p>Use when the data is consisted of integer numbers.</p>
+	 */
+
+	static LinkedList<Long> readLongArray(String filePath) {
+		LinkedList<Long> table = new LinkedList<>();
 		File fileToRead = new File(filePath);
 		try {
 			Scanner fileScanner = new Scanner(fileToRead);
@@ -43,13 +51,8 @@ public interface DataReader {
 	 * <p>Use when the data is consisted of real numbers.</p>
 	 */
 
-	static LinkedList<Double> readDoubleArray(int day) {
+	static LinkedList<Double> readDoubleArray(String filePath) {
 		LinkedList<Double> table = new LinkedList<>();
-		String filePath;
-		if (day < 10)
-			filePath = "data\\day0" + day + ".txt";
-		else
-			filePath = "data\\day" + day + ".txt";
 		File fileToRead = new File(filePath);
 		try {
 			Scanner fileScanner = new Scanner(fileToRead);
@@ -73,13 +76,8 @@ public interface DataReader {
 	 * <p>Use when the data could be represented as simple array, similar to {@code readLongArray} and  {@code readDoubleArray}, but it contains non-number characters.</p>
 	 */
 
-	static LinkedList<String> readSimpleString(int day) {
+	static LinkedList<String> readSimpleString(String filePath) {
 		LinkedList<String> list = new LinkedList<>();
-		String filePath;
-		if (day < 10)
-			filePath = "data\\day0" + day + ".txt";
-		else
-			filePath = "data\\day" + day + ".txt";
 		File fileToRead = new File(filePath);
 		try {
 			Scanner fileScanner = new Scanner(fileToRead);
@@ -103,13 +101,8 @@ public interface DataReader {
 	 * <p>Use when the input is represented in a way that would require further, and more specific, analyze of each line.</p>
 	 */
 
-	static LinkedList<String> readAlchemyString(int day) {
+	static LinkedList<String> readAlchemyString(String filePath) {
 		LinkedList<String> alchemy = new LinkedList<>();
-		String filePath;
-		if (day < 10)
-			filePath = "data\\day0" + day + ".txt";
-		else
-			filePath = "data\\day" + day + ".txt";
 		File fileToRead = new File(filePath);
 		try {
 			Scanner fileScanner = new Scanner(fileToRead);
