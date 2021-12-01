@@ -17,9 +17,9 @@ public interface DataReader {
 		LinkedList<Long> table = new LinkedList<>();
 		String filePath;
 		if (day < 10)
-			filePath = "data\\day0" + day + ".txt";
+			filePath = "src\\main\\resources\\day0" + day + ".txt";
 		else
-			filePath = "data\\day" + day + ".txt";
+			filePath = "src\\main\\resources\\day" + day + ".txt";
 		File fileToRead = new File(filePath);
 		try {
 			Scanner fileScanner = new Scanner(fileToRead);
