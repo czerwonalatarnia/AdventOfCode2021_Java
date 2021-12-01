@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import own.exception.FileIsEmpty;
 
 public interface DataReader {
 
@@ -12,7 +13,7 @@ public interface DataReader {
 	 * <p>Creates the {@code String} variable which is a path to the text file.</p>
 	 */
 
-	static String createFilePath(int day){
+	static String createFilePath(int day) {
 		String filePath;
 		if (day < 10)
 			filePath = "src\\main\\resources\\day0" + day + ".txt";
@@ -30,6 +31,8 @@ public interface DataReader {
 		LinkedList<Long> table = new LinkedList<>();
 		File fileToRead = new File(filePath);
 		try {
+			if (fileToRead.length() == 0)
+				throw new FileIsEmpty("File " + filePath + " is empty.");
 			Scanner fileScanner = new Scanner(fileToRead);
 			fileScanner.useDelimiter("(\\s*,\\s*)|\\s+");
 			while (fileScanner.hasNextLong()) {
@@ -38,6 +41,10 @@ public interface DataReader {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("File " + filePath + " do not exist");
+			return new LinkedList<>();
+		} catch (FileIsEmpty e) {
+			e.printStackTrace();
+			System.out.println("File is empty, check if you didn't forget the data");
 			return new LinkedList<>();
 		} catch (Exception e) {
 			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
@@ -55,6 +62,8 @@ public interface DataReader {
 		LinkedList<Double> table = new LinkedList<>();
 		File fileToRead = new File(filePath);
 		try {
+			if (fileToRead.length() == 0)
+				throw new FileIsEmpty("File " + filePath + " is empty.");
 			Scanner fileScanner = new Scanner(fileToRead);
 			fileScanner.useDelimiter("(\\s*,\\s*)|\\s+");
 			while (fileScanner.hasNextDouble()) {
@@ -63,6 +72,10 @@ public interface DataReader {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("File " + filePath + " do not exist");
+			return new LinkedList<>();
+		} catch (FileIsEmpty e) {
+			e.printStackTrace();
+			System.out.println("File is empty, check if you didn't forget the data");
 			return new LinkedList<>();
 		} catch (Exception e) {
 			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
@@ -80,6 +93,8 @@ public interface DataReader {
 		LinkedList<String> list = new LinkedList<>();
 		File fileToRead = new File(filePath);
 		try {
+			if (fileToRead.length() == 0)
+				throw new FileIsEmpty("File " + filePath + " is empty.");
 			Scanner fileScanner = new Scanner(fileToRead);
 			while (fileScanner.hasNextLine()) {
 				String string = fileScanner.nextLine();
@@ -88,6 +103,10 @@ public interface DataReader {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("File " + filePath + " do not exist");
+			return new LinkedList<>();
+		} catch (FileIsEmpty e) {
+			e.printStackTrace();
+			System.out.println("File is empty, check if you didn't forget the data");
 			return new LinkedList<>();
 		} catch (Exception e) {
 			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
@@ -105,6 +124,8 @@ public interface DataReader {
 		LinkedList<String> alchemy = new LinkedList<>();
 		File fileToRead = new File(filePath);
 		try {
+			if (fileToRead.length() == 0)
+				throw new FileIsEmpty("File " + filePath + " is empty.");
 			Scanner fileScanner = new Scanner(fileToRead);
 			while (fileScanner.hasNextLine()) {
 				alchemy.add(fileScanner.nextLine());
@@ -112,6 +133,10 @@ public interface DataReader {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("File " + filePath + " do not exist");
+			return new LinkedList<>();
+		} catch (FileIsEmpty e) {
+			e.printStackTrace();
+			System.out.println("File is empty, check if you didn't forget the data");
 			return new LinkedList<>();
 		} catch (Exception e) {
 			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
