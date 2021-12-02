@@ -1,9 +1,15 @@
 package aoc2021;
 
-import aoc2021.Day02.Day02;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class Main {
 	public static void main(String[] args) {
-		Day02.day();
+
+		/* If you want to run specific day, set value of DAY to the day you want and MONTH to 12. */
+
+		int DAY = LocalDate.now(ZoneId.of("Europe/Warsaw")).getDayOfMonth();
+		int MONTH = LocalDate.now(ZoneId.of("Europe/Warsaw")).getMonthValue();
+		RunHelper.runChallenges(DAY, MONTH);
 	}
 }
