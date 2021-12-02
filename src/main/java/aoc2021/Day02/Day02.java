@@ -1,10 +1,9 @@
 package aoc2021.Day02;
 
 import java.util.LinkedList;
-import aoc2021.Day;
 import aoc2021.own.functions.DataReader;
 
-public abstract class Day02 implements Day {
+public abstract class Day02 {
 	public static void day() {
 		LinkedList<String> movementCommands = DataReader.readAlchemyString(DataReader.createFilePath(2));
 		System.out.println("\nThe answer to part 1 is " + part1(movementCommands));
