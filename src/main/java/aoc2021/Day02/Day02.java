@@ -6,8 +6,7 @@ import aoc2021.own.functions.DataReader;
 public abstract class Day02 {
 	public static void day() {
 		LinkedList<String> movementCommands = DataReader.readAlchemyString(DataReader.createFilePath(2));
-		System.out.println("\nThe answer to part 1 is " + part1(movementCommands));
-		System.out.println("\nThe answer to part 2 is " + part2(movementCommands));
+		System.out.println("Day 2\nThe answer to part 1 is " + part1(movementCommands) + "\nThe answer to part 2 is " + part2(movementCommands));
 	}
 
 	static long part1(LinkedList<String> movementCommands) {

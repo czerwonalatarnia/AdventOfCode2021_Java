@@ -42,6 +42,6 @@ public class Submarine {
 	}
 
 	public long getSuperPosition() {
-		return horizontal*vertical;
+		return horizontal * vertical;
 	}
 }
