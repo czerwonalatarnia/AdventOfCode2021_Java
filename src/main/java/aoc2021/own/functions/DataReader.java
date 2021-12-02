@@ -1,11 +1,11 @@
-package Functions;
+package aoc2021.own.functions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import own.exception.FileIsEmpty;
+import aoc2021.own.exception.FileIsEmpty;
 
 public interface DataReader {
 

@@ -1,4 +1,4 @@
-package Functions;
+package aoc2021.own.functions;
 
 import java.util.List;
 

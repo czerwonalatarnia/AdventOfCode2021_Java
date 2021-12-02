@@ -1,4 +1,4 @@
-package Day02;
+package aoc2021.Day02;
 
 public class Submarine {
 	private long horizontal = 0;

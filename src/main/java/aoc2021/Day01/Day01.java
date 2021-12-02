@@ -1,11 +1,12 @@
-package Day01;
+package aoc2021.Day01;
 
 import java.util.LinkedList;
-import Functions.DataReader;
-import static Functions.Calculator.arrayLongSum;
+import aoc2021.Day;
+import aoc2021.own.functions.DataReader;
+import static aoc2021.own.functions.Calculator.arrayLongSum;
 
-public interface Day01 {
-	static void day01() {
+public abstract class Day01 implements Day {
+	public static void day() {
 		LinkedList<Long> sonarReports = DataReader.readLongArray(DataReader.createFilePath(1));
 		System.out.println("\nThe answer to part 1 is " + part1(sonarReports));
 		System.out.println("\nThe answer to part 2 is " + part2(sonarReports));
