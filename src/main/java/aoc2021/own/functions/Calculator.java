@@ -1,5 +1,4 @@
 package aoc2021.own.functions;
-
 import java.util.List;
 
 public interface Calculator {
@@ -8,24 +7,14 @@ public interface Calculator {
 	 * <p>Takes as the argument {@link List} of {@code long} elements and returns the sum of all of them.</p>
 	 */
 
-	static long arrayLongSum(List<Long> array) {
-		long sum = 0;
-		for (var el : array) {
-			sum += el;
-		}
-		return sum;
-	}
+	static long arrayLongSum(List<Long> array) { return array.stream().reduce(0L, (s, e) -> s + e); }
 
 	/**
 	 * <p>Sums the {@code n} subsequent elements in {@link List}{@code <long>}, with the last of them on position {@code pos}, and returns the sum.</p>
 	 */
 
 	static long arrayLongSum(List<Long> array, int n, int pos) {
-		long sum = 0;
-		for (int i = pos; i > pos - n; i--) {
-			sum += array.get(i);
-		}
-		return sum;
+		return array.subList(pos - n + 1, pos + 1).stream().reduce(0L, (s, e) -> s + e);
 	}
 
 	/**

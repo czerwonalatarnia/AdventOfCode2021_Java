@@ -1,15 +1,17 @@
 package aoc2021.Day02;
 
 import java.util.LinkedList;
+
+import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
-public abstract class Day02 {
-	public static void day() {
+public class Day02 implements IDay {
+	public void day() throws Exception {
 		LinkedList<String> movementCommands = DataReader.readAlchemyString(DataReader.createFilePath(2));
 		System.out.println("Day 2\nThe answer to part 1 is " + part1(movementCommands) + "\nThe answer to part 2 is " + part2(movementCommands));
 	}
 
-	static long part1(LinkedList<String> movementCommands) {
+	long part1(LinkedList<String> movementCommands) {
 		Submarine submarine = new Submarine();
 		for (var el : movementCommands) {
 			long command = el.charAt(el.length() - 1) - '0';
@@ -23,7 +25,7 @@ public abstract class Day02 {
 		return submarine.getSuperPosition();
 	}
 
-	static long part2(LinkedList<String> movementCommands) {
+	long part2(LinkedList<String> movementCommands) {
 		Submarine submarine = new Submarine();
 		for (var el : movementCommands) {
 			long command = el.charAt(el.length() - 1) - '0';

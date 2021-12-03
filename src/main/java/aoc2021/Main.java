@@ -7,9 +7,9 @@ public class Main {
 	public static void main(String[] args) {
 
 		/* If you want to run specific day, set value of DAY to the day you want and MONTH to 12. */
-
-		int DAY = LocalDate.now(ZoneId.of("Europe/Warsaw")).getDayOfMonth();
-		int MONTH = LocalDate.now(ZoneId.of("Europe/Warsaw")).getMonthValue();
+		LocalDate today = LocalDate.now(ZoneId.of("Europe/Warsaw"));
+		int DAY = today.getDayOfMonth();
+		int MONTH = today.getMonthValue();
 		RunHelper.runChallenges(DAY, MONTH);
 	}
 }
