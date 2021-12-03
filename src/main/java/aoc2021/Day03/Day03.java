@@ -1,15 +1,16 @@
 package aoc2021.Day03;
 
+import aoc2021.IDay;
 import java.util.LinkedList;
 import aoc2021.own.functions.DataReader;
 
-public abstract class Day03 {
-	public static void day() {
+public class Day03 implements IDay  {
+	public void day() throws Exception {
 		var data = DataReader.readAlchemyString(DataReader.createFilePath(3));
 		System.out.println("Day 3\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
 	}
 
-	static int part1(LinkedList<String> data) {
+	int part1(LinkedList<String> data) {
 		String maxBit = "";
 		int i1, i0;
 		for (int i = 0; i < data.peekFirst().length(); i++) {
@@ -35,7 +36,7 @@ public abstract class Day03 {
 		return a * b;
 	}
 
-	static int part2(LinkedList<String> data) {
+	int part2(LinkedList<String> data) {
 		String maxBit = "";
 		String minBit = "";
 		LinkedList<String> oxygen = (LinkedList<String>) data.clone();

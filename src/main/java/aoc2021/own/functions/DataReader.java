@@ -2,6 +2,8 @@ package aoc2021.own.functions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,14 +14,11 @@ public interface DataReader {
 	/**
 	 * <p>Creates the {@code String} variable which is a path to the text file.</p>
 	 */
+	public static final Path resourcePath = Path.of("src", "main", "resource");
 
-	static String createFilePath(int day) {
-		String filePath;
-		if (day < 10)
-			filePath = "src\\main\\resources\\day0" + day + ".txt";
-		else
-			filePath = "src\\main\\resources\\day" + day + ".txt";
-		return filePath;
+	static Path createFilePath(int day) {
+		String dayStr = String.format("day%02d.txt", day);
+		return resourcePath.resolve(dayStr);
 	}
 
 	/**
@@ -27,12 +26,12 @@ public interface DataReader {
 	 * <p>Use when the data is consisted of integer numbers.</p>
 	 */
 
-	static LinkedList<Long> readLongArray(String filePath) {
+	static LinkedList<Long> readLongArray(Path filePath) {
 		LinkedList<Long> table = new LinkedList<>();
-		File fileToRead = new File(filePath);
+		File fileToRead = filePath.toFile();
 		try {
 			if (fileToRead.length() == 0)
-				throw new FileIsEmpty("File " + filePath + " is empty.");
+				throw new FileIsEmpty("File " + filePath.toString() + " is empty.");
 			Scanner fileScanner = new Scanner(fileToRead);
 			fileScanner.useDelimiter("(\\s*,\\s*)|\\s+");
 			while (fileScanner.hasNextLong()) {
@@ -40,7 +39,7 @@ public interface DataReader {
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			System.out.println("File " + filePath + " do not exist");
+			System.out.println("File " + filePath.toString() + " do not exist");
 			return new LinkedList<>();
 		} catch (FileIsEmpty e) {
 			e.printStackTrace();
@@ -89,29 +88,19 @@ public interface DataReader {
 	 * <p>Use when the data could be represented as simple array, similar to {@code readLongArray} and  {@code readDoubleArray}, but it contains non-number characters.</p>
 	 */
 
-	static LinkedList<String> readSimpleString(String filePath) {
+	static LinkedList<String> readSimpleString(Path filePath) throws FileIsEmpty, IOException {
 		LinkedList<String> list = new LinkedList<>();
-		File fileToRead = new File(filePath);
-		try {
-			if (fileToRead.length() == 0)
-				throw new FileIsEmpty("File " + filePath + " is empty.");
-			Scanner fileScanner = new Scanner(fileToRead);
-			while (fileScanner.hasNextLine()) {
-				String string = fileScanner.nextLine();
-				list.addAll(List.of(string.split("(\\s*,\\s*)|\\s+")));
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("File " + filePath + " do not exist");
-			return new LinkedList<>();
-		} catch (FileIsEmpty e) {
-			e.printStackTrace();
-			System.out.println("File is empty, check if you didn't forget the data");
-			return new LinkedList<>();
-		} catch (Exception e) {
-			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
-			return new LinkedList<>();
+		File fileToRead = filePath.toFile();
+
+		if (fileToRead.length() == 0) {
+			throw new FileIsEmpty("File " + filePath.toString() + " is empty.");
 		}
+		Scanner fileScanner = new Scanner(fileToRead);
+		while (fileScanner.hasNextLine()) {
+			String string = fileScanner.nextLine();
+			list.addAll(List.of(string.split("(\\s*,\\s*)|\\s+")));
+		}
+
 		return list;
 	}
 
@@ -120,27 +109,14 @@ public interface DataReader {
 	 * <p>Use when the input is represented in a way that would require further, and more specific, analyze of each line.</p>
 	 */
 
-	static LinkedList<String> readAlchemyString(String filePath) {
+	static LinkedList<String> readAlchemyString(Path filePath) throws FileIsEmpty, IOException {
 		LinkedList<String> alchemy = new LinkedList<>();
-		File fileToRead = new File(filePath);
-		try {
-			if (fileToRead.length() == 0)
-				throw new FileIsEmpty("File " + filePath + " is empty.");
-			Scanner fileScanner = new Scanner(fileToRead);
-			while (fileScanner.hasNextLine()) {
-				alchemy.add(fileScanner.nextLine());
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("File " + filePath + " do not exist");
-			return new LinkedList<>();
-		} catch (FileIsEmpty e) {
-			e.printStackTrace();
-			System.out.println("File is empty, check if you didn't forget the data");
-			return new LinkedList<>();
-		} catch (Exception e) {
-			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
-			return new LinkedList<>();
+		File fileToRead = filePath.toFile();
+		if (fileToRead.length() == 0)
+			throw new FileIsEmpty("File " + filePath.toString() + " is empty.");
+		Scanner fileScanner = new Scanner(fileToRead);
+		while (fileScanner.hasNextLine()) {
+			alchemy.add(fileScanner.nextLine());
 		}
 		return alchemy;
 	}

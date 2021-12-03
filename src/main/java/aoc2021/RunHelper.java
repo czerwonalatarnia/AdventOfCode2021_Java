@@ -1,30 +1,36 @@
 package aoc2021;
 
-import java.lang.reflect.InvocationTargetException;
+import aoc2021.own.exception.FileIsEmpty;
+
+import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.stream.IntStream;
 
 public interface RunHelper {
 	static void runChallenges(int day, int month) {
 		if (month == 12) {
 			doDay(day);
 		} else {
-			for (int iDay = 1; iDay <= 25; iDay++) {
+			IntStream.rangeClosed(1, 25).forEachOrdered(iDay -> {
 				doDay(iDay);
 				System.out.println();
-			}
+			});
 		}
 	}
 
 	static void doDay(int iDay) {
-		String classPath;
-		if (iDay < 10)
-			classPath = "aoc2021.Day0" + iDay + ".Day0" + iDay;
-		else
-			classPath = "aoc2021.Day" + iDay + ".Day" + iDay;
+		String classPath = String.format("aoc2021.Day%02d.Day%02d", iDay, iDay);
 		try {
-			Class.forName(classPath).getDeclaredMethod("day").invoke(null);
-		} catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+			IDay dayChallenge = (IDay) Class.forName(classPath).getDeclaredConstructor().newInstance();
+			dayChallenge.day();
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (FileIsEmpty e) {
+			System.out.println(e.getMessage());
+			System.out.println("File is empty, check if you didn't forget the data");
+		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Something that throws " + e + " has happened.");
+			System.out.println("Something that throws " + e.toString() + " has happened.");
 		}
 	}
 }
