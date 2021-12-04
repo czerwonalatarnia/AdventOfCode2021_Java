@@ -14,7 +14,7 @@ public interface DataReader {
 	/**
 	 * <p>Creates the {@code String} variable which is a path to the text file.</p>
 	 */
-	public static final Path resourcePath = Path.of("src", "main", "resource");
+	Path resourcePath = Path.of("src", "main", "resources");
 
 	static Path createFilePath(int day) {
 		String dayStr = String.format("day%02d.txt", day);
@@ -31,7 +31,7 @@ public interface DataReader {
 		File fileToRead = filePath.toFile();
 		try {
 			if (fileToRead.length() == 0)
-				throw new FileIsEmpty("File " + filePath.toString() + " is empty.");
+				throw new FileIsEmpty("File " + filePath + " is empty.");
 			Scanner fileScanner = new Scanner(fileToRead);
 			fileScanner.useDelimiter("(\\s*,\\s*)|\\s+");
 			while (fileScanner.hasNextLong()) {
@@ -39,7 +39,7 @@ public interface DataReader {
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			System.out.println("File " + filePath.toString() + " do not exist");
+			System.out.println("File " + filePath + " do not exist");
 			return new LinkedList<>();
 		} catch (FileIsEmpty e) {
 			e.printStackTrace();
@@ -93,7 +93,7 @@ public interface DataReader {
 		File fileToRead = filePath.toFile();
 
 		if (fileToRead.length() == 0) {
-			throw new FileIsEmpty("File " + filePath.toString() + " is empty.");
+			throw new FileIsEmpty("File " + filePath + " is empty.");
 		}
 		Scanner fileScanner = new Scanner(fileToRead);
 		while (fileScanner.hasNextLine()) {
@@ -113,10 +113,12 @@ public interface DataReader {
 		LinkedList<String> alchemy = new LinkedList<>();
 		File fileToRead = filePath.toFile();
 		if (fileToRead.length() == 0)
-			throw new FileIsEmpty("File " + filePath.toString() + " is empty.");
+			throw new FileIsEmpty("File " + filePath + " is empty.");
 		Scanner fileScanner = new Scanner(fileToRead);
 		while (fileScanner.hasNextLine()) {
-			alchemy.add(fileScanner.nextLine());
+			String lineSizeCheck = fileScanner.nextLine();
+			if (lineSizeCheck.length() != 0)
+				alchemy.add(lineSizeCheck);
 		}
 		return alchemy;
 	}

@@ -1,7 +1,6 @@
 package aoc2021.Day02;
 
 import java.util.LinkedList;
-
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
