@@ -59,11 +59,7 @@ public class Day04 implements IDay {
 		while (data.size() != 0) {
 			String[] bingoLines = new String[5];
 			for (int line = 0; line < 5; line++) {
-				String leadingSpaceCheck = data.pollFirst();
-				if (leadingSpaceCheck.charAt(0) == ' ') {
-					leadingSpaceCheck = leadingSpaceCheck.substring(1);
-				}
-				bingoLines[line] = leadingSpaceCheck;
+				bingoLines[line] = data.pollFirst().strip();
 			}
 			buildGame.add(new Bingo(bingoLines));
 		}

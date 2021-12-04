@@ -4,6 +4,8 @@ import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Day03 implements IDay {
     public void day() throws Exception {
@@ -36,97 +38,33 @@ public class Day03 implements IDay {
         }
         return a * b;
     }
-
     int part2(LinkedList<String> data) {
-        String maxBit = "";
-        String minBit = "";
-        LinkedList<String> oxygen = (LinkedList<String>) data.clone();
-        LinkedList<String> data2 = (LinkedList<String>) data.clone();
-        LinkedList<String> carbon = (LinkedList<String>) data.clone();
-        int i1, i0;
-        for (int i = 0; i < data.peekFirst().length(); i++) {
-            i0 = 0;
-            i1 = 0;
-            for (var el : data) {
-                if (el.charAt(i) == '0')
-                    i0++;
-                else
-                    i1++;
-            }
-            if (i0 > i1) {
-                maxBit += "0";
-                minBit += "1";
-            } else {
-                maxBit += "1";
-                minBit += "0";
-            }
-        }
-        for (int i = 0; i < maxBit.length() && oxygen.size() > 1; ++i) {
-            i0 = 0;
-            i1 = 0;
-            for (var el : data) {
-                if (el.charAt(i) == '0')
-                    i0++;
-                else
-                    i1++;
-            }
-            if (i > 0) {
-                if (i0 > i1) {
-                    maxBit = maxBit.substring(0, i) + "0" + maxBit.substring(i + 1);
-                } else {
-                    maxBit = maxBit.substring(0, i) + "1" + maxBit.substring(i + 1);
-                }
-            } else {
-                if (i0 > i1) {
-                    maxBit = "0" + maxBit.substring(i + 1);
-                } else {
-                    maxBit = "1" + maxBit.substring(i + 1);
-                }
-            }
-            for (int j = 0; j < oxygen.size(); ++j) {
+        char[] maxBit = data.peekFirst().toCharArray();
+        char[] minBit = data.peekFirst().toCharArray();
+        List<String> oxygen = (List<String>) data.clone();
+        List<String> carbon = (List<String>) data.clone();
 
-                if (oxygen.get(j).charAt(i) != maxBit.charAt(i)) {
-                    oxygen.remove(j);
-                    j--;
-                }
-            }
-            data = (LinkedList<String>) oxygen.clone();
+        for (int i = 0; i < maxBit.length && oxygen.size() > 1; ++i) {
+            int finalI = i;
+            long i0 = oxygen.stream().filter(el -> el.charAt(finalI) == '0').count();
+            long i1 = oxygen.size() - i0;
+            maxBit[i] = (i0 > i1) ? '0' : '1';
+            char bit = maxBit[i];
+            oxygen = oxygen.stream().filter(el -> el.charAt(finalI) == bit).collect(Collectors.toList());
         }
-        for (int i = 0; i < minBit.length() && carbon.size() > 1; ++i) {
-            i0 = 0;
-            i1 = 0;
-            for (var el : data2) {
-                if (el.charAt(i) == '0')
-                    i0++;
-                else
-                    i1++;
-            }
-            if (i > 0) {
-                if (i0 <= i1) {
-                    minBit = minBit.substring(0, i) + "0" + minBit.substring(i + 1);
-                } else {
-                    minBit = minBit.substring(0, i) + "1" + minBit.substring(i + 1);
-                }
-            } else {
-                if (i0 <= i1) {
-                    minBit = "0" + minBit.substring(i + 1);
-                } else {
-                    minBit = "1" + minBit.substring(i + 1);
-                }
-            }
-            for (int j = 0; j < carbon.size(); ++j) {
-                if (carbon.get(j).charAt(i) != minBit.charAt(i)) {
-                    carbon.remove(j);
-                    j--;
-                }
-            }
-            data2 = (LinkedList<String>) carbon.clone();
+        for (int i = 0; i < minBit.length && carbon.size() > 1; ++i) {
+            int finalI = i;
+            long i0 = carbon.stream().filter(el -> el.charAt(finalI) == '0').count();
+            long i1 = carbon.size() - i0;
+            minBit[i] = (i0 <= i1) ? '0' : '1';
+            char bit = minBit[i];
+            carbon = carbon.stream().filter(el -> el.charAt(finalI) == bit).collect(Collectors.toList());
         }
         int a = 0;
         int b = 0;
-        for (int i = maxBit.length() - 1; i >= 0; --i) {
-            a += ((oxygen.get(0).charAt(i) - '0') * Math.pow(2, (maxBit.length() - i - 1)));
-            b += ((carbon.get(0).charAt(i) - '0') * Math.pow(2, (maxBit.length() - i - 1)));
+        for (int i = maxBit.length - 1; i >= 0; --i) {
+            a += ((oxygen.get(0).charAt(i) - '0') * Math.pow(2, (maxBit.length - i - 1)));
+            b += ((carbon.get(0).charAt(i) - '0') * Math.pow(2, (maxBit.length - i - 1)));
         }
         System.out.println(oxygen);
         System.out.println(a + " - " + b);
