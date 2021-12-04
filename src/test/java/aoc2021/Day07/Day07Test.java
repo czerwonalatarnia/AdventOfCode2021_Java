@@ -1,6 +1,5 @@
 package aoc2021.Day07;
 
-import aoc2021.Day07.Day07;
 import aoc2021.own.exception.FileIsEmpty;
 import aoc2021.own.functions.DataReader;
 import org.junit.jupiter.api.Disabled;
