@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day04Test {
-	public final Path resourcePath = Path.of("src", "test", "resources", "aoc2021", "Day04");
+	public static final Path resourcePath = Path.of("src", "test", "resources", "aoc2021", "Day04");
 
 	@Test
 	void testPart1() throws FileIsEmpty, IOException {
