@@ -13,28 +13,10 @@ public class Day04 implements IDay {
 
 	int part1(LinkedList<String> data) {
 		String[] drawnBallsString = data.pollFirst().split(",");
-		int[] drawnBalls = new int[drawnBallsString.length];
-		for (int drawn = 0; drawn < drawnBalls.length; drawn++) {
-			drawnBalls[drawn] = Integer.parseInt(drawnBallsString[drawn]);
-		}
-		LinkedList<Bingo> bingos = new LinkedList<>();
-		if (data.size() % 5 != 0) {
-			System.out.println("You have wrong data");
-			return -1;
-		}
-		while (data.size() != 0) {
-			String[] bingoLines = new String[5];
-			for (int line = 0; line < 5; line++) {
-				String leadingSpaceCheck = data.pollFirst();
-				if (leadingSpaceCheck.charAt(0) == ' ') {
-					leadingSpaceCheck = leadingSpaceCheck.substring(1);
-				}
-				bingoLines[line] = leadingSpaceCheck;
-			}
-			bingos.add(new Bingo(bingoLines));
-		}
+		int[] drawnBalls = getDrawnBalls(drawnBallsString);
+		LinkedList<Bingo> bingo = getBingo(data);
 		for (var drawn : drawnBalls) {
-			for (var el : bingos) {
+			for (var el : bingo) {
 				if (el.drawNumber(drawn)) {
 					return el.result();
 				}
@@ -45,15 +27,35 @@ public class Day04 implements IDay {
 
 	int part2(LinkedList<String> data) {
 		String[] drawnBallsString = data.pollFirst().split(",");
+		int[] drawnBalls = getDrawnBalls(drawnBallsString);
+		LinkedList<Bingo> bingo = getBingo(data);
+		LinkedList<Integer> winningScores = new LinkedList<>();
+		for (var drawn : drawnBalls) {
+			for (var el : bingo) {
+				if (!el.hasWon()) {
+					if (el.drawNumber(drawn)) {
+						winningScores.add(el.result());
+					}
+				}
+			}
+		}
+		return winningScores.peekLast();
+	}
+
+	private int[] getDrawnBalls(String[] drawnBallsString) {
 		int[] drawnBalls = new int[drawnBallsString.length];
 		for (int drawn = 0; drawn < drawnBalls.length; drawn++) {
 			drawnBalls[drawn] = Integer.parseInt(drawnBallsString[drawn]);
 		}
-		LinkedList<Bingo> bingos = new LinkedList<>();
+		return drawnBalls;
+	}
+
+	private LinkedList<Bingo> getBingo(LinkedList<String> data) {
 		if (data.size() % 5 != 0) {
 			System.out.println("You have wrong data");
-			return -1;
+			return new LinkedList<>();
 		}
+		LinkedList<Bingo> buildGame = new LinkedList<>();
 		while (data.size() != 0) {
 			String[] bingoLines = new String[5];
 			for (int line = 0; line < 5; line++) {
@@ -63,19 +65,8 @@ public class Day04 implements IDay {
 				}
 				bingoLines[line] = leadingSpaceCheck;
 			}
-			bingos.add(new Bingo(bingoLines));
+			buildGame.add(new Bingo(bingoLines));
 		}
-		LinkedList<Integer> winningScores = new LinkedList<>();
-		for (var drawn : drawnBalls) {
-			for (var el : bingos) {
-				if (!el.hasWon()) {
-					if (el.drawNumber(drawn)) {
-						winningScores.add(el.result());
-						System.out.println("Won with " + el.result());
-					}
-				}
-			}
-		}
-		return winningScores.peekLast();
+		return buildGame;
 	}
 }
