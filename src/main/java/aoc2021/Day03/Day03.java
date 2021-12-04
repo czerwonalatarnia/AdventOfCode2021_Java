@@ -39,32 +39,29 @@ public class Day03 implements IDay {
         return a * b;
     }
     int part2(LinkedList<String> data) {
-        char[] maxBit = data.peekFirst().toCharArray();
-        char[] minBit = data.peekFirst().toCharArray();
         List<String> oxygen = (List<String>) data.clone();
         List<String> carbon = (List<String>) data.clone();
+        long length = data.peekFirst().length();
 
-        for (int i = 0; i < maxBit.length && oxygen.size() > 1; ++i) {
+        for (int i = 0; i < length && oxygen.size() > 1; ++i) {
             int finalI = i;
             long i0 = oxygen.stream().filter(el -> el.charAt(finalI) == '0').count();
             long i1 = oxygen.size() - i0;
-            maxBit[i] = (i0 > i1) ? '0' : '1';
-            char bit = maxBit[i];
+            char bit = (i0 > i1) ? '0' : '1';
             oxygen = oxygen.stream().filter(el -> el.charAt(finalI) == bit).collect(Collectors.toList());
         }
-        for (int i = 0; i < minBit.length && carbon.size() > 1; ++i) {
+        for (int i = 0; i < length && carbon.size() > 1; ++i) {
             int finalI = i;
             long i0 = carbon.stream().filter(el -> el.charAt(finalI) == '0').count();
             long i1 = carbon.size() - i0;
-            minBit[i] = (i0 <= i1) ? '0' : '1';
-            char bit = minBit[i];
+            char bit = (i0 <= i1) ? '0' : '1';
             carbon = carbon.stream().filter(el -> el.charAt(finalI) == bit).collect(Collectors.toList());
         }
         int a = 0;
         int b = 0;
-        for (int i = maxBit.length - 1; i >= 0; --i) {
-            a += ((oxygen.get(0).charAt(i) - '0') * Math.pow(2, (maxBit.length - i - 1)));
-            b += ((carbon.get(0).charAt(i) - '0') * Math.pow(2, (maxBit.length - i - 1)));
+        for (int i = (int) length - 1; i >= 0; --i) {
+            a += ((oxygen.get(0).charAt(i) - '0') * Math.pow(2, (length - i - 1)));
+            b += ((carbon.get(0).charAt(i) - '0') * Math.pow(2, (length - i - 1)));
         }
         System.out.println(oxygen);
         System.out.println(a + " - " + b);
