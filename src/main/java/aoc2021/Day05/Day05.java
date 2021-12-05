@@ -1,19 +1,14 @@
 package aoc2021.Day05;
 
-import aoc2021.IDay;
-import aoc2021.own.exception.FileIsEmpty;
-import aoc2021.own.functions.DataReader;
-
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.stream.Stream;
-
-import static aoc2021.own.functions.Calculator.arrayLongSum;
+import aoc2021.IDay;
+import aoc2021.own.functions.DataReader;
 
 public class Day05 implements IDay {
 	public void day() throws Exception {
 		var data = DataReader.readAlchemyString(DataReader.createFilePath(5));
-		System.out.println("Day 1\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
+		System.out.println("Day 5\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
 	}
 
 	long part1(LinkedList<String> data) {

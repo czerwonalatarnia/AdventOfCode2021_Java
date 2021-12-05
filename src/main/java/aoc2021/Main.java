@@ -10,6 +10,6 @@ public class Main {
 
 		int DAY = LocalDate.now(ZoneId.of("Europe/Warsaw")).getDayOfMonth();
 		int MONTH = LocalDate.now(ZoneId.of("Europe/Warsaw")).getMonthValue();
-		RunHelper.runChallenges(DAY, MONTH);
+		RunHelper.runChallenges(3, MONTH);
 	}
 }

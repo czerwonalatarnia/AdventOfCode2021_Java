@@ -1,13 +1,11 @@
 package aoc2021.Day09;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import aoc2021.own.exception.FileIsEmpty;
 import aoc2021.own.functions.DataReader;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.nio.file.Path;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Disabled
