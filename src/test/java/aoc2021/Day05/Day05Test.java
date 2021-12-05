@@ -16,12 +16,12 @@ class Day05Test {
 	@Test
 	void testPart1() throws FileIsEmpty, IOException {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day05test.txt"));
-		assertEquals(0, new Day05().part1());
+		assertEquals(5, new Day05().part1(dataTest));
 	}
 
 	@Test
 	void testPart2() throws FileIsEmpty, IOException {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day05test.txt"));
-		assertEquals(0, new Day05().part2());
+		assertEquals(12, new Day05().part2(dataTest));
 	}
 }
