@@ -9,20 +9,20 @@ class Day06Test {
 	public static final Path resourcePath = Path.of("src", "test", "resources", "aoc2021", "Day06");
 
 	@Test
-	void testPart_18() {
+	void testPart1_18() {
 		var dataTest = DataReader.readLongArray(resourcePath.resolve("day06test.txt"));
 		assertEquals(26, new Day06().breedTheFish(dataTest, 18));
 	}
 
 	@Test
-	void testPart_80() {
+	void testPart1_80() {
 		var dataTest = DataReader.readLongArray(resourcePath.resolve("day06test.txt"));
 		assertEquals(5934, new Day06().breedTheFish(dataTest, 80));
 	}
 
-	/*@Test
+	@Test
 	void testPart2() {
 		var dataTest = DataReader.readLongArray(resourcePath.resolve("day06test.txt"));
-		assertEquals((long) 26984457539, new Day06().breedTheFish(dataTest, 256));
-	}*/
+		assertEquals(26984457539L, new Day06().breedTheFish(dataTest, 256));
+	}
 }
