@@ -1,26 +1,28 @@
 package aoc2021.Day06;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import aoc2021.own.exception.FileIsEmpty;
 import aoc2021.own.functions.DataReader;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled
 class Day06Test {
 	public static final Path resourcePath = Path.of("src", "test", "resources", "aoc2021", "Day06");
 
 	@Test
-	void testPart1() throws FileIsEmpty, IOException {
-		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day06test.txt"));
-		assertEquals(0, new Day06().part1());
+	void testPart_18() {
+		var dataTest = DataReader.readLongArray(resourcePath.resolve("day06test.txt"));
+		assertEquals(26, new Day06().breedTheFish(dataTest, 18));
 	}
 
 	@Test
-	void testPart2() throws FileIsEmpty, IOException {
-		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day06test.txt"));
-		assertEquals(0, new Day06().part2());
+	void testPart_80() {
+		var dataTest = DataReader.readLongArray(resourcePath.resolve("day06test.txt"));
+		assertEquals(5934, new Day06().breedTheFish(dataTest, 80));
 	}
+
+	/*@Test
+	void testPart2() {
+		var dataTest = DataReader.readLongArray(resourcePath.resolve("day06test.txt"));
+		assertEquals((long) 26984457539, new Day06().breedTheFish(dataTest, 256));
+	}*/
 }
