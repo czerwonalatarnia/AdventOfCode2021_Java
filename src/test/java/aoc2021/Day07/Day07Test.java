@@ -13,14 +13,14 @@ class Day07Test {
 	public static final Path resourcePath = Path.of("src", "test", "resources", "aoc2021", "Day07");
 
 	@Test
-	void testPart1() throws FileIsEmpty, IOException {
-		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day07test.txt"));
-		assertEquals(0, new Day07().part1());
+	void testPart1() {
+		var dataTest = DataReader.readLongArray(resourcePath.resolve("day07test.txt"));
+		assertEquals(37, new Day07().part1(dataTest));
 	}
 
 	@Test
-	void testPart2() throws FileIsEmpty, IOException {
-		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day07test.txt"));
-		assertEquals(0, new Day07().part2());
+	void testPart2() {
+		var dataTest = DataReader.readLongArray(resourcePath.resolve("day07test.txt"));
+		assertEquals(168, new Day07().part2(dataTest));
 	}
 }
