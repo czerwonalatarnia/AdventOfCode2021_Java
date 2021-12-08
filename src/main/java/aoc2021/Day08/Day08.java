@@ -60,7 +60,6 @@ public class Day08 implements IDay {
 		char[] one = new char[2];
 		char[] four = new char[4];
 		char[] six = new char[6];
-		char[] three = new char[5];
 		AtomicBoolean ifContainOne = new AtomicBoolean(false);
 		AtomicBoolean ifContainFour = new AtomicBoolean(false);
 		Arrays.stream(numbers)
@@ -87,14 +86,8 @@ public class Day08 implements IDay {
 			      ifContainOne.set(string.contains("" + one[0]) && string.contains("" + one[1]));
 			      ifContainFour.set(string.contains("" + four[0]) && string.contains("" + four[1]) && string.contains("" + four[2]) && string.contains("" + four[3]));
 			      if (string.length() == 5) {
-				      if (ifContainOne.get()) {
+				      if (ifContainOne.get())
 					      display.matchStringAndNumber(string, 3);
-					      three[0] = string.charAt(0);
-					      three[1] = string.charAt(1);
-					      three[2] = string.charAt(2);
-					      three[3] = string.charAt(3);
-					      three[4] = string.charAt(4);
-				      }
 			      } else if (string.length() == 6) {
 				      if (!ifContainOne.get()) {
 					      display.matchStringAndNumber(string, 6);
@@ -126,7 +119,7 @@ public class Day08 implements IDay {
 				      }
 				      if (count == 5)
 					      display.matchStringAndNumber(string, 5);
-				      else if (!(new String(three).equals(string)))
+				      else
 					      display.matchStringAndNumber(string, 2);
 			      }
 		      });
