@@ -83,7 +83,7 @@ public class Day08 implements IDay {
 				      display.matchStringAndNumber(string, 8);
 		      })
 		      .filter(string -> string.length() != 2 && string.length() != 3 && string.length() != 4 && string.length() != 7)
-		      .collect(Collectors.toList())
+		      .toList()
 		      .stream()
 		      .peek(string -> {
 			      ifContainOne.set(string.contains("" + one[0]) && string.contains("" + one[1]));
@@ -120,7 +120,7 @@ public class Day08 implements IDay {
 			      } else
 				      return string.length() != 6;
 		      })
-		      .collect(Collectors.toList())
+		      .toList()
 		      .forEach(string -> {
 			      int count = 0;
 			      if (string.length() == 5) {
