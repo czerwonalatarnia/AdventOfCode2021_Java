@@ -28,7 +28,9 @@ public class Bingo {
 	 * <p>Function that checks if the number drawn in current round of Bingo appears on the board. If this has happened, the function marks it in the {@code isChecked} board
 	 * and decreases the {@code sumOfNotHit} which sums the values from the bingo board that were not marked yet.</p>
 	 * <p>It also uses the {@code checkIfWin} method to see if the number marked this round created a bingo on the board, and marks that number as {@code winningNumber}.</p>
+	 *
 	 * @param draw number that was drawn in current round of Bingo game.
+	 *
 	 * @return true if after this round the bingo was completed,
 	 * false if there is still no bingo.
 	 */

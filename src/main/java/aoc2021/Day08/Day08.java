@@ -1,17 +1,15 @@
 package aoc2021.Day08;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import aoc2021.IDay;
-import aoc2021.own.exception.FileIsEmpty;
 import aoc2021.own.functions.Calculator;
 import aoc2021.own.functions.DataReader;
 
 public class Day08 implements IDay {
-	public void day() throws FileIsEmpty, IOException {
+	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(8));
 		LinkedList<String> data2 = DataReader.readAlchemyString(DataReader.createFilePath(8));
 		System.out.println("Day 8\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data2));

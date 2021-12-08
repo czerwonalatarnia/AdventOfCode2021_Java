@@ -6,7 +6,7 @@ import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
 public class Day05 implements IDay {
-	public void day() throws Exception {
+	public void day() {
 		var data = DataReader.readAlchemyString(DataReader.createFilePath(5));
 		System.out.println("Day 5\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
 	}
@@ -25,7 +25,9 @@ public class Day05 implements IDay {
 
 	private void fillMap(int[][] map, LinkedList<String> data, int part) {
 		for (String datum : data) {
-			int[] placement = Stream.of(datum.split(",|\\s+->\\s+")).mapToInt(Integer::parseInt).toArray();
+			int[] placement = Stream.of(datum.split(",|\\s+->\\s+"))
+			                        .mapToInt(Integer::parseInt)
+			                        .toArray();
 			if (placement[0] == placement[2]) {
 				for (int it = Math.min(placement[1], placement[3]); it <= Math.max(placement[1], placement[3]); it++) {
 					map[placement[0]][it]++;

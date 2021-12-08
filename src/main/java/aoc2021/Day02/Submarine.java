@@ -5,24 +5,8 @@ public class Submarine {
 	private long vertical = 0;
 	private long aim = 0;
 
-	public long getHorizontal() {
-		return horizontal;
-	}
-
-	public void setHorizontal(long horizontal) {
-		this.horizontal = horizontal;
-	}
-
 	public void moveHorizontal(long horizontal) {
 		this.horizontal += horizontal;
-	}
-
-	public long getVertical() {
-		return vertical;
-	}
-
-	public void setVertical(long vertical) {
-		this.vertical = vertical;
 	}
 
 	public void moveVertical(long vertical) {
@@ -31,10 +15,6 @@ public class Submarine {
 
 	public long getAim() {
 		return aim;
-	}
-
-	public void setAim(long aim) {
-		this.aim = aim;
 	}
 
 	public void moveAim(long aim) {

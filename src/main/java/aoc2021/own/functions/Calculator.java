@@ -1,95 +1,80 @@
 package aoc2021.own.functions;
+
 import java.util.List;
+
+/**
+ * Class created for easy reference to methods hidden in the bodies of functions.
+ */
 
 public interface Calculator {
 
 	/**
-	 * <p>Takes as the argument {@link List} of {@code long} elements and returns the sum of all of them.</p>
+	 * <p>Sums all the elements in {@link List}<{@code long}> and returns the result.</p>
 	 */
 
-	static long arrayLongSum(List<Long> array) { return array.stream().reduce(0L, (s, e) -> s + e); }
+	static long arrayLongSum(List<Long> array) {
+		return array.stream()
+		            .reduce(0L, Long::sum);
+	}
 
 	/**
-	 * <p>Sums the {@code n} subsequent elements in {@link List}{@code <long>}, with the last of them on position {@code pos}, and returns the sum.</p>
+	 * <p>Sums the {@code n} subsequent elements in {@link List}<{@code long}>, with the first of them on position {@code pos}, and returns the result.</p>
 	 */
 
 	static long arrayLongSum(List<Long> array, int n, int pos) {
-		return array.subList(pos - n + 1, pos + 1).stream().reduce(0L, (s, e) -> s + e);
+		return array.subList(pos, pos + n)
+		            .stream()
+		            .reduce(0L, Long::sum);
 	}
 
 	/**
-	 * <p>Takes as the argument {@link List} of {@code double} elements and returns the sum of all of them.</p>
+	 * <p>Sums all the elements in {@link List}<{@code double}> and returns the result.</p>
 	 */
 
 	static double arrayDoubleSum(List<Double> array) {
-		double sum = 0;
-		for (var el : array) {
-			sum += el;
-		}
-		return sum;
+		return array.stream()
+		            .reduce(0d, Double::sum);
 	}
 
 	/**
-	 * <p>Sums the {@code n} subsequent elements in {@link List}{@code <double>}, with the last of them on position {@code pos}, and returns the sum.</p>
+	 * <p>Sums the {@code n} subsequent elements in {@link List}<{@code double}>, with the first of them on position {@code pos}, and returns the result.</p>
 	 */
 
 	static double arrayDoubleSum(List<Double> array, int n, int pos) {
-		double sum = 0;
-		for (int i = pos; i >= pos - n; i--) {
-			sum += array.get(i);
-		}
-		return sum;
+		return array.subList(pos, pos + n)
+		            .stream()
+		            .reduce(0d, Double::sum);
 	}
 
 	/**
-	 * <p>Finds the biggest element of {@link List}{@code <long>} and returns its value.</p>
+	 * <p>Finds the biggest element of {@link List}<{@code long}> and returns its value.</p>
 	 */
 
 	static long arrayLongMax(List<Long> array) {
-		long max = Long.MIN_VALUE;
-		for (var el : array) {
-			if (el > max)
-				max = el;
-		}
-		return max;
+		return array.stream().max(Long::compareTo).orElseThrow();
 	}
 
 	/**
-	 * <p>Finds the smallest element of {@link List}{@code <long>} and returns its value.</p>
+	 * <p>Finds the smallest element of {@link List}<{@code long}> and returns its value.</p>
 	 */
 
 	static long arrayLongMin(List<Long> array) {
-		long min = Long.MAX_VALUE;
-		for (var el : array) {
-			if (el < min)
-				min = el;
-		}
-		return min;
+		return array.stream().min(Long::compareTo).orElseThrow();
 	}
 
 	/**
-	 * <p>Finds the biggest element of {@link List}{@code <double>} and returns its value.</p>
+	 * <p>Finds the biggest element of {@link List}<{@code double}> and returns its value.</p>
 	 */
 
 	static double arrayDoubleMax(List<Double> array) {
-		double max = Double.MIN_VALUE;
-		for (var el : array) {
-			if (el > max)
-				max = el;
-		}
-		return max;
+		return array.stream().max(Double::compareTo).orElseThrow();
 	}
 
 	/**
-	 * <p>Finds the smallest element of {@link List}{@code <double>} and returns its value.</p>
+	 * <p>Finds the smallest element of {@link List}<{@code double}> and returns its value.</p>
 	 */
 
 	static double arrayDoubleMin(List<Double> array) {
-		double min = Double.MAX_VALUE;
-		for (var el : array) {
-			if (el < min)
-				min = el;
-		}
-		return min;
+		return array.stream().min(Double::compareTo).orElseThrow();
 	}
 }

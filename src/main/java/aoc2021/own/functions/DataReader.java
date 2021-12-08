@@ -85,22 +85,33 @@ public interface DataReader {
 
 	/**
 	 * <p>Outputs the {@link LinkedList} of {@link String} elements.</p>
-	 * <p>Use when the data could be represented as simple array, similar to {@code readLongArray} and  {@code readDoubleArray}, but it contains non-number characters.</p>
+	 * <p>Use when the data can be processed by reading each word separately.</p>
 	 */
 
-	static LinkedList<String> readSimpleString(Path filePath) throws FileIsEmpty, IOException {
+	static LinkedList<String> readSimpleString(Path filePath) {
 		LinkedList<String> list = new LinkedList<>();
 		File fileToRead = filePath.toFile();
-
-		if (fileToRead.length() == 0) {
-			throw new FileIsEmpty("File " + filePath + " is empty.");
+		try {
+			if (fileToRead.length() == 0) {
+				throw new FileIsEmpty("File " + filePath + " is empty.");
+			}
+			Scanner fileScanner = new Scanner(fileToRead);
+			while (fileScanner.hasNextLine()) {
+				String string = fileScanner.nextLine();
+				list.addAll(List.of(string.split("(\\s*,\\s*)|\\s+")));
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("File " + filePath + " do not exist");
+			return new LinkedList<>();
+		} catch (FileIsEmpty e) {
+			e.printStackTrace();
+			System.out.println("File is empty, check if you didn't forget the data");
+			return new LinkedList<>();
+		} catch (Exception e) {
+			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
+			return new LinkedList<>();
 		}
-		Scanner fileScanner = new Scanner(fileToRead);
-		while (fileScanner.hasNextLine()) {
-			String string = fileScanner.nextLine();
-			list.addAll(List.of(string.split("(\\s*,\\s*)|\\s+")));
-		}
-
 		return list;
 	}
 
@@ -109,16 +120,29 @@ public interface DataReader {
 	 * <p>Use when the input is represented in a way that would require further, and more specific, analyze of each line.</p>
 	 */
 
-	static LinkedList<String> readAlchemyString(Path filePath) throws FileIsEmpty, IOException {
+	static LinkedList<String> readAlchemyString(Path filePath) {
 		LinkedList<String> alchemy = new LinkedList<>();
 		File fileToRead = filePath.toFile();
-		if (fileToRead.length() == 0)
-			throw new FileIsEmpty("File " + filePath + " is empty.");
-		Scanner fileScanner = new Scanner(fileToRead);
-		while (fileScanner.hasNextLine()) {
-			String lineSizeCheck = fileScanner.nextLine();
-			if (lineSizeCheck.length() != 0)
-				alchemy.add(lineSizeCheck);
+		try {
+			if (fileToRead.length() == 0)
+				throw new FileIsEmpty("File " + filePath + " is empty.");
+			Scanner fileScanner = new Scanner(fileToRead);
+			while (fileScanner.hasNextLine()) {
+				String lineSizeCheck = fileScanner.nextLine();
+				if (lineSizeCheck.length() != 0)
+					alchemy.add(lineSizeCheck);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("File " + filePath + " do not exist");
+			return new LinkedList<>();
+		} catch (FileIsEmpty e) {
+			e.printStackTrace();
+			System.out.println("File is empty, check if you didn't forget the data");
+			return new LinkedList<>();
+		} catch (Exception e) {
+			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
+			return new LinkedList<>();
 		}
 		return alchemy;
 	}

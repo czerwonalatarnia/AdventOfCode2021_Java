@@ -23,7 +23,7 @@ public class Day01 implements IDay {
 	int part2(LinkedList<Long> sonarReports) {
 		int tripleIncreases = 0;
 		for (int i = 3; i < sonarReports.size(); i++) {
-			if (arrayLongSum(sonarReports, 3, i) > arrayLongSum(sonarReports, 3, i - 1))
+			if (sonarReports.get(i) > sonarReports.get(i - 3))
 				tripleIncreases++;
 		}
 		return tripleIncreases;

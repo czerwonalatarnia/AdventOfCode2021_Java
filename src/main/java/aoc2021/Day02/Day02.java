@@ -5,7 +5,7 @@ import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
 public class Day02 implements IDay {
-	public void day() throws Exception {
+	public void day() {
 		LinkedList<String> movementCommands = DataReader.readAlchemyString(DataReader.createFilePath(2));
 		System.out.println("Day 2\nThe answer to part 1 is " + part1(movementCommands) + "\nThe answer to part 2 is " + part2(movementCommands));
 	}

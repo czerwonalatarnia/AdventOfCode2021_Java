@@ -1,18 +1,18 @@
 package aoc2021.Day08;
 
 public class Display {
-	private final String[] stringMakingNumber = new String[10];
+	private final String[] numberCodes = new String[10];
 
 	public void matchStringAndNumber(String code, int display) {
-		stringMakingNumber[display] = code;
+		numberCodes[display] = code;
 	}
 
 	public int getNumber(String value) {
 		for (int i = 0; i < 10; i++) {
-			if (value.length() == stringMakingNumber[i].length()) {
+			if (value.length() == numberCodes[i].length()) {
 				int count = 0;
 				for (int j = 0; j < value.length(); j++) {
-					if (stringMakingNumber[i].contains("" + value.toCharArray()[j])) {
+					if (numberCodes[i].contains("" + value.toCharArray()[j])) {
 						count++;
 					}
 				}

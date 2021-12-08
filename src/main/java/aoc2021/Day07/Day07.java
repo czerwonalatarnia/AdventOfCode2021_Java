@@ -15,9 +15,9 @@ public class Day07 implements IDay {
 		long max = Calculator.arrayLongMax(data);
 		long min = Calculator.arrayLongMin(data);
 		long sum = Long.MAX_VALUE;
-		for (long it = min; it <= max ; it++) {
+		for (long it = min; it <= max; it++) {
 			LinkedList<Long> current = new LinkedList<>();
-			for (var el: data) {
+			for (var el : data) {
 				current.add(Math.abs(el - it));
 			}
 			long pointSum = Calculator.arrayLongSum(current);
@@ -31,13 +31,13 @@ public class Day07 implements IDay {
 		long max = Calculator.arrayLongMax(data);
 		long min = Calculator.arrayLongMin(data);
 		long sum = Long.MAX_VALUE;
-		for (long it = min; it <= max ; it++) {
+		for (long it = min; it <= max; it++) {
 			LinkedList<Long> current = new LinkedList<>();
 			long pointSum = 0;
-			for (var el: data) {
+			for (var el : data) {
 				current.add(Math.abs(el - it));
 			}
-			for (var el: current) {
+			for (var el : current) {
 				for (long i = 1; i <= el; i++) {
 					pointSum += i;
 				}
