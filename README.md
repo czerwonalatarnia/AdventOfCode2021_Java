@@ -1,4 +1,4 @@
-# AdventOfCode2021_Java
+# Advent Of Code 2021 Java Edition
 
 Trying to do this year's challenges in Java to learn language a little.
 
