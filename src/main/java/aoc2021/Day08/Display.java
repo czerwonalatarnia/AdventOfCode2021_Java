@@ -7,10 +7,6 @@ public class Display {
 		stringMakingNumber[display] = code;
 	}
 
-	public char[] getDisplayParts(int number) {
-		return stringMakingNumber[number].toCharArray();
-	}
-
 	public int getNumber(String value) {
 		for (int i = 0; i < 10; i++) {
 			if (value.length() == stringMakingNumber[i].length()) {
