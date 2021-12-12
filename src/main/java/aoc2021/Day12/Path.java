@@ -2,6 +2,7 @@ package aoc2021.Day12;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class Path {
 	private final String path;
@@ -33,17 +34,17 @@ public class Path {
 
 	public Path(Path oldPath, Cave cave) {
 		path = oldPath.path + cave;
-		currentPath = new LinkedList<>(oldPath.currentPath);
-		currentPath.addLast(cave.getName());
 		visited = new HashSet<>(oldPath.visited);
 		visited2 = new HashSet<>(oldPath.visited2);
+		currentPath = new LinkedList<>(oldPath.currentPath);
 		repeatSmall = oldPath.repeatSmall;
-		visited2.add("start");
-		visited2.add("end");
-		if (cave.getName().chars()
-		             .filter(Character::isUpperCase)
-		             .findAny()
-		             .isEmpty()) {
+
+		currentPath.addLast(cave.getName());
+		if (cave.getName()
+		        .chars()
+		        .filter(Character::isUpperCase)
+		        .findAny()
+		        .isEmpty()) {
 			if (visited.add(cave.getName())) {
 				if (repeatSmall > 0)
 					visited2.add(cave.getName());
@@ -52,6 +53,19 @@ public class Path {
 			} else
 				visited2.add(cave.getName());
 		}
+	}
+
+	@Override public int hashCode() {
+		return Objects.hash(path, visited, visited2, currentPath, repeatSmall);
+	}
+
+	@Override public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Path path1 = (Path) o;
+		return repeatSmall == path1.repeatSmall && Objects.equals(path, path1.path) && Objects.equals(visited, path1.visited) && Objects.equals(visited2, path1.visited2) && Objects.equals(currentPath, path1.currentPath);
 	}
 
 	public String currentCave() {
