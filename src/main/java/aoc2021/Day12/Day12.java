@@ -28,7 +28,7 @@ public class Day12 implements IDay {
 		if (mapTheCaves(data, caves))
 			return -1;
 		LinkedList<Path> pathBuilding = new LinkedList<>();
-		HashSet<Path> paths = new HashSet<>();
+		LinkedList<Path> paths = new LinkedList<>();
 		pathBuilding.add(new Path("start"));
 		pathFinder2(caves, pathBuilding, paths);
 		return paths.size();
@@ -76,7 +76,7 @@ public class Day12 implements IDay {
 		}
 	}
 
-	private void pathFinder2(HashMap<String, Cave> caves, LinkedList<Path> pathBuilding, HashSet<Path> paths) {
+	private void pathFinder2(HashMap<String, Cave> caves, LinkedList<Path> pathBuilding, LinkedList<Path> paths) {
 		while (!pathBuilding.isEmpty()) {
 			Path currentPath = pathBuilding.poll();
 			if (currentPath.currentCave()
@@ -92,14 +92,16 @@ public class Day12 implements IDay {
 						paths.add(new Path(currentPath, caves.get("end")));
 						continue;
 					}
+					if (connected.equals("start")) {
+						continue;
+					}
 					if (currentPath.isRepeat(connected)) {
-						if (currentPath.isRepeat2(connected)) {
-							continue;
-						}
 						if (currentPath.canRepeat()) {
-							currentPath.setCanRepeat(false);
-						} else
-							continue;
+							Path addPath = new Path(currentPath, caves.get(connected));
+							addPath.setCanRepeat(false);
+							pathBuilding.add(addPath);
+						}
+						continue;
 					}
 				}
 				pathBuilding.add(new Path(currentPath, caves.get(connected)));
