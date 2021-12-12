@@ -38,21 +38,25 @@ public class Path {
 		visited2 = new HashSet<>(oldPath.visited2);
 		currentPath = new LinkedList<>(oldPath.currentPath);
 		canRepeat = oldPath.canRepeat;
-
 		currentPath.addLast(cave.getName());
 		if (cave.getName()
 		        .chars()
 		        .filter(Character::isUpperCase)
 		        .findAny()
 		        .isEmpty()) {
-			if (visited.add(cave.getName())) {
-				if (canRepeat)
-					canRepeat = false;
-				else
-					visited2.add(cave.getName());
-			} else
-				visited2.add(cave.getName());
+			if (visited.add(cave.getName()) && canRepeat) {
+				return;
+			}
+			visited2.add(cave.getName());
 		}
+	}
+
+	public boolean canRepeat() {
+		return canRepeat;
+	}
+
+	public void setCanRepeat(boolean canRepeat) {
+		this.canRepeat = canRepeat;
 	}
 
 	@Override public int hashCode() {
