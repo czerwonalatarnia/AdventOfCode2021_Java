@@ -7,7 +7,6 @@ import java.util.Objects;
 public class Path {
 	private final String path;
 	private final HashSet<String> visited;
-	private final HashSet<String> visited2;
 	private final LinkedList<String> currentPath;
 	private boolean canRepeat;
 
@@ -16,9 +15,6 @@ public class Path {
 		visited = new HashSet<>();
 		visited.add(cave);
 		canRepeat = true;
-		visited2 = new HashSet<>();
-		visited2.add("start");
-		visited2.add("end");
 		currentPath = new LinkedList<>();
 		currentPath.add(cave);
 	}
@@ -26,29 +22,18 @@ public class Path {
 	public Path(Path oldPath, String cave) {
 		path = oldPath.path + cave;
 		visited = new HashSet<>(oldPath.visited);
-		visited2 = new HashSet<>(oldPath.visited2);
 		visited.add(cave);
 		currentPath = new LinkedList<>(oldPath.currentPath);
 		currentPath.addLast(cave);
 	}
 
 	public Path(Path oldPath, Cave cave) {
-		path = oldPath.path + cave;
+		path = oldPath.path + cave.getName();
 		visited = new HashSet<>(oldPath.visited);
-		visited2 = new HashSet<>(oldPath.visited2);
+		visited.add(cave.getName());
 		currentPath = new LinkedList<>(oldPath.currentPath);
 		canRepeat = oldPath.canRepeat;
 		currentPath.addLast(cave.getName());
-		if (cave.getName()
-		        .chars()
-		        .filter(Character::isUpperCase)
-		        .findAny()
-		        .isEmpty()) {
-			if (visited.add(cave.getName()) && canRepeat) {
-				return;
-			}
-			visited2.add(cave.getName());
-		}
 	}
 
 	public boolean canRepeat() {
@@ -60,7 +45,7 @@ public class Path {
 	}
 
 	@Override public int hashCode() {
-		return Objects.hash(path, visited, visited2, currentPath, canRepeat);
+		return Objects.hash(path, visited, currentPath, canRepeat);
 	}
 
 	@Override public boolean equals(Object o) {
@@ -69,7 +54,7 @@ public class Path {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Path path1 = (Path) o;
-		return canRepeat == path1.canRepeat && Objects.equals(path, path1.path) && Objects.equals(visited, path1.visited) && Objects.equals(visited2, path1.visited2) && Objects.equals(currentPath, path1.currentPath);
+		return canRepeat == path1.canRepeat && Objects.equals(path, path1.path) && Objects.equals(visited, path1.visited) && Objects.equals(currentPath, path1.currentPath);
 	}
 
 	public String currentCave() {
@@ -80,16 +65,13 @@ public class Path {
 		return visited.contains(cave);
 	}
 
-	public boolean isRepeat2(String cave) {
-		return visited2.contains(cave);
-	}
-
 	public String finalPath() {
 		StringBuilder print = new StringBuilder();
 		for (var el : currentPath) {
-			print.append(el).append(',');
+			print.append(el)
+			     .append(',');
 		}
-		print.deleteCharAt(print.length()-1);
+		print.deleteCharAt(print.length() - 1);
 		return String.valueOf(print);
 	}
 }
