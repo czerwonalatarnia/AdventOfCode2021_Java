@@ -55,7 +55,6 @@ public class Day12 implements IDay {
 	private void pathFinder(HashMap<String, Cave> caves, LinkedList<Path> pathBuilding, HashSet<Path> paths) {
 		while (!pathBuilding.isEmpty()) {
 			Path currentPath = pathBuilding.poll();
-			assert currentPath != null;
 			if (currentPath.currentCave()
 			               .equals("end"))
 				continue;
@@ -65,12 +64,12 @@ public class Day12 implements IDay {
 				             .filter(Character::isUpperCase)
 				             .findAny()
 				             .isEmpty()) {
-					if (currentPath.isRepeat(connected))
-						continue;
 					if (connected.equals("end")) {
 						paths.add(new Path(currentPath, "end"));
 						continue;
 					}
+					if (currentPath.isRepeat(connected))
+						continue;
 				}
 				pathBuilding.add(new Path(currentPath, connected));
 			}
@@ -80,7 +79,6 @@ public class Day12 implements IDay {
 	private void pathFinder2(HashMap<String, Cave> caves, LinkedList<Path> pathBuilding, HashSet<Path> paths) {
 		while (!pathBuilding.isEmpty()) {
 			Path currentPath = pathBuilding.poll();
-			assert currentPath != null;
 			if (currentPath.currentCave()
 			               .equals("end"))
 				continue;
@@ -91,11 +89,18 @@ public class Day12 implements IDay {
 				             .findAny()
 				             .isEmpty()) {
 					if (connected.equals("end")) {
-						paths.add(new Path(currentPath, "end"));
+						paths.add(new Path(currentPath, caves.get("end")));
 						continue;
 					}
-					if (currentPath.isRepeat(connected) && currentPath.isRepeat2(connected))
-						continue;
+					if (currentPath.isRepeat(connected)) {
+						if (currentPath.isRepeat2(connected)) {
+							continue;
+						}
+						if (currentPath.canRepeat()) {
+							currentPath.setCanRepeat(false);
+						} else
+							continue;
+					}
 				}
 				pathBuilding.add(new Path(currentPath, caves.get(connected)));
 			}
