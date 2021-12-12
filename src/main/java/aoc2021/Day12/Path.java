@@ -85,6 +85,11 @@ public class Path {
 	}
 
 	public String finalPath() {
-		return currentPath.toString();
+		StringBuilder print = new StringBuilder();
+		for (var el : currentPath) {
+			print.append(el).append(',');
+		}
+		print.deleteCharAt(print.length()-1);
+		return String.valueOf(print);
 	}
 }

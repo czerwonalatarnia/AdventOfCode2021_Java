@@ -98,7 +98,8 @@ public class Day12 implements IDay {
 						}
 						if (currentPath.canRepeat()) {
 							currentPath.setCanRepeat(false);
-						}
+						} else
+							continue;
 					}
 				}
 				pathBuilding.add(new Path(currentPath, caves.get(connected)));
