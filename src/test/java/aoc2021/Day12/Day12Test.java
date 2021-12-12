@@ -38,4 +38,10 @@ class Day12Test {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day12testB.txt"));
 		assertEquals(103, new Day12().part2(dataTest));
 	}
+
+	@Test void testPart2Answer() {
+		Path codeFix = Path.of("src", "main", "resources");
+		var dataTest = DataReader.readAlchemyString(codeFix.resolve("day12.txt"));
+		assertEquals(120535, new Day12().part2(dataTest));
+	}
 }

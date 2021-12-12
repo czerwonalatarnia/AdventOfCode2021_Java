@@ -107,8 +107,5 @@ public class Day12 implements IDay {
 				pathBuilding.add(new Path(currentPath, caves.get(connected)));
 			}
 		}
-		for (var asd : paths) {
-			System.out.println(asd.finalPath());
-		}
 	}
 }
