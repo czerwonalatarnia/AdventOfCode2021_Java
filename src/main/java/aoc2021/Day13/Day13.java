@@ -2,6 +2,7 @@ package aoc2021.Day13;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
@@ -14,7 +15,7 @@ public class Day13 implements IDay {
 
 	int part(LinkedList<String> data) {
 		int part1Answer = 0;
-		HashSet<Point> points = new HashSet<>();
+		Set<Point> points = new HashSet<>();
 		LinkedList<String> instructions = new LinkedList<>();
 		for (var el : data) {
 			if (el.charAt(0) >= '0' && el.charAt(0) <= '9') {
@@ -24,16 +25,7 @@ public class Day13 implements IDay {
 				instructions.add(el);
 		}
 		for (int it = 0; it < instructions.size(); it++) {
-			String[] split = instructions.get(it)
-			                             .split("=");
-			char axis = split[0].charAt(split[0].length() - 1);
-			int pos = Integer.parseInt(split[1]);
-			HashSet<Point> temp = new HashSet<>(points);
-			points.clear();
-			for (var el : temp) {
-				el.fold(axis, pos);
-				points.add(el);
-			}
+			points = foldThePaper(points, instructions.get(it));
 			if (it == 0) {
 				part1Answer = points.size();
 				System.out.println("The answer to part 1 is " + part1Answer + "\nThe answer to part 2 are the letters from the picture");
@@ -43,7 +35,19 @@ public class Day13 implements IDay {
 		return part1Answer;
 	}
 
-	private void printPicture(HashSet<Point> points) {
+	private Set<Point> foldThePaper(Set<Point> points, String instructions) {
+		String[] split = instructions.split("=");
+		char axis = split[0].charAt(split[0].length() - 1);
+		int pos = Integer.parseInt(split[1]);
+		Set<Point> folded = new HashSet<>();
+		for (var el : points) {
+			el.fold(axis, pos);
+			folded.add(el);
+		}
+		return folded;
+	}
+
+	private void printPicture(Set<Point> points) {
 		int relativeWidth = 0;
 		int relativeHeight = 0;
 		int maxWidth = 0;
