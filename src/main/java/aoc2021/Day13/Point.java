@@ -18,10 +18,6 @@ public class Point {
 			y = 2 * pos - y;
 	}
 
-	public String getPosition() {
-		return x + "," + y;
-	}
-
 	public int getX() {
 		return x;
 	}
