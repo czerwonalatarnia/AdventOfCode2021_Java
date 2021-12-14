@@ -9,49 +9,11 @@ import aoc2021.own.functions.DataReader;
 public class Day14 implements IDay {
 	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(14));
-		System.out.println("Day 14\nThe answer to part 1 is " + part1(data));
-		System.out.println("The answer to part 2 is " + part2(data));
+		System.out.println("Day 14\nThe answer to part 1 is " + part(data, 10));
+		System.out.println("The answer to part 2 is " + part(data, 40));
 	}
 
-	int part1(LinkedList<String> data) {
-		String elements = data.getFirst();
-		LinkedList<String> rules = new LinkedList<>(data);
-		rules.pollFirst();
-		HashMap<String, Character> insertions = new HashMap<>();
-		for (var rule : rules) {
-			insertions.put("" + rule.charAt(0) + rule.charAt(1), rule.charAt(rule.length() - 1));
-		}
-		int[] elementAmount = new int[26];
-		for (int it = 0; it < 10; it++) {
-			StringBuilder newElements = new StringBuilder("" + elements.charAt(0));
-			for (int i = 1; i < elements.length(); i++) {
-				String key = "" + elements.charAt(i - 1) + elements.charAt(i);
-				newElements.append(insertions.get(key))
-				           .append(elements.charAt(i));
-			}
-			elements = String.valueOf(newElements);
-		}
-		for (int it = 0; it < elements.length(); it++) {
-			elementAmount[elements.charAt(it) - 'A']++;
-		}
-		int max = 0;
-		int min = Integer.MAX_VALUE;
-		for (var el : elementAmount) {
-			if (el > max)
-				max = el;
-			if (el < min & el > 0)
-				min = el;
-		}
-		for (var el : elementAmount) {
-			System.out.print(el + ", ");
-		}
-		System.out.println();
-		return max - min;
-	}
-
-	// Something doesn't work correctly
-
-	BigInteger part2(LinkedList<String> data) {
+	BigInteger part(LinkedList<String> data, int repeats) {
 		String elements = data.getFirst();
 		LinkedList<String> rules = new LinkedList<>(data);
 		rules.pollFirst();
@@ -70,7 +32,7 @@ public class Day14 implements IDay {
 			amount.replace(key, amount.get(key)
 			                          .add(BigInteger.ONE));
 		}
-		for (int it = 0; it < 40; it++) {
+		for (int it = 0; it < repeats; it++) {
 			HashMap<String, BigInteger> temp = new HashMap<>();
 			for (String key : amount.keySet()) {
 				String key1 = "" + key.charAt(0) + insertions.get(key);
@@ -90,12 +52,17 @@ public class Day14 implements IDay {
 		}
 		for (String key : amount.keySet()) {
 			elementAmount[key.charAt(0) - 'A'] = elementAmount[key.charAt(0) - 'A'].add(amount.get(key));
-			elementAmount[key.charAt(0) - 'A'] = elementAmount[key.charAt(0) - 'A'].add(amount.get(key));
+			elementAmount[key.charAt(1) - 'A'] = elementAmount[key.charAt(1) - 'A'].add(amount.get(key));
 		}
-		for (var el : elementAmount) {
-			System.out.print(el + ", ");
-		}
-		System.out.println();
+
+		// each element, except first and last, is counted twice (as they are part of two pairs: aX and Xb
+		// so for correct result first the counter for border elements must be increased and later all the counters
+		// must be divided by two
+
+		elementAmount[elements.charAt(0) - 'A'] = elementAmount[elements.charAt(0) - 'A'].add(BigInteger.ONE);
+		elementAmount[elements.charAt(elements.length() - 1) - 'A'] = elementAmount[elements.charAt(elements.length() - 1) - 'A'].add(BigInteger.ONE);
+		for (int i = 0; i < 26; i++)
+			elementAmount[i] = elementAmount[i].divide(BigInteger.TWO);
 		BigInteger max = BigInteger.ZERO;
 		BigInteger min = new BigInteger(String.valueOf(Long.MAX_VALUE));
 		for (var el : elementAmount) {
@@ -104,9 +71,6 @@ public class Day14 implements IDay {
 			if (el.compareTo(min) < 0 && el.compareTo(BigInteger.ZERO) > 0)
 				min = el;
 		}
-
-		// But the result IS OKAY
-
-		return max.subtract(min).divide(BigInteger.TWO).subtract(BigInteger.ONE);
+		return max.subtract(min);
 	}
 }
