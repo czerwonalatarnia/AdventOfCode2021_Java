@@ -6,10 +6,6 @@ import aoc2021.own.functions.DataReader;
 import aoc2021.own.functions.MapSearches;
 
 public class Day15 implements IDay {
-	public static void main(String[] args) {
-		new Day15().day();
-	}
-
 	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(15));
 		System.out.println("Day 15\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
