@@ -3,6 +3,7 @@ package aoc2021.Day15;
 import java.util.LinkedList;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
+import aoc2021.own.functions.MapSearches;
 
 public class Day15 implements IDay {
 	public static void main(String[] args) {
@@ -29,7 +30,7 @@ public class Day15 implements IDay {
 				bestDistance[it][jt] = Integer.MAX_VALUE;
 			}
 		}
-		drawTheDistance(bestDistance, map, maxWidth, maxHeight);
+		MapSearches.mapBFSSquareNaive(bestDistance, map, maxWidth, maxHeight, 0, 0, 0);
 		return bestDistance[exitX][exitY];
 	}
 
@@ -54,38 +55,7 @@ public class Day15 implements IDay {
 				bestDistance[it][jt] = Integer.MAX_VALUE;
 			}
 		}
-		drawTheDistance(bestDistance, map, maxWidth, maxHeight);
+		MapSearches.mapBFSSquareNaive(bestDistance, map, maxWidth, maxHeight, 0, 0, 0);
 		return bestDistance[exitX][exitY];
-	}
-
-	private void drawTheDistance(int[][] bestDistance, int[][] map, int maxWidth, int maxHeight) {
-		for (int i = 0; i < 1000; i++) {
-			for (int y = 0; y < maxHeight; y++) {
-				for (int x = 0; x < maxWidth; x++) {
-					if (y == 0 & x == 0)
-						bestDistance[x][y] = 0;
-					try {
-						if (bestDistance[x + 1][y] > bestDistance[x][y] + map[x + 1][y])
-							bestDistance[x + 1][y] = bestDistance[x][y] + map[x + 1][y];
-					} catch (IndexOutOfBoundsException ignored) {
-					}
-					try {
-						if (bestDistance[x - 1][y] > bestDistance[x][y] + map[x - 1][y])
-							bestDistance[x - 1][y] = bestDistance[x][y] + map[x - 1][y];
-					} catch (IndexOutOfBoundsException ignored) {
-					}
-					try {
-						if (bestDistance[x][y - 1] > bestDistance[x][y] + map[x][y - 1])
-							bestDistance[x][y - 1] = bestDistance[x][y] + map[x][y - 1];
-					} catch (IndexOutOfBoundsException ignored) {
-					}
-					try {
-						if (bestDistance[x][y + 1] > bestDistance[x][y] + map[x][y + 1])
-							bestDistance[x][y + 1] = bestDistance[x][y] + map[x][y + 1];
-					} catch (IndexOutOfBoundsException ignored) {
-					}
-				}
-			}
-		}
 	}
 }
