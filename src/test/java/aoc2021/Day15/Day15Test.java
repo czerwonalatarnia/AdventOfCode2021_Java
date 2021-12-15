@@ -15,6 +15,6 @@ class Day15Test {
 
 	@Test void testPart2() {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day15test.txt"));
-		assertEquals(0, new Day15().part2(dataTest));
+		assertEquals(315, new Day15().part2(dataTest));
 	}
 }

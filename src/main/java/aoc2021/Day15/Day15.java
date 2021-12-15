@@ -1,11 +1,14 @@
 package aoc2021.Day15;
 
 import java.util.LinkedList;
-import java.util.Stack;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
 public class Day15 implements IDay {
+	public static void main(String[] args) {
+		new Day15().day();
+	}
+
 	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(15));
 		System.out.println("Day 9\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
@@ -17,70 +20,72 @@ public class Day15 implements IDay {
 		int maxHeight = data.size();
 		int exitX = maxWidth - 1;
 		int exitY = maxHeight - 1;
-		int minDanger = Integer.MAX_VALUE;
-		Stack<Path> paths = new Stack<>();
 		int[][] map = new int[maxWidth][maxHeight];
+		int[][] bestDistance = new int[maxWidth][maxHeight];
 		for (int jt = 0; jt < maxHeight; jt++) {
-			for (int it = 0; it < maxWidth; it++)
+			for (int it = 0; it < maxWidth; it++) {
 				map[it][jt] = data.get(jt)
 				                  .charAt(it) - '0';
+				bestDistance[it][jt] = Integer.MAX_VALUE;
+			}
 		}
-		paths.push(new Path(0, 0, 0));
-		while (!paths.isEmpty()) {
-			Path here = paths.pop();
-			int x = here.getXPos();
-			int y = here.getYPos();
-			if (here.getPathDanger() >= minDanger)
-				continue;
-			if (x == exitX && y == exitY) {
-				minDanger = here.getPathDanger();
-				continue;
-			}
-			/*if (x - 1 > 0) {
-				if (here.isNew(x - 1, y))
-					paths.push(new Path(x - 1, y, map[x - 1][y], here));
-			}
-			if (y - 1 > 0) {
-				if (here.isNew(x, y - 1))
-					paths.push(new Path(x, y - 1, map[x][y - 1], here));
-			}*/
-			if (y < exitY && x < exitX) {
-				if (map[x][y + 1] > map[x + 1][y]) {
-					if (x + 1 < maxWidth) {
-						if (here.isNew(x + 1, y))
-							paths.push(new Path(x + 1, y, map[x + 1][y], here));
-					}
-					if (y + 1 < maxWidth) {
-						if (here.isNew(x, y + 1))
-							paths.push(new Path(x, y + 1, map[x][y + 1], here));
-					}
-				} else {
-					if (y + 1 < maxWidth) {
-						if (here.isNew(x, y + 1))
-							paths.push(new Path(x, y + 1, map[x][y + 1], here));
-					}
-					if (x + 1 < maxWidth) {
-						if (here.isNew(x + 1, y))
-							paths.push(new Path(x + 1, y, map[x + 1][y], here));
-					}
-				}
-			} else {
-				if (x + 1 < maxWidth) {
-					if (here.isNew(x + 1, y))
-						paths.push(new Path(x + 1, y, map[x + 1][y], here));
-				}
-				if (y + 1 < maxWidth) {
-					if (here.isNew(x, y + 1))
-						paths.push(new Path(x, y + 1, map[x][y + 1], here));
-				}
-
-			}
-			System.out.println("(" + x + ", " + y + ") = " + here.getPathDanger() + " --------- " + minDanger);
-		}
-		return minDanger;
+		drawTheDistance(bestDistance, map, maxWidth, maxHeight);
+		return bestDistance[exitX][exitY];
 	}
 
 	int part2(LinkedList<String> data) {
-		return 0;
+		int repeatX = data.get(0)
+		                  .length();
+		int repeatY = data.size();
+		int maxWidth = data.get(0)
+		                   .length() * 5;
+		int maxHeight = data.size() * 5;
+		int exitX = maxWidth - 1;
+		int exitY = maxHeight - 1;
+		int[][] map = new int[maxWidth][maxHeight];
+		int[][] bestDistance = new int[maxWidth][maxHeight];
+		for (int jt = 0; jt < maxHeight; jt++) {
+			for (int it = 0; it < maxWidth; it++) {
+				map[it][jt] = data.get(jt % repeatY)
+				                  .charAt(it % repeatX) - '0';
+				map[it][jt] += ((it / repeatX) + (jt / repeatY));
+				while (map[it][jt] > 9)
+					map[it][jt] -= 9;
+				bestDistance[it][jt] = Integer.MAX_VALUE;
+			}
+		}
+		drawTheDistance(bestDistance, map, maxWidth, maxHeight);
+		return bestDistance[exitX][exitY];
+	}
+
+	private void drawTheDistance(int[][] bestDistance, int[][] map, int maxWidth, int maxHeight) {
+		for (int i = 0; i < 1000; i++) {
+			for (int y = 0; y < maxHeight; y++) {
+				for (int x = 0; x < maxWidth; x++) {
+					if (y == 0 & x == 0)
+						bestDistance[x][y] = 0;
+					try {
+						if (bestDistance[x + 1][y] > bestDistance[x][y] + map[x + 1][y])
+							bestDistance[x + 1][y] = bestDistance[x][y] + map[x + 1][y];
+					} catch (IndexOutOfBoundsException ignored) {
+					}
+					try {
+						if (bestDistance[x - 1][y] > bestDistance[x][y] + map[x - 1][y])
+							bestDistance[x - 1][y] = bestDistance[x][y] + map[x - 1][y];
+					} catch (IndexOutOfBoundsException ignored) {
+					}
+					try {
+						if (bestDistance[x][y - 1] > bestDistance[x][y] + map[x][y - 1])
+							bestDistance[x][y - 1] = bestDistance[x][y] + map[x][y - 1];
+					} catch (IndexOutOfBoundsException ignored) {
+					}
+					try {
+						if (bestDistance[x][y + 1] > bestDistance[x][y] + map[x][y + 1])
+							bestDistance[x][y + 1] = bestDistance[x][y] + map[x][y + 1];
+					} catch (IndexOutOfBoundsException ignored) {
+					}
+				}
+			}
+		}
 	}
 }
