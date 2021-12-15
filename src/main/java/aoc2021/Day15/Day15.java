@@ -12,7 +12,7 @@ public class Day15 implements IDay {
 
 	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(15));
-		System.out.println("Day 9\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
+		System.out.println("Day 15\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
 	}
 
 	int part1(LinkedList<String> data) {
