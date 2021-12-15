@@ -30,7 +30,7 @@ public class Day15 implements IDay {
 				bestDistance[it][jt] = Integer.MAX_VALUE;
 			}
 		}
-		MapSearches.mapBFSSquareNaive(bestDistance, map, maxWidth, maxHeight, 0, 0, 0);
+		MapSearches.mapBFSSquare(bestDistance, map, maxWidth, maxHeight, 0, 0, 0);
 		return bestDistance[exitX][exitY];
 	}
 
@@ -55,7 +55,7 @@ public class Day15 implements IDay {
 				bestDistance[it][jt] = Integer.MAX_VALUE;
 			}
 		}
-		MapSearches.mapBFSSquareNaive(bestDistance, map, maxWidth, maxHeight, 0, 0, 0);
+		MapSearches.mapBFSSquare(bestDistance, map, maxWidth, maxHeight, 0, 0, 0);
 		return bestDistance[exitX][exitY];
 	}
 }

@@ -3,7 +3,7 @@ package aoc2021.Day15;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import aoc2021.Day13.Point;
+import aoc2021.own.objects.Point;
 
 public class Path {
 	private final int xPos;
