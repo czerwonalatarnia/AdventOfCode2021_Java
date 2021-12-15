@@ -1,4 +1,4 @@
-package aoc2021.Day13;
+package aoc2021.own.objects;
 
 import java.util.Objects;
 

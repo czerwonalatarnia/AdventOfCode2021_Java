@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
+import aoc2021.own.objects.Point;
 
 public class Day13 implements IDay {
 	public void day() {
