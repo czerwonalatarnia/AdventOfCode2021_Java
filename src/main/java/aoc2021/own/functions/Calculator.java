@@ -51,7 +51,9 @@ public interface Calculator {
 	 */
 
 	static long arrayLongMax(List<Long> array) {
-		return array.stream().max(Long::compareTo).orElseThrow();
+		return array.stream()
+		            .max(Long::compareTo)
+		            .orElseThrow();
 	}
 
 	/**
@@ -59,7 +61,9 @@ public interface Calculator {
 	 */
 
 	static long arrayLongMin(List<Long> array) {
-		return array.stream().min(Long::compareTo).orElseThrow();
+		return array.stream()
+		            .min(Long::compareTo)
+		            .orElseThrow();
 	}
 
 	/**
@@ -67,7 +71,9 @@ public interface Calculator {
 	 */
 
 	static double arrayDoubleMax(List<Double> array) {
-		return array.stream().max(Double::compareTo).orElseThrow();
+		return array.stream()
+		            .max(Double::compareTo)
+		            .orElseThrow();
 	}
 
 	/**
@@ -75,7 +81,9 @@ public interface Calculator {
 	 */
 
 	static double arrayDoubleMin(List<Double> array) {
-		return array.stream().min(Double::compareTo).orElseThrow();
+		return array.stream()
+		            .min(Double::compareTo)
+		            .orElseThrow();
 	}
 
 	static int binaryToInt(String binary) {
@@ -83,15 +91,15 @@ public interface Calculator {
 		int sum = 0;
 		for (int i = 0; i < length; i++) {
 			sum *= 2;
-			if (binary.charAt(i) == '1') {
+			if (binary.charAt(i) == '1')
 				sum += 1;
-			}
-		} return sum;
+		}
+		return sum;
 	}
 
 	static String hexToBinString(String hex) {
 		StringBuilder bin = new StringBuilder();
-		for (int i = 0; i < hex.length(); i++){
+		for (int i = 0; i < hex.length(); i++) {
 			switch (hex.charAt(i)) {
 				case '0' -> bin.append("0000");
 				case '1' -> bin.append("0001");
