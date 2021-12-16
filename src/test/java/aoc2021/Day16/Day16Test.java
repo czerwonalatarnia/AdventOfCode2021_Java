@@ -43,8 +43,43 @@ class Day16Test {
 		assertEquals(31, new Day16().part1(dataTest));
 	}
 
-	@Test void testPart2() {
-		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testA.txt"));
+	@Test void testPart2G() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testG.txt"));
+		assertEquals(3, new Day16().part2(dataTest));
+	}
+
+	@Test void testPart2H() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testH.txt"));
+		assertEquals(54, new Day16().part2(dataTest));
+	}
+
+	@Test void testPart2I() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testI.txt"));
+		assertEquals(7, new Day16().part2(dataTest));
+	}
+
+	@Test void testPart2J() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testJ.txt"));
+		assertEquals(9, new Day16().part2(dataTest));
+	}
+
+	@Test void testPart2K() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testK.txt"));
+		assertEquals(1, new Day16().part2(dataTest));
+	}
+
+	@Test void testPart2L() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testL.txt"));
 		assertEquals(0, new Day16().part2(dataTest));
+	}
+
+	@Test void testPart2M() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testM.txt"));
+		assertEquals(0, new Day16().part2(dataTest));
+	}
+
+	@Test void testPart2N() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testN.txt"));
+		assertEquals(1, new Day16().part2(dataTest));
 	}
 }
