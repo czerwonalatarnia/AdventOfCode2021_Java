@@ -6,7 +6,6 @@ import aoc2021.own.functions.Calculator;
 public class Message {
 	private final int mainVersion;
 	private final int mainType;
-	private final int value;
 	private LinkedList<Message> subMessages = new LinkedList<>();
 
 	public Message(String message) {
@@ -22,24 +21,10 @@ public class Message {
 		}
 		System.out.println("Creating message, lenghtType = " + lengthType + "\n\t\t" + message);
 		String restOfMessage = message.substring(iterator);
-		if (lengthType == 0) {
-			value = 0;
+		if (lengthType == 0)
 			subMessages = setSubMessages(restOfMessage.substring(15));
-		} else if (lengthType == 1) {
-			value = 0;
-			int amount = Calculator.binaryToInt(restOfMessage.substring(0, 11));
-			subMessages = setSubMessages(restOfMessage.substring(11), amount);
-		} else {
-			int sum = 0;
-			for (int i = 0; i < restOfMessage.length(); i += 5) {
-				sum += Calculator.binaryToInt(restOfMessage.substring(i + 1, i + 5));
-				if (restOfMessage.charAt(i) == '0') {
-					break;
-				} else
-					sum *= 16;
-			}
-			value = sum;
-		}
+		else if (lengthType == 1)
+			subMessages = setSubMessages(restOfMessage.substring(11), Calculator.binaryToInt(restOfMessage.substring(0, 11)));
 	}
 
 	private LinkedList<Message> setSubMessages(String message) {
@@ -56,30 +41,22 @@ public class Message {
 				lengthType = message.charAt(6) - '0';
 			if (lengthType != -1 && message.length() < 19)
 				break;
-			switch (lengthType) {
-				case -1 -> {
-					subMessage.append(message, 0, 6);
-					message = message.substring(6);
-					System.out.println("Cut start\t" + message);
-					int i = 0;
-					for (; i < message.length(); i += 5) {
-						if (message.charAt(i) == '0') {
-							i += 5;
-							subMessage.append(message, 0, i);
-							message = message.substring(i);
-							break;
-						}
-					}
-					System.out.println("Prepared\t" + message);
-				}
-				case 0 -> message = case0(message, subMessage);
-				case 1 -> message = case1(message, subMessage);
-			}
-			System.out.println("Will create\t" + subMessage);
-			messages.add(new Message(String.valueOf(subMessage)));
-			System.out.println("Created\t" + message + '\n');
+			message = findSubPacket(message, messages, subMessage, lengthType);
 		}
 		return messages;
+	}
+
+	private String findSubPacket(String message, LinkedList<Message> messages, StringBuilder subMessage,
+	                             int lengthType) {
+		switch (lengthType) {
+			case -1 -> message = caseMinus1(message, subMessage);
+			case 0 -> message = case0(message, subMessage);
+			case 1 -> message = case1(message, subMessage);
+		}
+		System.out.println("Will create\t" + subMessage);
+		messages.add(new Message(String.valueOf(subMessage)));
+		System.out.println("Created\t" + message + '\n');
+		return message;
 	}
 
 	private LinkedList<Message> setSubMessages(String message, int amount) {
@@ -95,28 +72,7 @@ public class Message {
 				lengthType = -1;
 			else
 				lengthType = message.charAt(6) - '0';
-			switch (lengthType) {
-				case -1 -> {
-					subMessage.append(message, 0, 6);
-					message = message.substring(6);
-					System.out.println("Cut start\t" + message);
-					int i = 0;
-					for (; i < message.length(); i += 5) {
-						if (message.charAt(i) == '0') {
-							i += 5;
-							subMessage.append(message, 0, i);
-							message = message.substring(i);
-							break;
-						}
-					}
-					System.out.println("Prepared\t" + message);
-				}
-				case 0 -> message = case0(message, subMessage);
-				case 1 -> message = case1(message, subMessage);
-			}
-			System.out.println("Will create\t" + subMessage);
-			messages.add(new Message(String.valueOf(subMessage)));
-			System.out.println("Created\t" + message + '\n');
+			message = findSubPacket(message, messages, subMessage, lengthType);
 		}
 		return messages;
 	}
@@ -127,6 +83,7 @@ public class Message {
 		message = message.substring(22);
 		System.out.println("Cut start\t" + message);
 		subMessage.append(message);
+		message = "";
 		System.out.println("Prepared\t" + message);
 		return message;
 	}
@@ -136,6 +93,24 @@ public class Message {
 		message = message.substring(18);
 		System.out.println("Cut start\t" + message);
 		subMessage.append(message);
+		message = "";
+		System.out.println("Prepared\t" + message);
+		return message;
+	}
+
+	private String caseMinus1(String message, StringBuilder subMessage) {
+		subMessage.append(message, 0, 6);
+		message = message.substring(6);
+		System.out.println("Cut start\t" + message);
+		int i = 0;
+		for (; i < message.length(); i += 5) {
+			if (message.charAt(i) == '0') {
+				i += 5;
+				subMessage.append(message, 0, i);
+				message = message.substring(i);
+				break;
+			}
+		}
 		System.out.println("Prepared\t" + message);
 		return message;
 	}
@@ -152,21 +127,6 @@ public class Message {
 			}
 		}
 		sum += getMainVersion();
-		return sum;
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public int getValues() {
-		int sum = 0;
-		if (!subMessages.isEmpty()) {
-			for (var el : subMessages) {
-				sum += el.getValues();
-			}
-		}
-		sum += getValue();
 		return sum;
 	}
 }

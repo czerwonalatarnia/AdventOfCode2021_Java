@@ -40,6 +40,6 @@ class Day16Test {
 
 	@Test void testPart2() {
 		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testA.txt"));
-		assertEquals(30, new Day16().part2(dataTest));
+		assertEquals(0, new Day16().part2(dataTest));
 	}
 }
