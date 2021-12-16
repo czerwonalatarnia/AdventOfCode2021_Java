@@ -12,8 +12,8 @@ public class Message {
 	private final int mainType;
 	private final int debuggingLengthID;
 	private final int value;
-	private final LinkedList<Message> subMessages = new LinkedList<>();
 	private final int stringPosUnlessCopyOfPrevious;
+	private Message nextMessages = null;
 
 	public Message(char[] message) {
 		this.thisMessage = message;
@@ -27,10 +27,16 @@ public class Message {
 			debuggingLengthID = -1;
 			value = setValue();
 		} else {
-			debuggingLengthID = original[iterator];
+			debuggingLengthID = original[iterator] - '0';
 			iterator += 1;
+			if (debuggingLengthID == 0)
+				iterator += 15;
+			else
+				iterator += 11;
 			value = 0;
 		}
+		if (iterator + 11 < original.length)
+			nextMessages = new Message(Arrays.copyOfRange(original, iterator, original.length));
 	}
 
 	public int setValue() {
@@ -38,10 +44,8 @@ public class Message {
 		do {
 			sum *= 16;
 			sum += Calculator.binaryToInt("" + original[iterator + 1] + original[iterator + 2] + original[iterator + 3] + original[iterator + 4]);
-			System.out.println(sum);
 			iterator += 5;
 		} while (original[iterator - 5] != '0');
-		System.out.println(sum);
 		return sum;
 	}
 
@@ -59,11 +63,8 @@ public class Message {
 
 	public int getVersions() {
 		int sum = 0;
-		if (!subMessages.isEmpty()) {
-			for (var el : subMessages) {
-				sum += el.getVersions();
-			}
-		}
+		if (nextMessages != null)
+			sum += nextMessages.getVersions();
 		sum += getMainVersion();
 		return sum;
 	}
@@ -74,11 +75,8 @@ public class Message {
 
 	public int getValues() {
 		int sum = 0;
-		if (!subMessages.isEmpty()) {
-			for (var el : subMessages) {
-				sum += el.getValues();
-			}
-		}
+		if (nextMessages != null)
+			sum += nextMessages.getValues();
 		sum += getValue();
 		return sum;
 	}
