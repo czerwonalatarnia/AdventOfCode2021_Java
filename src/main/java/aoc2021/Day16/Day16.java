@@ -15,11 +15,17 @@ public class Day16 implements IDay {
 		char[] dataButCharArray = data.toCharArray();
 		Message.setOriginal(dataButCharArray);
 		Message.setIterator(0);
-		Message message = new Message(dataButCharArray);
+		Message message = new Message();
 		return message.getVersions();
 	}
 
 	int part2(String data) {
-		return 0;
+		data = Calculator.hexToBinString(data);
+		char[] dataButCharArray = data.toCharArray();
+		Message.setOriginal(dataButCharArray);
+		Message.setIterator(0);
+		Message message = new Message();
+		System.out.println();
+		return message.getFinalValue();
 	}
 }
