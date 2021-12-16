@@ -54,6 +54,8 @@ public class Message {
 				lengthType = -1;
 			else
 				lengthType = message.charAt(6) - '0';
+			if (lengthType != -1 && message.length() < 19)
+				break;
 			switch (lengthType) {
 				case -1 -> {
 					subMessage.append(message, 0, 6);
@@ -75,25 +77,12 @@ public class Message {
 					int length = Calculator.binaryToInt(message.substring(6, 22));
 					message = message.substring(22);
 					System.out.println("Cut start\t" + message);
-					subMessage.append(message, 0, length);
-					message = message.substring(length);
+					/*subMessage.append(message, 0, length);
+					message = message.substring(length);*/
+					subMessage.append(message);
 					System.out.println("Prepared\t" + message);
 				}
-				case 1 -> {
-					subMessage.append(message, 0, 18);
-					message = message.substring(18);
-					System.out.println("Cut start\t" + message);
-					int i = 0;
-					for (; i < message.length(); i += 5) {
-						if (message.charAt(i) == '0') {
-							i += 5;
-							subMessage.append(message, 0, i);
-							message = message.substring(i);
-							break;
-						}
-					}
-					System.out.println("Prepared\t" + message);
-				}
+				case 1 -> message = case1(message, subMessage);
 			}
 			System.out.println("Will create\t" + subMessage);
 			messages.add(new Message(String.valueOf(subMessage)));
@@ -136,31 +125,37 @@ public class Message {
 					int length = Calculator.binaryToInt(message.substring(6, 22));
 					message = message.substring(22);
 					System.out.println("Cut start\t" + message);
-					subMessage.append(message, 0, length);
-					message = message.substring(length);
+					/*subMessage.append(message, 0, length);
+					message = message.substring(length);*/
+					subMessage.append(message);
 					System.out.println("Prepared\t" + message);
 				}
-				case 1 -> {
-					subMessage.append(message, 0, 18);
-					message = message.substring(18);
-					System.out.println("Cut start\t" + message);
-					int i = 0;
-					for (; i < message.length(); i += 5) {
-						if (message.charAt(i) == '0') {
-							i += 5;
-							subMessage.append(message, 0, i);
-							message = message.substring(i);
-							break;
-						}
-					}
-					System.out.println("Prepared\t" + message);
-				}
+				case 1 -> message = case1(message, subMessage);
 			}
 			System.out.println("Will create\t" + subMessage);
 			messages.add(new Message(String.valueOf(subMessage)));
 			System.out.println("Created\t" + message + '\n');
 		}
 		return messages;
+	}
+
+	private String case1(String message, StringBuilder subMessage) {
+		subMessage.append(message, 0, 18);
+		message = message.substring(18);
+		System.out.println("Cut start\t" + message);
+		/*int i = 0;
+		for (; i < message.length() - 5; i++) {
+			if (message.charAt(i) == '0') {
+				i += 5;
+				while ((i + 18) % 8 != 0)
+					i++;
+				subMessage.append(message, 0, i);
+				message = message.substring(i);
+				break;
+			}
+		}*/
+		System.out.println("Prepared\t" + message);
+		return message;
 	}
 
 	public int getMainVersion() {
