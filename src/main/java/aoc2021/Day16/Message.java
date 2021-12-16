@@ -30,7 +30,7 @@ public class Message {
 	private LinkedList<Message> setSubMessages(String message) {
 		System.out.println();
 		LinkedList<Message> messages = new LinkedList<>();
-		while (message.length() > 11) {
+		while (message.length() > 10) {
 			System.out.println(message.length() + ", " + message);
 			StringBuilder subMessage = new StringBuilder();
 			int type = Calculator.binaryToInt(message.substring(3, 6));
