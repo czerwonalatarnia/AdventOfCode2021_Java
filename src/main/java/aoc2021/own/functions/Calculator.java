@@ -77,4 +77,39 @@ public interface Calculator {
 	static double arrayDoubleMin(List<Double> array) {
 		return array.stream().min(Double::compareTo).orElseThrow();
 	}
+
+	static int binaryToInt(String binary) {
+		int length = binary.length();
+		int sum = 0;
+		for (int i = length - 1; i >= 0; i--) {
+			if (binary.charAt(i) == '1') {
+				sum += Math.pow(2, length - 1  - i);
+			}
+		} return sum;
+	}
+
+	static String hexToBinString(String hex) {
+		StringBuilder bin = new StringBuilder();
+		for (int i = 0; i < hex.length(); i++){
+			switch (hex.charAt(i)) {
+				case '0' -> bin.append("0000");
+				case '1' -> bin.append("0001");
+				case '2' -> bin.append("0010");
+				case '3' -> bin.append("0011");
+				case '4' -> bin.append("0100");
+				case '5' -> bin.append("0101");
+				case '6' -> bin.append("0110");
+				case '7' -> bin.append("0111");
+				case '8' -> bin.append("1000");
+				case '9' -> bin.append("1001");
+				case 'A', 'a' -> bin.append("1010");
+				case 'B', 'b' -> bin.append("1011");
+				case 'C', 'c' -> bin.append("1100");
+				case 'D', 'd' -> bin.append("1101");
+				case 'E', 'e' -> bin.append("1110");
+				case 'F', 'f' -> bin.append("1111");
+			}
+		}
+		return String.valueOf(bin);
+	}
 }
