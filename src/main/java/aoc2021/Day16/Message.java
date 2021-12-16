@@ -9,7 +9,7 @@ public class Message {
 	private final int mainVersion;
 	private final int mainType;
 	private final LinkedList<Message> subMessages = new LinkedList<>();
-	private Integer value = null;
+	private Long value = null;
 
 	public Message() {
 		this.mainVersion = Calculator.binaryToInt("" + original[iterator] + original[iterator + 1] + original[iterator + 2]);
@@ -51,7 +51,7 @@ public class Message {
 	}
 
 	public void setValue() {
-		int sum = 0;
+		long sum = 0;
 		do {
 			sum *= 16;
 			sum += Calculator.binaryToInt("" + original[iterator + 1] + original[iterator + 2] + original[iterator + 3] + original[iterator + 4]);
@@ -84,44 +84,46 @@ public class Message {
 		return sum;
 	}
 
-	public Integer getValue() {
+	public Long getValue() {
 		return value;
 	}
 
-	public int getFinalValue() {
-		int returnValue = 0;
+	public long getFinalValue() {
+		System.out.println("Mode is " + getMainType());
+		long returnValue = 0;
 		if (getMainType() == 4)
 			return getValue();
-		if (subMessages.contains(null)) {
-			for (var el : subMessages) {
-				if (el.getValue() == null)
-					el.getFinalValue();
-			}
-		} else {
-			List<Integer> elements = subMessages.stream()
-			                                    .map(Message::getValue)
-			                                    .toList();
-			switch (getMainType()) {
-				case 0 -> returnValue = elements.stream()
-				                                .mapToInt(Integer::intValue)
-				                                .sum();
-				case 1 -> {
-					returnValue = 1;
-					for (var el : elements)
-						returnValue *= el;
-				}
-				case 2 -> returnValue = elements.stream()
-				                                .min(Integer::compareTo)
-				                                .orElse(Integer.MAX_VALUE);
-				case 3 -> returnValue = elements.stream()
-				                                .max(Integer::compareTo)
-				                                .orElse(Integer.MIN_VALUE);
-				case 5 -> returnValue = elements.get(0) > elements.get(1) ? 1 : 0;
-				case 6 -> returnValue = elements.get(0) < elements.get(1) ? 1 : 0;
-				case 7 -> returnValue = Objects.equals(elements.get(0), elements.get(1)) ? 1 : 0;
+		for (var el : subMessages) {
+			if (el.getValue() == null) {
+				System.out.println("We need to go deeper");
+				el.getFinalValue();
 			}
 		}
+		List<Long> elements = subMessages.stream()
+		                                    .map(Message::getValue)
+		                                    .toList();
+		switch (getMainType()) {
+			case 0 -> {
+				for (var el : elements)
+					returnValue += el;
+			}
+			case 1 -> {
+				returnValue = 1;
+				for (var el : elements)
+					returnValue *= el;
+			}
+			case 2 -> returnValue = elements.stream()
+			                                .min(Long::compareTo)
+			                                .orElse(Long.MAX_VALUE);
+			case 3 -> returnValue = elements.stream()
+			                                .max(Long::compareTo)
+			                                .orElse(Long.MIN_VALUE);
+			case 5 -> returnValue = elements.get(0) > elements.get(1) ? 1 : 0;
+			case 6 -> returnValue = elements.get(0) < elements.get(1) ? 1 : 0;
+			case 7 -> returnValue = Objects.equals(elements.get(0), elements.get(1)) ? 1 : 0;
+		}
 		value = returnValue;
+		System.out.println("It created value " + getValue() + '\n');
 		return returnValue;
 	}
 }

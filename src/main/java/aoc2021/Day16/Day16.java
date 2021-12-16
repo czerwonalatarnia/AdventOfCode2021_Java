@@ -19,7 +19,7 @@ public class Day16 implements IDay {
 		return message.getVersions();
 	}
 
-	int part2(String data) {
+	long part2(String data) {
 		data = Calculator.hexToBinString(data);
 		char[] dataButCharArray = data.toCharArray();
 		Message.setOriginal(dataButCharArray);
