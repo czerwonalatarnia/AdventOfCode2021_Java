@@ -17,11 +17,11 @@ public class Message {
 
 	public Message(char[] message) {
 		this.thisMessage = message;
-		this.mainVersion = Calculator.binaryToInt(Arrays.toString(Arrays.copyOfRange(original, iterator, iterator + 3)));
+		this.mainVersion = Calculator.binaryToInt("" + original[iterator] + original[iterator + 1] + original[iterator + 2]);
 		iterator += 3;
 		this.stringPosUnlessCopyOfPrevious = Arrays.toString(original)
 		                                           .indexOf(Arrays.toString(thisMessage));
-		this.mainType = Calculator.binaryToInt(Arrays.toString(Arrays.copyOfRange(original, iterator, iterator + 3)));
+		this.mainType = Calculator.binaryToInt("" + original[iterator] + original[iterator + 1] + original[iterator + 2]);
 		iterator += 3;
 		if (mainType == 4) {
 			debuggingLengthID = -1;
@@ -37,7 +37,8 @@ public class Message {
 		int sum = 0;
 		do {
 			sum *= 16;
-			sum += Calculator.binaryToInt(Arrays.toString(Arrays.copyOfRange(original, iterator, iterator + 5)));
+			sum += Calculator.binaryToInt("" + original[iterator + 1] + original[iterator + 2] + original[iterator + 3] + original[iterator + 4]);
+			System.out.println(sum);
 			iterator += 5;
 		} while (original[iterator - 5] != '0');
 		System.out.println(sum);
