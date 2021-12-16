@@ -7,18 +7,18 @@ public class Message {
 	public static String original;
 	private final int mainVersion;
 	private final int mainType;
+	private final int lengthType;
+	private final int stringPos;
+	private int value = 0;
 	private LinkedList<Message> subMessages = new LinkedList<>();
-
-	public static void setOriginal(String orignal) {
-		original = orignal;
-	}
 
 	public Message(String message) {
 		//System.out.println("Created\t" + message + '\n');
-		System.out.println(original.indexOf(message));
+		stringPos = original.indexOf(message);
+		printIdValue();
 		mainVersion = Calculator.binaryToInt(message.substring(0, 3));
 		mainType = Calculator.binaryToInt(message.substring(3, 6));
-		int iterator, lengthType;
+		int iterator;
 		if (mainType == 4) {
 			iterator = 6;
 			lengthType = -1;
@@ -32,6 +32,25 @@ public class Message {
 			subMessages = setSubMessages(restOfMessage.substring(15));
 		else if (lengthType == 1)
 			subMessages = setSubMessages(restOfMessage.substring(11), Calculator.binaryToInt(restOfMessage.substring(0, 11)));
+		else {
+			int sum = 0;
+			for (int i = 0; i < restOfMessage.length(); i += 5) {
+				sum += Calculator.binaryToInt(restOfMessage.substring(i + 1, i + 5));
+				if (restOfMessage.charAt(i) == '0') {
+					break;
+				} else
+					sum *= 16;
+			}
+			value = sum;
+		}
+	}
+
+	private void printIdValue() {
+		System.out.println(stringPos);
+	}
+
+	public static void setOriginal(String orignal) {
+		original = orignal;
 	}
 
 	public int getMainVersion() {
@@ -51,7 +70,7 @@ public class Message {
 
 	private LinkedList<Message> setSubMessages(String message) {
 		LinkedList<Message> messages = new LinkedList<>();
-		while (message.length() > 9) {
+		while (message.length() > 10) {
 			//System.out.println(message.length() + " = length,\t" + message);
 			StringBuilder subMessage = new StringBuilder();
 			int type = Calculator.binaryToInt(message.substring(3, 6));
@@ -60,8 +79,6 @@ public class Message {
 				lengthType = -1;
 			else
 				lengthType = message.charAt(6) - '0';
-			if (lengthType != -1 && message.length() < 11)
-				break;
 			message = findSubPacket(message, messages, subMessage, lengthType);
 		}
 		return messages;
@@ -130,5 +147,20 @@ public class Message {
 		subMessage.append(message);
 		message = "";
 		return message;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public int getValues() {
+		int sum = 0;
+		if (!subMessages.isEmpty()) {
+			for (var el : subMessages) {
+				sum += el.getValues();
+			}
+		}
+		sum += getValue();
+		return sum;
 	}
 }
