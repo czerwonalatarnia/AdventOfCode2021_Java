@@ -2,10 +2,8 @@ package aoc2021.own.functions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 import aoc2021.own.exception.FileIsEmpty;
 
@@ -84,35 +82,33 @@ public interface DataReader {
 	}
 
 	/**
-	 * <p>Outputs the {@link LinkedList} of {@link String} elements.</p>
-	 * <p>Use when the data can be processed by reading each word separately.</p>
+	 * <p>Outputs a {@link String}.</p>
+	 * <p>Use when the data fits in one line but there's no reason to split it.</p>
 	 */
 
-	static LinkedList<String> readSimpleString(Path filePath) {
-		LinkedList<String> list = new LinkedList<>();
+	static String readSimpleString(Path filePath) {
 		File fileToRead = filePath.toFile();
+		String string;
 		try {
 			if (fileToRead.length() == 0) {
 				throw new FileIsEmpty("File " + filePath + " is empty.");
 			}
 			Scanner fileScanner = new Scanner(fileToRead);
-			while (fileScanner.hasNextLine()) {
-				String string = fileScanner.nextLine();
-				list.addAll(List.of(string.split("(\\s*,\\s*)|\\s+")));
-			}
+			string = fileScanner.nextLine();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("File " + filePath + " do not exist");
-			return new LinkedList<>();
+			return "";
 		} catch (FileIsEmpty e) {
 			e.printStackTrace();
 			System.out.println("File is empty, check if you didn't forget the data");
-			return new LinkedList<>();
+			return "";
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("You have encountered an unexpected error, but I was expecting it so have this catch");
-			return new LinkedList<>();
+			return "";
 		}
-		return list;
+		return string;
 	}
 
 	/**
