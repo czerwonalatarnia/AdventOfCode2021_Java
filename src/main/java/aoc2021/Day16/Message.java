@@ -4,12 +4,18 @@ import java.util.LinkedList;
 import aoc2021.own.functions.Calculator;
 
 public class Message {
+	public static String original;
 	private final int mainVersion;
 	private final int mainType;
 	private LinkedList<Message> subMessages = new LinkedList<>();
 
+	public static void setOriginal(String orignal) {
+		original = orignal;
+	}
+
 	public Message(String message) {
-		System.out.println("Created\t" + message + '\n');
+		//System.out.println("Created\t" + message + '\n');
+		System.out.println(original.indexOf(message));
 		mainVersion = Calculator.binaryToInt(message.substring(0, 3));
 		mainType = Calculator.binaryToInt(message.substring(3, 6));
 		int iterator, lengthType;
@@ -20,7 +26,7 @@ public class Message {
 			iterator = 7;
 			lengthType = message.charAt(6) - '0';
 		}
-		System.out.println("Creating message, lenghtType = " + lengthType + "\n\t\t" + message);
+		//System.out.println("Creating message, lenghtType = " + lengthType + "\n\t\t" + message);
 		String restOfMessage = message.substring(iterator);
 		if (lengthType == 0)
 			subMessages = setSubMessages(restOfMessage.substring(15));
@@ -44,10 +50,9 @@ public class Message {
 	}
 
 	private LinkedList<Message> setSubMessages(String message) {
-		System.out.println();
 		LinkedList<Message> messages = new LinkedList<>();
-		while (message.length() > 10) {
-			System.out.println(message.length() + ", " + message);
+		while (message.length() > 9) {
+			//System.out.println(message.length() + " = length,\t" + message);
 			StringBuilder subMessage = new StringBuilder();
 			int type = Calculator.binaryToInt(message.substring(3, 6));
 			int lengthType;
@@ -55,7 +60,7 @@ public class Message {
 				lengthType = -1;
 			else
 				lengthType = message.charAt(6) - '0';
-			if (lengthType != -1 && message.length() < 19)
+			if (lengthType != -1 && message.length() < 11)
 				break;
 			message = findSubPacket(message, messages, subMessage, lengthType);
 		}
@@ -63,10 +68,9 @@ public class Message {
 	}
 
 	private LinkedList<Message> setSubMessages(String message, int amount) {
-		System.out.println();
 		LinkedList<Message> messages = new LinkedList<>();
 		while (amount > 0) {
-			System.out.println(amount + " = amount, " + message);
+			//System.out.println(amount + " = amount,\t" + message);
 			amount--;
 			StringBuilder subMessage = new StringBuilder();
 			int type = Calculator.binaryToInt(message.substring(3, 6));
@@ -87,7 +91,7 @@ public class Message {
 			case 0 -> message = case0(message, subMessage);
 			case 1 -> message = case1(message, subMessage);
 		}
-		System.out.println("Will create\t" + subMessage);
+		//System.out.println("Will create\t" + subMessage);
 		messages.add(new Message(String.valueOf(subMessage)));
 		return message;
 	}
@@ -95,7 +99,7 @@ public class Message {
 	private String caseMinus1(String message, StringBuilder subMessage) {
 		subMessage.append(message, 0, 6);
 		message = message.substring(6);
-		System.out.println("Cut start\t" + message);
+		//System.out.println("Cut start\t" + message);
 		int i = 0;
 		for (; i < message.length(); i += 5) {
 			if (message.charAt(i) == '0') {
@@ -105,27 +109,25 @@ public class Message {
 				break;
 			}
 		}
-		System.out.println("Prepared\t" + message);
 		return message;
 	}
 
 	private String case0(String message, StringBuilder subMessage) {
 		subMessage.append(message, 0, 22);
 		int length = Calculator.binaryToInt(message.substring(6, 22));
-		System.out.println("Cut start\t" + message);
+		//System.out.println("Cut start\t" + message);
 		message = message.substring(22);
 		subMessage.append(message, 0, length);
 		message = message.substring(length);
-		System.out.println("Prepared\t" + message);
+		//System.out.println("Prepared\t" + message);
 		return message;
 	}
 
 	private String case1(String message, StringBuilder subMessage) {
 		subMessage.append(message, 0, 18);
-		System.out.println("Cut start\t" + message);
+		//System.out.println("Cut start\t" + message);
 		message = message.substring(18);
 		subMessage.append(message);
-		System.out.println("Prepared\t" + message);
 		message = "";
 		return message;
 	}
