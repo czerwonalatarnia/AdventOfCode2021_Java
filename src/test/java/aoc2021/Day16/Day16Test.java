@@ -8,6 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Day16Test {
 	public static final Path resourcePath = Path.of("src", "test", "resources", "aoc2021", "Day16");
 
+	@Test void testPart0() {
+		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16test0.txt"));
+		assertEquals(6, new Day16().part1(dataTest));
+	}
+
 	@Test void testPart1A() {
 		var dataTest = DataReader.readSimpleString(resourcePath.resolve("day16testA.txt"));
 		assertEquals(9, new Day16().part1(dataTest));
