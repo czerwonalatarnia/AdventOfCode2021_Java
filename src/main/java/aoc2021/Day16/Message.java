@@ -72,16 +72,7 @@ public class Message {
 					}
 					System.out.println("Prepared\t" + message);
 				}
-				case 0 -> {
-					subMessage.append(message, 0, 22);
-					int length = Calculator.binaryToInt(message.substring(6, 22));
-					message = message.substring(22);
-					System.out.println("Cut start\t" + message);
-					/*subMessage.append(message, 0, length);
-					message = message.substring(length);*/
-					subMessage.append(message);
-					System.out.println("Prepared\t" + message);
-				}
+				case 0 -> message = case0(message, subMessage);
 				case 1 -> message = case1(message, subMessage);
 			}
 			System.out.println("Will create\t" + subMessage);
@@ -120,16 +111,7 @@ public class Message {
 					}
 					System.out.println("Prepared\t" + message);
 				}
-				case 0 -> {
-					subMessage.append(message, 0, 22);
-					int length = Calculator.binaryToInt(message.substring(6, 22));
-					message = message.substring(22);
-					System.out.println("Cut start\t" + message);
-					/*subMessage.append(message, 0, length);
-					message = message.substring(length);*/
-					subMessage.append(message);
-					System.out.println("Prepared\t" + message);
-				}
+				case 0 -> message = case0(message, subMessage);
 				case 1 -> message = case1(message, subMessage);
 			}
 			System.out.println("Will create\t" + subMessage);
@@ -139,21 +121,21 @@ public class Message {
 		return messages;
 	}
 
+	private String case0(String message, StringBuilder subMessage) {
+		subMessage.append(message, 0, 22);
+		int length = Calculator.binaryToInt(message.substring(6, 22));
+		message = message.substring(22);
+		System.out.println("Cut start\t" + message);
+		subMessage.append(message);
+		System.out.println("Prepared\t" + message);
+		return message;
+	}
+
 	private String case1(String message, StringBuilder subMessage) {
 		subMessage.append(message, 0, 18);
 		message = message.substring(18);
 		System.out.println("Cut start\t" + message);
-		/*int i = 0;
-		for (; i < message.length() - 5; i++) {
-			if (message.charAt(i) == '0') {
-				i += 5;
-				while ((i + 18) % 8 != 0)
-					i++;
-				subMessage.append(message, 0, i);
-				message = message.substring(i);
-				break;
-			}
-		}*/
+		subMessage.append(message);
 		System.out.println("Prepared\t" + message);
 		return message;
 	}
