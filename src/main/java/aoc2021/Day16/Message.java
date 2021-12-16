@@ -1,6 +1,8 @@
 package aoc2021.Day16;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import aoc2021.own.functions.Calculator;
 
 public class Message {
@@ -89,19 +91,16 @@ public class Message {
 	}
 
 	public long getFinalValue() {
-		System.out.println("Mode is " + getMainType());
 		long returnValue = 0;
 		if (getMainType() == 4)
 			return getValue();
 		for (var el : subMessages) {
-			if (el.getValue() == null) {
-				System.out.println("We need to go deeper");
+			if (el.getValue() == null)
 				el.getFinalValue();
-			}
 		}
 		List<Long> elements = subMessages.stream()
-		                                    .map(Message::getValue)
-		                                    .toList();
+		                                 .map(Message::getValue)
+		                                 .toList();
 		switch (getMainType()) {
 			case 0 -> {
 				for (var el : elements)
@@ -123,7 +122,6 @@ public class Message {
 			case 7 -> returnValue = Objects.equals(elements.get(0), elements.get(1)) ? 1 : 0;
 		}
 		value = returnValue;
-		System.out.println("It created value " + getValue() + '\n');
 		return returnValue;
 	}
 }
