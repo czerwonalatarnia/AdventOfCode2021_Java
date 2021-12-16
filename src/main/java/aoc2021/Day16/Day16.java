@@ -6,7 +6,7 @@ import aoc2021.own.functions.DataReader;
 
 public class Day16 implements IDay {
 	public void day() {
-		String data = DataReader.readSimpleString(DataReader.createFilePath(15));
+		String data = DataReader.readSimpleString(DataReader.createFilePath(16));
 		System.out.println("Day 16\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
 	}
 

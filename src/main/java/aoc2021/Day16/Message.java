@@ -9,6 +9,7 @@ public class Message {
 	private LinkedList<Message> subMessages = new LinkedList<>();
 
 	public Message(String message) {
+		System.out.println("Created\t" + message + '\n');
 		mainVersion = Calculator.binaryToInt(message.substring(0, 3));
 		mainType = Calculator.binaryToInt(message.substring(3, 6));
 		int iterator, lengthType;
@@ -64,7 +65,7 @@ public class Message {
 	private LinkedList<Message> setSubMessages(String message, int amount) {
 		System.out.println();
 		LinkedList<Message> messages = new LinkedList<>();
-		while (amount > 0 && message.length() > 10) {
+		while (amount > 0) {
 			System.out.println(amount + " = amount, " + message);
 			amount--;
 			StringBuilder subMessage = new StringBuilder();
@@ -88,7 +89,6 @@ public class Message {
 		}
 		System.out.println("Will create\t" + subMessage);
 		messages.add(new Message(String.valueOf(subMessage)));
-		System.out.println("Created\t" + message + '\n');
 		return message;
 	}
 
@@ -112,21 +112,21 @@ public class Message {
 	private String case0(String message, StringBuilder subMessage) {
 		subMessage.append(message, 0, 22);
 		int length = Calculator.binaryToInt(message.substring(6, 22));
-		message = message.substring(22);
 		System.out.println("Cut start\t" + message);
-		subMessage.append(message);
-		message = "";
+		message = message.substring(22);
+		subMessage.append(message, 0, length);
+		message = message.substring(length);
 		System.out.println("Prepared\t" + message);
 		return message;
 	}
 
 	private String case1(String message, StringBuilder subMessage) {
 		subMessage.append(message, 0, 18);
-		message = message.substring(18);
 		System.out.println("Cut start\t" + message);
+		message = message.substring(18);
 		subMessage.append(message);
-		message = "";
 		System.out.println("Prepared\t" + message);
+		message = "";
 		return message;
 	}
 }
