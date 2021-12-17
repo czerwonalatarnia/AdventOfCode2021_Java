@@ -13,24 +13,9 @@ public class Day17 implements IDay {
 		StringBuilder yPos = new StringBuilder();
 		for (int i = data.indexOf('y') + 3; data.charAt(i) >= '0' && data.charAt(i) <= '9'; i++)
 			yPos.append(data.charAt(i));
-		int yMin = -Integer.parseInt(String.valueOf(yPos));
-		yPos = new StringBuilder();
-		for (int i = data.lastIndexOf('-') + 1; i < data.length(); i++)
-			yPos.append(data.charAt(i));
-		int yMax = -Integer.parseInt(String.valueOf(yPos));
-		int answer = 0;
-		for (int i = 0; i < 1000; i++) {
-			int maxHeight = i * (i + 1) / 2;
-			int fall = 0;
-			for (int j = 1; j < 10; j++) {
-				fall -= (i + j);
-				if (fall <= yMax && fall >= yMin && maxHeight > answer)
-					answer = maxHeight;
-				else if (fall < yMin)
-					break;
-			}
-		}
-		return answer;
+		int yMinAbs = Integer.parseInt(String.valueOf(yPos));
+		return (yMinAbs - 1) * yMinAbs / 2;
+		// What goes up, goes down. And when it goes down below 0 it goes faster than it started going up. So the optimal initial speed is one lower than the absolute value of the bottom row of target.
 	}
 
 	int part2(String data) {
