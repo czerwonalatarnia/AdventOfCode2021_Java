@@ -1,5 +1,7 @@
 package aoc2021.Day18;
 
+import java.util.Objects;
+
 public class NodeBinaryTree {
 	private final int level;
 	private final String thisString;
@@ -54,22 +56,17 @@ public class NodeBinaryTree {
 	}
 
 	public boolean validate() {
+		if (validateExplode())
+			return true;
+		else
+			return validateSplit();
+	}
+
+	public boolean validateSplit() {
 		boolean wasChange = false;
 		if (leftNode != null)
-			wasChange = leftNode.validate();
-		if (!wasChange && level > 3) {
-			if (leftNode != null && rightNode != null) {
-				if (leftNode.value > -1 && rightNode.value > -1) {
-					System.out.println("\tIn explode - level " + level + ": " + this);
-					System.out.println("\t\tExplode " + this);
-					explode();
-					wasChange = true;
-				}
-			}
-		}
+			wasChange = leftNode.validateSplit();
 		if (!wasChange && this.value > 9) {
-			System.out.println("\tIn split - level " + level + ": " + this);
-			System.out.println("\t\tSplit " + this);
 			int newNumber = this.value;
 			this.leftNode = new NodeBinaryTree(newNumber / 2, this.level + 1, this);
 			this.rightNode = new NodeBinaryTree(newNumber - newNumber / 2, this.level + 1, this);
@@ -77,7 +74,24 @@ public class NodeBinaryTree {
 			wasChange = true;
 		}
 		if (rightNode != null && !wasChange)
-			wasChange = rightNode.validate();
+			wasChange = rightNode.validateSplit();
+		return wasChange;
+	}
+
+	private boolean validateExplode() {
+		boolean wasChange = false;
+		if (leftNode != null)
+			wasChange = leftNode.validateExplode();
+		if (!wasChange && level > 3) {
+			if (leftNode != null && rightNode != null) {
+				if (leftNode.value > -1 && rightNode.value > -1) {
+					explode();
+					wasChange = true;
+				}
+			}
+		}
+		if (rightNode != null && !wasChange)
+			wasChange = rightNode.validateExplode();
 		return wasChange;
 	}
 
@@ -123,6 +137,19 @@ public class NodeBinaryTree {
 		}
 	}
 
+	@Override public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		NodeBinaryTree that = (NodeBinaryTree) o;
+		return level == that.level && value == that.value && thisString.equals(that.thisString) && parentNode.equals(that.parentNode) && leftNode.equals(that.leftNode) && rightNode.equals(that.rightNode);
+	}
+
+	@Override public int hashCode() {
+		return Objects.hash(level, thisString, parentNode, leftNode, rightNode, value);
+	}
+
 	@Override public String toString() {
 		if (leftNode == null && rightNode == null)
 			return String.valueOf(value);
@@ -137,6 +164,6 @@ public class NodeBinaryTree {
 		if (value > -1)
 			return value;
 		else
-			return 3 * leftNode.calcMagnitude() + 3 * rightNode.calcMagnitude();
+			return 3 * leftNode.calcMagnitude() + 2 * rightNode.calcMagnitude();
 	}
 }

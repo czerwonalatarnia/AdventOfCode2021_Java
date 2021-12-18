@@ -1,7 +1,9 @@
 package aoc2021.Day18;
 
 import java.util.LinkedList;
+import java.util.Objects;
 import aoc2021.IDay;
+import aoc2021.own.functions.Calculator;
 import aoc2021.own.functions.DataReader;
 
 public class Day18 implements IDay {
@@ -20,21 +22,34 @@ public class Day18 implements IDay {
 			assert second != null;
 			trees.addFirst(addTrees(first, second));
 		}
-		System.out.println(trees.get(0));
-		return trees.get(0).calcMagnitude();
+		return trees.get(0)
+		            .calcMagnitude();
 	}
 
 	long part2(LinkedList<String> data) {
-		return 0;
+		LinkedList<NodeBinaryTree> trees = new LinkedList<>();
+		LinkedList<PairTree> pairs = new LinkedList<>();
+		LinkedList<Long> values = new LinkedList<>();
+		for (var el : data)
+			trees.add(new NodeBinaryTree(el, 0, null));
+		for (var el : trees) {
+			for (var er : trees) {
+				if (!Objects.equals(el, er)) {
+					pairs.add(new PairTree(el, er));
+				}
+			}
+		}
+		for (var pair : pairs) {
+			NodeBinaryTree first = pair.left;
+			NodeBinaryTree second = pair.right;
+			values.add(addTrees(first, second).calcMagnitude());
+		}
+		return Calculator.arrayLongMax(values);
 	}
 
 	private NodeBinaryTree addTrees(NodeBinaryTree leftSide, NodeBinaryTree rightSide) {
-		System.out.println("Add " + leftSide + " to " + rightSide);
 		NodeBinaryTree newOne = new NodeBinaryTree("[" + leftSide.toString() + "," + rightSide.toString() + "]", 0, null);
-		System.out.println("Before reduction: " + newOne);
-		while (newOne.validate())
-			System.out.println("In meantime: " + newOne);
-		System.out.println(newOne + "\n");
+		while (newOne.validate()) ;
 		return newOne;
 	}
 }
