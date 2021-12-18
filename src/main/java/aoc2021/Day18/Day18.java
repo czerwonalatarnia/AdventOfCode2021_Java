@@ -21,7 +21,7 @@ public class Day18 implements IDay {
 			trees.addFirst(addTrees(first, second));
 		}
 		System.out.println(trees.get(0));
-		return 0;
+		return trees.get(0).calcMagnitude();
 	}
 
 	long part2(LinkedList<String> data) {

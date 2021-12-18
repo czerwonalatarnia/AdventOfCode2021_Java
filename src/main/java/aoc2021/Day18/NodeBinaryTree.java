@@ -57,20 +57,23 @@ public class NodeBinaryTree {
 		boolean wasChange = false;
 		if (leftNode != null)
 			wasChange = leftNode.validate();
-		if (!wasChange && (level > 3) && (((leftNode != null) ? leftNode.value : -1) > -1) && (((rightNode != null) ? rightNode.value : -1) > -1)) {
-			System.out.println("In explode - level " + level + ": " + this);
-			System.out.println("Explode " + this);
-			explode();
-			wasChange = true;
+		if (!wasChange && level > 3) {
+			if (leftNode != null && rightNode != null) {
+				if (leftNode.value > -1 && rightNode.value > -1) {
+					System.out.println("\tIn explode - level " + level + ": " + this);
+					System.out.println("\t\tExplode " + this);
+					explode();
+					wasChange = true;
+				}
+			}
 		}
 		if (!wasChange && this.value > 9) {
-			System.out.println("In split - level " + level + ": " + this);
-			System.out.print("Split ");
+			System.out.println("\tIn split - level " + level + ": " + this);
+			System.out.println("\t\tSplit " + this);
 			int newNumber = this.value;
 			this.leftNode = new NodeBinaryTree(newNumber / 2, this.level + 1, this);
 			this.rightNode = new NodeBinaryTree(newNumber - newNumber / 2, this.level + 1, this);
 			this.value = -1;
-			System.out.println(this);
 			wasChange = true;
 		}
 		if (rightNode != null && !wasChange)
@@ -128,5 +131,12 @@ public class NodeBinaryTree {
 			assert rightNode != null;
 			return "[" + leftNode + "," + rightNode + "]";
 		}
+	}
+
+	public long calcMagnitude() {
+		if (value > -1)
+			return value;
+		else
+			return 3 * leftNode.calcMagnitude() + 3 * rightNode.calcMagnitude();
 	}
 }
