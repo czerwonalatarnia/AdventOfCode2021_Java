@@ -33,7 +33,7 @@ public class Day18 implements IDay {
 		System.out.println("Add " + leftSide + " to " + rightSide);
 		NodeBinaryTree newOne = new NodeBinaryTree("[" + leftSide.toString() + "," + rightSide.toString() + "]", 0, null);
 		System.out.println("Before reduction: " + newOne);
-		newOne.validate();
+		while (newOne.validate());
 		System.out.println(newOne + "\n");
 		return newOne;
 	}

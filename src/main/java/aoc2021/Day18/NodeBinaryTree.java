@@ -59,6 +59,7 @@ public class NodeBinaryTree {
 			wasChange = leftNode.validate();
 		if (!wasChange && level > 3 && (leftNode != null ? leftNode.value : -1) > -1 && (rightNode != null ? rightNode.value : -1) > -1) {
 			this.explode();
+			System.out.println(this);
 			wasChange = true;
 		} if (!wasChange && this.value > 9) {
 			System.out.println("In split - level " + level + ": " + this);
@@ -67,6 +68,7 @@ public class NodeBinaryTree {
 			this.leftNode = new NodeBinaryTree(newNumber / 2, this.level + 1, this);
 			this.rightNode = new NodeBinaryTree(newNumber - newNumber / 2, this.level + 1, this);
 			this.value = -1;
+			System.out.println(this);
 			wasChange = true;
 		}
 		if (rightNode != null && wasChange)
