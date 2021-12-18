@@ -12,7 +12,7 @@ public class Day18 implements IDay {
 		System.out.println("Day 18\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
 	}
 
-	long part1(LinkedList<String> data) {
+	String getFinalTree(LinkedList<String> data) {
 		LinkedList<NodeBinaryTree> trees = new LinkedList<>();
 		for (var el : data)
 			trees.add(new NodeBinaryTree(el, 0, null));
@@ -22,8 +22,11 @@ public class Day18 implements IDay {
 			assert second != null;
 			trees.addFirst(addTrees(first, second));
 		}
-		return trees.get(0)
-		            .calcMagnitude();
+		return trees.get(0).toString();
+	}
+
+	long part1(LinkedList<String> data) {
+		return new NodeBinaryTree(getFinalTree(data), 0, null).calcMagnitude();
 	}
 
 	long part2(LinkedList<String> data) {
