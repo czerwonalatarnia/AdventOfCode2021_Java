@@ -44,7 +44,6 @@ public class NodeBinaryTree {
 			leftNode = new NodeBinaryTree(number.substring(1, i), level + 1, this);
 			rightNode = new NodeBinaryTree(number.substring(i + 1, j), level + 1, this);
 		} else {
-			System.out.println("Number: " + number + "\n\tParent was: " + parentNode.thisString);
 			StringBuilder val = new StringBuilder();
 			for (int i = 0; i < number.length() && number.charAt(i) >= '0' && number.charAt(i) <= '9'; i++)
 				val.append(number.charAt(i));
@@ -58,22 +57,26 @@ public class NodeBinaryTree {
 		boolean wasChange = false;
 		if (leftNode != null)
 			wasChange = leftNode.validate();
-		if (rightNode != null)
-			wasChange = rightNode.validate();
-		if (!wasChange && this.value > 9) {
+		if (!wasChange && level > 3 && (leftNode != null ? leftNode.value : -1) > -1 && (rightNode != null ? rightNode.value : -1) > -1) {
+			this.explode();
+			wasChange = true;
+		} if (!wasChange && this.value > 9) {
+			System.out.println("In split - level " + level + ": " + this);
+			System.out.print("Split ");
 			int newNumber = this.value;
 			this.leftNode = new NodeBinaryTree(newNumber / 2, this.level + 1, this);
 			this.rightNode = new NodeBinaryTree(newNumber - newNumber / 2, this.level + 1, this);
-			this.value = -2;
-			wasChange = true;
-		} else if (!wasChange && level > 4 && value > -1) {
-			this.parentNode.explode();
+			this.value = -1;
 			wasChange = true;
 		}
+		if (rightNode != null && wasChange)
+			wasChange = rightNode.validate();
 		return wasChange;
 	}
 
 	public void explode() {
+		System.out.println("In explode - level " + level + ": " + this);
+		System.out.print("Explode ");
 		value = 0;
 		int splitLeft = this.leftNode.value;
 		int splitRight = this.rightNode.value;
@@ -92,7 +95,7 @@ public class NodeBinaryTree {
 			leftNumber = parent.leftNode;
 			while (leftNumber.rightNode != null)
 				leftNumber = leftNumber.rightNode;
-			if(leftNumber.value < 0)
+			if (leftNumber.value < 0)
 				System.out.println("ERROR LEFT ERROR");
 			leftNumber.value += splitLeft;
 		}
@@ -109,7 +112,7 @@ public class NodeBinaryTree {
 			rightNumber = parent.rightNode;
 			while (rightNumber.leftNode != null)
 				rightNumber = rightNumber.leftNode;
-			if(rightNumber.value < 0)
+			if (rightNumber.value < 0)
 				System.out.println("ERROR RIGHT ERROR");
 			rightNumber.value += splitRight;
 		}
