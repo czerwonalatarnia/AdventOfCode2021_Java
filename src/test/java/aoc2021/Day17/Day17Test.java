@@ -1,7 +1,6 @@
 package aoc2021.Day17;
 
 import java.nio.file.Path;
-import aoc2021.Day16.Day16;
 import aoc2021.own.functions.DataReader;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
