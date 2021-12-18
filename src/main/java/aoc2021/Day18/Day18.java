@@ -1,7 +1,6 @@
 package aoc2021.Day18;
 
 import java.util.LinkedList;
-import java.util.Objects;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
@@ -33,7 +32,8 @@ public class Day18 implements IDay {
 		System.out.println("Add " + leftSide + " to " + rightSide);
 		NodeBinaryTree newOne = new NodeBinaryTree("[" + leftSide.toString() + "," + rightSide.toString() + "]", 0, null);
 		System.out.println("Before reduction: " + newOne);
-		while (newOne.validate());
+		while (newOne.validate())
+			System.out.println("In meantime: " + newOne);
 		System.out.println(newOne + "\n");
 		return newOne;
 	}
