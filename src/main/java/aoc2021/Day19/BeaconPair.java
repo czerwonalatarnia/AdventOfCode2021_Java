@@ -15,6 +15,10 @@ public class BeaconPair implements Comparable<BeaconPair> {
 		this.secondBeacon = secondBeacon;
 	}
 
+	public BeaconPair swap() {
+		return new BeaconPair(secondScanner, secondBeacon, firstScanner, firstBeacon);
+	}
+
 	public int getFirstScanner() {
 		return firstScanner;
 	}

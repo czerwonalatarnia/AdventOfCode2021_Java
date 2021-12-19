@@ -11,6 +11,10 @@ public class ScannerPair implements Comparable<ScannerPair> {
 		this.secondScanner = secondScanner;
 	}
 
+	public ScannerPair swap() {
+		return new ScannerPair(secondScanner, firstScanner);
+	}
+
 	public int getFirstScanner() {
 		return firstScanner;
 	}

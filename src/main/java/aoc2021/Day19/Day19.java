@@ -57,21 +57,14 @@ public class Day19 implements IDay {
 						}
 					}
 					if (counter > 6) {
-						if (linked.add(new BeaconPair(scan1.getNumber(), i, scan2.getNumber(), j))) {
-							/*System.out.println("LINKED: scanner " + scan1.getNumber() + ": " + i + " and scanner " + scan2.getNumber() + ": " + j);
-							System.out.println("\tAmount of linked beacons: " + linked.size());*/
-							break;
-						}
+						linked.add(new BeaconPair(scan1.getNumber(), i, scan2.getNumber(), j));
+						break;
 					}
 				}
 			}
 		}
-		if (linked.size() >= 12) {
-			/*System.out.println(" --- LINKED SCANNERS --- ");
-			System.out.println("scanner " + scan1.getNumber() + " and scanner " + scan2.getNumber());
-			System.out.println();*/
+		if (linked.size() >= 12)
 			scannerPairs.add(new ScannerPair(scan1.getNumber(), scan2.getNumber()));
-		}
 		return linked;
 	}
 
@@ -89,7 +82,8 @@ public class Day19 implements IDay {
 			                                       .isOriented())
 				scannersToOrient.offer(pair);
 			else if (scanners.get(pair.getFirstScanner())
-			                 .isOriented()) {
+			                 .isOriented() && !scanners.get(pair.getSecondScanner())
+			                                           .isOriented()) {
 				Set<BeaconPair> temp = beaconPairs.stream()
 				                                  .filter(s -> s.getFirstScanner() == pair.getFirstScanner() && s.getSecondScanner() == pair.getSecondScanner())
 				                                  .collect(Collectors.toSet());
@@ -113,6 +107,35 @@ public class Day19 implements IDay {
 				                                                   .get(linkedBeacons[0].getSecondBeacon())));
 				System.out.println(scanners.get(pair.getSecondScanner())
 				                           .getNumber() + ": " + scanners.get(pair.getSecondScanner())
+				                                                         .getScannerPosition());
+			} else if (!scanners.get(pair.getFirstScanner())
+			                    .isOriented() && scanners.get(pair.getSecondScanner())
+			                                             .isOriented()) {
+				Set<BeaconPair> temp = beaconPairs.stream()
+				                                  .filter(s -> s.getFirstScanner() == pair.getFirstScanner() && s.getSecondScanner() == pair.getSecondScanner())
+				                                  .collect(Collectors.toSet());
+				BeaconPair[] linkedBeacons = new BeaconPair[temp.size()];
+				int iterator = 0;
+				for (var el : temp) {
+					linkedBeacons[iterator] = el.swap();
+					iterator++;
+				}
+				findingXCoordinate(scanners, pair.swap(), linkedBeacons);
+				findingYCoordinate(scanners, pair.swap(), linkedBeacons);
+				findingZCoordinate(scanners, pair.swap(), linkedBeacons);
+				scanners.get(pair.swap().getSecondScanner())
+				        .orientate();
+				scanners.get(pair.swap().getSecondScanner())
+				        .setRelativePosition(scanners.get(pair.swap().getFirstScanner())
+				                                     .getBeacons()
+				                                     .get(linkedBeacons[0].getFirstBeacon())
+				                                     .plus(scanners.get(pair.swap().getSecondScanner())
+				                                                   .getBeacons()
+				                                                   .get(linkedBeacons[0].getSecondBeacon())));
+				System.out.println(scanners.get(pair.swap()
+				                                    .getSecondScanner())
+				                           .getNumber() + ": " + scanners.get(pair.swap()
+				                                                                  .getSecondScanner())
 				                                                         .getScannerPosition());
 			}
 		}
