@@ -2,10 +2,8 @@ package aoc2021.Day19;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
-import aoc2021.own.objects.Point;
 
 public class Day19 implements IDay {
 	public void day() {
@@ -39,13 +37,32 @@ public class Day19 implements IDay {
 		return 0;
 	}
 
-	private void compareScanners(SubScanner scan1, SubScanner scan2) {
+	private LinkedList<BeaconPair> compareScanners(SubScanner scan1, SubScanner scan2) {
+		LinkedList<BeaconPair> linked = new LinkedList<>();
 		for (int i = 0; i < scan1.getSize(); i++) {
 			for (int j = 0; j < scan2.getSize(); j++) {
-				System.out.println(Arrays.toString(scan1.distanceBeacon(i)));
-				System.out.println(Arrays.toString(scan2.distanceBeacon(j)));
-				System.out.println();
+				int counter = 0;
+				for (int it = 0; it < scan1.distanceBeacon(i).length; it++) {
+					for (int jt = 0; jt < scan2.distanceBeacon(j).length; jt++) {
+						if (scan1.distanceBeacon(i)[it] == scan2.distanceBeacon(j)[jt]) {
+							counter++;
+							break;
+						}
+					}
+				}
+				if (counter > 6) {
+					linked.add(new BeaconPair(scan1.getNumber(), i, scan1.getNumber(), j));
+					System.out.println("LINKED: " + scan1.getNumber() + ": " + i + " and " +  scan2.getNumber()+ ": " +j);
+				}
+				//System.out.println(Arrays.toString(scan1.distanceBeacon(i)));
+				//System.out.println(Arrays.toString(scan2.distanceBeacon(j)));
+				//System.out.println();
 			}
 		}
+		if (linked.size() >= 12) {
+			scan1.addLinked(scan2.getNumber());
+			scan2.addLinked(scan1.getNumber());
+		}
+		return linked;
 	}
 }
