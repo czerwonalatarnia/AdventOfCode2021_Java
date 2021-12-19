@@ -1,17 +1,19 @@
 package aoc2021.Day19;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import aoc2021.own.objects.Point;
 
 public class SubScanner {
 	private final int number;
 	private final LinkedList<Point> beacons = new LinkedList<>();
-	private boolean oriented = false;
-	private final char first = 'x';
-	private final char second = 'y';
-	private final char third = 'z';
 	private final Point scannerPosition = new Point(0, 0, 0);
+	private boolean oriented = false;
+	private char first = 'x';
+	private boolean firstReverse = false;
+	private char second = 'y';
+	private boolean secondReverse = false;
+	private char third = 'z';
+	private boolean thirdReverse = false;
 	private int size = 0;
 	private int[][] distanceMatrix;
 
@@ -20,6 +22,30 @@ public class SubScanner {
 		if (number == 0) {
 			oriented = true;
 		}
+	}
+
+	public void setFirst(char first) {
+		this.first = first;
+	}
+
+	public void setFirstReverse(boolean firstReverse) {
+		this.firstReverse = firstReverse;
+	}
+
+	public void setSecond(char second) {
+		this.second = second;
+	}
+
+	public void setSecondReverse(boolean secondReverse) {
+		this.secondReverse = secondReverse;
+	}
+
+	public void setThird(char third) {
+		this.third = third;
+	}
+
+	public void setThirdReverse(boolean thirdReverse) {
+		this.thirdReverse = thirdReverse;
 	}
 
 	public boolean isOriented() {
@@ -36,6 +62,10 @@ public class SubScanner {
 
 	public int getSize() {
 		return size;
+	}
+
+	public Point getBeacon(int i) {
+		return getBeacons().get(i);
 	}
 
 	public LinkedList<Point> getBeacons() {
