@@ -3,6 +3,7 @@ package aoc2021.Day19;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.stream.Collectors;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
@@ -32,12 +33,11 @@ public class Day19 implements IDay {
 		}
 		for (var el : scanners)
 			el.fillMatrix();
-		for(int it = 0; it < scanners.size() - 1; it++) {
+		for (int it = 0; it < scanners.size() - 1; it++) {
 			for (int jt = it + 1; jt < scanners.size(); jt++)
 				beaconPairs.addAll(compareScanners(scanners.get(it), scanners.get(jt), scannerPairs));
 		}
-		System.out.println("Amount of linked scanner pairs: " + scannerPairs.size());
-		System.out.println("Amount of linked beacon pairs: " + beaconPairs.size());
+		orientation(scanners, scannerPairs, beaconPairs);
 		return 0;
 	}
 
@@ -58,7 +58,7 @@ public class Day19 implements IDay {
 						}
 					}
 					if (counter > 6) {
-						if (linked.add(new BeaconPair(scan1.getNumber(), i, scan1.getNumber(), j))) {
+						if (linked.add(new BeaconPair(scan1.getNumber(), i, scan2.getNumber(), j))) {
 							/*System.out.println("LINKED: scanner " + scan1.getNumber() + ": " + i + " and scanner " + scan2.getNumber() + ": " + j);
 							System.out.println("\tAmount of linked beacons: " + linked.size());*/
 							break;
@@ -68,11 +68,57 @@ public class Day19 implements IDay {
 			}
 		}
 		if (linked.size() >= 12) {
-			System.out.println(" --- LINKED SCANNERS --- ");
+			/*System.out.println(" --- LINKED SCANNERS --- ");
 			System.out.println("scanner " + scan1.getNumber() + " and scanner " + scan2.getNumber());
-			System.out.println();
+			System.out.println();*/
 			scannerPairs.add(new ScannerPair(scan1.getNumber(), scan2.getNumber()));
 		}
 		return linked;
+	}
+
+	private void orientation(LinkedList<SubScanner> scanners, HashSet<ScannerPair> scannerPairs,
+	                         HashSet<BeaconPair> beaconPairs) {
+		ArrayBlockingQueue<ScannerPair> scannersToOrient = new ArrayBlockingQueue<>(scannerPairs.size());
+		int counterDebug = 0;
+		for (var el : scannerPairs)
+			scannersToOrient.offer(el);
+		while (scannersToOrient.size() > 0 && counterDebug < 10) {
+			counterDebug++;
+			ScannerPair pair = scannersToOrient.poll();
+			if (!scanners.get(pair.getFirstScanner())
+			             .isOriented() && !scanners.get(pair.getSecondScanner())
+			                                       .isOriented())
+				scannersToOrient.offer(pair);
+			else if (scanners.get(pair.getFirstScanner())
+			                 .isOriented()) {
+				HashSet<BeaconPair> linkedBeacons = (HashSet<BeaconPair>) beaconPairs.stream()
+				                                                                     .filter(s -> s.getFirstScanner() == pair.getFirstScanner() && s.getSecondScanner() == pair.getSecondScanner())
+				                                                                     .collect(Collectors.toSet());
+				System.out.println(pair.getFirstScanner() + " - " + pair.getSecondScanner());
+				for (var el : linkedBeacons) {
+					System.out.println("\t" + el.getFirstBeacon() + " - " + el.getSecondBeacon());
+					System.out.println("\t\t" + scanners.get(pair.getFirstScanner())
+					                                    .getBeacons()
+					                                    .get(el.getFirstBeacon()));
+					System.out.println("\t\t" + scanners.get(pair.getSecondScanner())
+					                                    .getBeacons()
+					                                    .get(el.getSecondBeacon()));
+					System.out.println("\t\t\t" + scanners.get(pair.getFirstScanner())
+					                                      .getBeacons()
+					                                      .get(el.getFirstBeacon())
+					                                      .minus(scanners.get(pair.getSecondScanner())
+					                                                     .getBeacons()
+					                                                     .get(el.getSecondBeacon())));
+					System.out.println("\t\t\t" + scanners.get(pair.getFirstScanner())
+					                                      .getBeacons()
+					                                      .get(el.getFirstBeacon())
+					                                      .plus(scanners.get(pair.getSecondScanner())
+					                                                    .getBeacons()
+					                                                    .get(el.getSecondBeacon())));
+
+				}
+				System.out.println();
+			}
+		}
 	}
 }
