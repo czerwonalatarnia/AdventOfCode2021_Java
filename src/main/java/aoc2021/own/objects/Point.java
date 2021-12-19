@@ -3,7 +3,7 @@ package aoc2021.own.objects;
 import java.util.Objects;
 
 public class Point implements Comparable<Point> {
-	boolean isZ;
+	private final boolean isZ;
 	private int x;
 	private int y;
 	private int z;
@@ -22,6 +22,13 @@ public class Point implements Comparable<Point> {
 		this.isZ = true;
 	}
 
+	public Point(int x, int y, int z, boolean isZ) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.isZ = isZ;
+	}
+
 	public void fold(char axis, int pos) {
 		if (axis == 'x' && x > pos)
 			x = 2 * pos - x;
@@ -35,12 +42,36 @@ public class Point implements Comparable<Point> {
 		return x;
 	}
 
+	public void setX(int x) {
+		this.x = x;
+	}
+
 	public int getY() {
 		return y;
 	}
 
+	public void setY(int y) {
+		this.y = y;
+	}
+
 	public int getZ() {
 		return z;
+	}
+
+	public void setZ(int z) {
+		this.z = z;
+	}
+
+	public long distanceFromZero() {
+		return Math.abs(x) + Math.abs(y) + Math.abs(z);
+	}
+
+	public Point minus(Point other) {
+		return new Point(x - other.x, y - other.y, z - other.z, isZ);
+	}
+
+	public Point plus(Point other) {
+		return new Point(x + other.x, y + other.y, z + other.z, isZ);
 	}
 
 	@Override public int hashCode() {
@@ -64,15 +95,14 @@ public class Point implements Comparable<Point> {
 	}
 
 	@Override public int compareTo(Point o) {
-		if (x == o.x && y == o.y & z == o.z)
+		if (x == o.x && y == o.y && z == o.z)
 			return 0;
 		else if (x == o.x && y == o.y) {
 			if (z > o.z)
 				return 1;
 			else
 				return -1;
-		}
-		else if (x == o.x) {
+		} else if (x == o.x) {
 			if (y > o.y)
 				return 1;
 			else
