@@ -1,6 +1,6 @@
 package aoc2021.Day19;
 
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
@@ -13,6 +13,7 @@ public class Day19 implements IDay {
 
 	long part1(LinkedList<String> data) {
 		LinkedList<SubScanner> scanners = new LinkedList<>();
+		HashSet<BeaconPair> beaconPairs = new HashSet<>();
 		for (var el : data) {
 			int index = el.indexOf('r') + 2;
 			if (el.charAt(1) == '-') {
@@ -29,7 +30,10 @@ public class Day19 implements IDay {
 		}
 		for (var el : scanners)
 			el.fillMatrix();
-		compareScanners(scanners.get(0), scanners.get(1));
+		for(int it = 0; it < scanners.size() - 1; it++) {
+			for (int jt = it + 1; jt < scanners.size(); jt++)
+				beaconPairs.addAll(compareScanners(scanners.get(it), scanners.get(jt)));
+		}
 		return 0;
 	}
 
@@ -37,8 +41,8 @@ public class Day19 implements IDay {
 		return 0;
 	}
 
-	private LinkedList<BeaconPair> compareScanners(SubScanner scan1, SubScanner scan2) {
-		LinkedList<BeaconPair> linked = new LinkedList<>();
+	private HashSet<BeaconPair> compareScanners(SubScanner scan1, SubScanner scan2) {
+		HashSet<BeaconPair> linked = new HashSet<>();
 		for (int i = 0; i < scan1.getSize(); i++) {
 			for (int j = 0; j < scan2.getSize(); j++) {
 				int counter = 0;
@@ -50,21 +54,22 @@ public class Day19 implements IDay {
 						}
 					}
 					if (counter > 6) {
-						linked.add(new BeaconPair(scan1.getNumber(), i, scan1.getNumber(), j));
-						System.out.println("LINKED: scanner " + scan1.getNumber() + ": " + i + " and scanner" +  scan2.getNumber()+ ": " +j);
-						System.out.println("\tAmount of linked beacons: " + linked.size());
-						break;
+						if (linked.add(new BeaconPair(scan1.getNumber(), i, scan1.getNumber(), j))) {
+							System.out.println("LINKED: scanner " + scan1.getNumber() + ": " + i + " and scanner " + scan2.getNumber() + ": " + j);
+							System.out.println("\tAmount of linked beacons: " + linked.size());
+							break;
+						}
 					}
 				}
-				//System.out.println(Arrays.toString(scan1.distanceBeacon(i)));
-				//System.out.println(Arrays.toString(scan2.distanceBeacon(j)));
-				//System.out.println();
 			}
 		}
 		if (linked.size() >= 12) {
 			scan1.addLinked(scan2.getNumber());
 			scan2.addLinked(scan1.getNumber());
+			System.out.println(" --- LINKED SCANNERS --- ");
+			System.out.println("scanner " + scan1.getNumber() + " and scanner " + scan2.getNumber());
 		}
+		System.out.println();
 		return linked;
 	}
 }
