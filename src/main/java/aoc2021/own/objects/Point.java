@@ -64,7 +64,7 @@ public class Point implements Comparable<Point> {
 	}
 
 	@Override public int compareTo(Point o) {
-		if (x == o.x && y == o.y & z == o.z)
+		if (x == o.x && y == o.y && z == o.z)
 			return 0;
 		else if (x == o.x && y == o.y) {
 			if (z > o.z)
