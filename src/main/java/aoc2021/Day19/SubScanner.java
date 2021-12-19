@@ -6,7 +6,7 @@ import aoc2021.own.objects.Point;
 public class SubScanner {
 	private final int number;
 	private final LinkedList<Point> beacons = new LinkedList<>();
-	private final Point scannerPosition = new Point(0, 0, 0);
+	private Point scannerPosition = new Point(0, 0, 0);
 	private boolean oriented = false;
 	private char first = 'x';
 	private boolean firstReverse = false;
@@ -16,12 +16,15 @@ public class SubScanner {
 	private boolean thirdReverse = false;
 	private int size = 0;
 	private int[][] distanceMatrix;
-
 	public SubScanner(int number) {
 		this.number = number;
 		if (number == 0) {
 			oriented = true;
 		}
+	}
+
+	public Point getScannerPosition() {
+		return scannerPosition;
 	}
 
 	public void setFirst(char first) {
@@ -133,7 +136,7 @@ public class SubScanner {
 	}
 
 	public void orientate() {
-		for (var el: beacons) {
+		for (var el : beacons) {
 			int tempX = el.getX();
 			switch (first) {
 				case 'x':
@@ -188,6 +191,18 @@ public class SubScanner {
 						el.setZ(-el.getZ());
 			}
 		}
+		first = 'x';
+		second = 'y';
+		third = 'z';
 		oriented = true;
+	}
+
+	public void setRelativePosition(Point relation) {
+		scannerPosition = relation;
+		for (var el: beacons) {
+			el.setX(-(el.getX() - scannerPosition.getX()));
+			el.setY(-(el.getY() - scannerPosition.getY()));
+			el.setZ(-(el.getZ() - scannerPosition.getZ()));
+		}
 	}
 }

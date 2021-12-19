@@ -99,35 +99,21 @@ public class Day19 implements IDay {
 					linkedBeacons[iterator] = el;
 					iterator++;
 				}
-				/*System.out.println(pair.getFirstScanner() + " - " + pair.getSecondScanner());
-				for (var el : linkedBeacons) {
-					System.out.println("\t" + el.getFirstBeacon() + " - " + el.getSecondBeacon());
-					System.out.println("\t\t" + scanners.get(pair.getFirstScanner())
-					                                    .getBeacons()
-					                                    .get(el.getFirstBeacon()));
-					System.out.println("\t\t" + scanners.get(pair.getSecondScanner())
-					                                    .getBeacons()
-					                                    .get(el.getSecondBeacon()));
-					System.out.println("\t\t\t" + scanners.get(pair.getFirstScanner())
-					                                      .getBeacons()
-					                                      .get(el.getFirstBeacon())
-					                                      .minus(scanners.get(pair.getSecondScanner())
-					                                                     .getBeacons()
-					                                                     .get(el.getSecondBeacon())));
-					System.out.println("\t\t\t" + scanners.get(pair.getFirstScanner())
-					                                      .getBeacons()
-					                                      .get(el.getFirstBeacon())
-					                                      .plus(scanners.get(pair.getSecondScanner())
-					                                                    .getBeacons()
-					                                                    .get(el.getSecondBeacon())));
-
-				}
-				System.out.println();*/
 				findingXCoordinate(scanners, pair, linkedBeacons);
 				findingYCoordinate(scanners, pair, linkedBeacons);
 				findingZCoordinate(scanners, pair, linkedBeacons);
-				System.out.println(scanners.get(pair.getSecondScanner()).orientation());
-				scanners.get(pair.getSecondScanner()).orientate();
+				scanners.get(pair.getSecondScanner())
+				        .orientate();
+				scanners.get(pair.getSecondScanner())
+				        .setRelativePosition(scanners.get(pair.getFirstScanner())
+				                                     .getBeacons()
+				                                     .get(linkedBeacons[0].getFirstBeacon())
+				                                     .plus(scanners.get(pair.getSecondScanner())
+				                                                   .getBeacons()
+				                                                   .get(linkedBeacons[0].getSecondBeacon())));
+				System.out.println(scanners.get(pair.getSecondScanner())
+				                           .getNumber() + ": " + scanners.get(pair.getSecondScanner())
+				                                                         .getScannerPosition());
 			}
 		}
 	}
