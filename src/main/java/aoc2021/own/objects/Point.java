@@ -22,6 +22,13 @@ public class Point implements Comparable<Point> {
 		this.isZ = true;
 	}
 
+	public Point(int x, int y, int z, boolean isZ) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.isZ = isZ;
+	}
+
 	public void fold(char axis, int pos) {
 		if (axis == 'x' && x > pos)
 			x = 2 * pos - x;
@@ -41,6 +48,14 @@ public class Point implements Comparable<Point> {
 
 	public int getZ() {
 		return z;
+	}
+
+	public Point minus(Point other) {
+		return new Point(x - other.x, y - other.y, z - other.z, isZ);
+	}
+
+	public Point plus(Point other) {
+		return new Point(x + other.x, y + other.y, z + other.z, isZ);
 	}
 
 	@Override public int hashCode() {
