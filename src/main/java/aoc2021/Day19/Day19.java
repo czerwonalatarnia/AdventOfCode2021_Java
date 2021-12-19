@@ -10,10 +10,10 @@ import aoc2021.own.objects.Point;
 public class Day19 implements IDay {
 	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(19));
-		System.out.println("Day 19\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
+		System.out.println("Day 19\nThe answer to part 1 is " + part(data, 1) + "\nThe answer to part 2 is " + part(data, 2));
 	}
 
-	long part1(LinkedList<String> data) {
+	long part(LinkedList<String> data, int part) {
 		LinkedList<SubScanner> scanners = new LinkedList<>();
 		HashSet<BeaconPair> beaconPairs = new HashSet<>();
 		HashSet<ScannerPair> scannerPairs = new HashSet<>();
@@ -39,13 +39,24 @@ public class Day19 implements IDay {
 		}
 		orientation(scanners, scannerPairs, beaconPairs);
 		HashSet<Point> allTheBeacons = new HashSet<>();
-		for (var el: scanners)
+		for (var el : scanners)
 			allTheBeacons.addAll(el.getBeacons());
-		return allTheBeacons.size();
-	}
-
-	long part2(LinkedList<String> data) {
-		return 0;
+		long distanceMax = 0;
+		for (var el : scanners) {
+			for (var er : scanners) {
+				if (el.getScannerPosition()
+				      .minus(er.getScannerPosition())
+				      .distanceFromZero() > distanceMax) {
+					distanceMax = el.getScannerPosition()
+					                .minus(er.getScannerPosition())
+					                .distanceFromZero();
+				}
+			}
+		}
+		if (part == 1)
+			return allTheBeacons.size();
+		else
+			return distanceMax;
 	}
 
 	private HashSet<BeaconPair> compareScanners(SubScanner scan1, SubScanner scan2, HashSet<ScannerPair> scannerPairs) {
@@ -125,13 +136,17 @@ public class Day19 implements IDay {
 				findingXCoordinate(scanners, pair.swap(), linkedBeacons);
 				findingYCoordinate(scanners, pair.swap(), linkedBeacons);
 				findingZCoordinate(scanners, pair.swap(), linkedBeacons);
-				scanners.get(pair.swap().getSecondScanner())
+				scanners.get(pair.swap()
+				                 .getSecondScanner())
 				        .orientate();
-				scanners.get(pair.swap().getSecondScanner())
-				        .setRelativePosition(scanners.get(pair.swap().getFirstScanner())
+				scanners.get(pair.swap()
+				                 .getSecondScanner())
+				        .setRelativePosition(scanners.get(pair.swap()
+				                                              .getFirstScanner())
 				                                     .getBeacons()
 				                                     .get(linkedBeacons[0].getFirstBeacon())
-				                                     .plus(scanners.get(pair.swap().getSecondScanner())
+				                                     .plus(scanners.get(pair.swap()
+				                                                            .getSecondScanner())
 				                                                   .getBeacons()
 				                                                   .get(linkedBeacons[0].getSecondBeacon())));
 				System.out.println(scanners.get(pair.swap()

@@ -10,11 +10,11 @@ class Day19Test {
 
 	@Test void testPart1() {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day19test.txt"));
-		assertEquals(79, new Day19().part1(dataTest));
+		assertEquals(79, new Day19().part(dataTest, 1));
 	}
 
 	@Test void testPart2() {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day19test.txt"));
-		assertEquals(0, new Day19().part2(dataTest));
+		assertEquals(3621, new Day19().part(dataTest, 2));
 	}
 }
