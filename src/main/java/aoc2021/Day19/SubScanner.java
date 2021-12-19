@@ -107,6 +107,23 @@ public class SubScanner {
 		return distanceMatrix[i][j];
 	}
 
+	public String orientation() {
+		String xStr, yStr, zStr;
+		if (firstReverse)
+			xStr = "-" + first;
+		else
+			xStr = String.valueOf(first);
+		if (secondReverse)
+			yStr = "-" + second;
+		else
+			yStr = String.valueOf(second);
+		if (thirdReverse)
+			zStr = "-" + third;
+		else
+			zStr = String.valueOf(third);
+		return "(" + xStr + ", " + yStr + ", " + zStr + ")";
+	}
+
 	public void addBeacon(String beacon) {
 		int x = Integer.parseInt(beacon.substring(0, beacon.indexOf(',')));
 		int y = Integer.parseInt(beacon.substring(beacon.indexOf(',') + 1, beacon.lastIndexOf(',')));

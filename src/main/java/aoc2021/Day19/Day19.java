@@ -132,17 +132,17 @@ public class Day19 implements IDay {
 
 	private void findingXCoordinate(LinkedList<SubScanner> scanners, ScannerPair pair, BeaconPair[] linkedBeacons) {
 		HashMap<String, Integer> findingX = new HashMap<>();
-		findingX.put("xx+", (scanners.get(linkedBeacons[0].getFirstScanner())
-		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
-		                             .getX() - scanners.get(linkedBeacons[0].getSecondScanner())
-		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
-		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
-		                                                                   .getBeacon(linkedBeacons[1].getFirstBeacon())
-		                                                                   .getX() - scanners.get(linkedBeacons[1].getSecondScanner())
-		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
-		                                                                                     .getX()));
 		findingX.put("xx-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
+		                             .getX() - scanners.get(linkedBeacons[0].getSecondScanner())
+		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
+		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
+		                                                                   .getBeacon(linkedBeacons[1].getFirstBeacon())
+		                                                                   .getX() - scanners.get(linkedBeacons[1].getSecondScanner())
+		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
+		                                                                                     .getX()));
+		findingX.put("xx+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getX() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
 		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
@@ -150,7 +150,7 @@ public class Day19 implements IDay {
 		                                                                   .getX() + scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getX()));
-		findingX.put("xy+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingX.put("xy-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getX() - scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -159,7 +159,7 @@ public class Day19 implements IDay {
 		                                                                   .getX() - scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getY()));
-		findingX.put("xy-", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingX.put("xy+", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getX() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -168,7 +168,7 @@ public class Day19 implements IDay {
 		                                                                   .getX() + scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getY()));
-		findingX.put("xz+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingX.put("xz-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getX() - scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -177,7 +177,7 @@ public class Day19 implements IDay {
 		                                                                   .getX() - scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getZ()));
-		findingX.put("xz-", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingX.put("xz+", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getX() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -229,17 +229,17 @@ public class Day19 implements IDay {
 
 	private void findingYCoordinate(LinkedList<SubScanner> scanners, ScannerPair pair, BeaconPair[] linkedBeacons) {
 		HashMap<String, Integer> findingY = new HashMap<>();
-		findingY.put("yx+", (scanners.get(linkedBeacons[0].getFirstScanner())
-		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
-		                             .getY() - scanners.get(linkedBeacons[0].getSecondScanner())
-		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
-		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
-		                                                                   .getBeacon(linkedBeacons[1].getFirstBeacon())
-		                                                                   .getY() - scanners.get(linkedBeacons[1].getSecondScanner())
-		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
-		                                                                                     .getX()));
 		findingY.put("yx-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
+		                             .getY() - scanners.get(linkedBeacons[0].getSecondScanner())
+		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
+		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
+		                                                                   .getBeacon(linkedBeacons[1].getFirstBeacon())
+		                                                                   .getY() - scanners.get(linkedBeacons[1].getSecondScanner())
+		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
+		                                                                                     .getX()));
+		findingY.put("yx+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getY() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
 		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
@@ -247,7 +247,7 @@ public class Day19 implements IDay {
 		                                                                   .getY() + scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getX()));
-		findingY.put("yy+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingY.put("yy-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getY() - scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -256,7 +256,7 @@ public class Day19 implements IDay {
 		                                                                   .getY() - scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getY()));
-		findingY.put("yy-", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingY.put("yy+", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getY() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -265,7 +265,7 @@ public class Day19 implements IDay {
 		                                                                   .getY() + scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getY()));
-		findingY.put("yz+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingY.put("yz-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getY() - scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -274,7 +274,7 @@ public class Day19 implements IDay {
 		                                                                   .getY() - scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getZ()));
-		findingY.put("yz-", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingY.put("yz+", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getY() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -326,17 +326,17 @@ public class Day19 implements IDay {
 
 	private void findingZCoordinate(LinkedList<SubScanner> scanners, ScannerPair pair, BeaconPair[] linkedBeacons) {
 		HashMap<String, Integer> findingZ = new HashMap<>();
-		findingZ.put("zx+", (scanners.get(linkedBeacons[0].getFirstScanner())
-		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
-		                             .getZ() - scanners.get(linkedBeacons[0].getSecondScanner())
-		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
-		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
-		                                                                   .getBeacon(linkedBeacons[1].getFirstBeacon())
-		                                                                   .getZ() - scanners.get(linkedBeacons[1].getSecondScanner())
-		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
-		                                                                                     .getX()));
 		findingZ.put("zx-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
+		                             .getZ() - scanners.get(linkedBeacons[0].getSecondScanner())
+		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
+		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
+		                                                                   .getBeacon(linkedBeacons[1].getFirstBeacon())
+		                                                                   .getZ() - scanners.get(linkedBeacons[1].getSecondScanner())
+		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
+		                                                                                     .getX()));
+		findingZ.put("zx+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getZ() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
 		                                               .getX()) - (scanners.get(linkedBeacons[1].getFirstScanner())
@@ -344,7 +344,7 @@ public class Day19 implements IDay {
 		                                                                   .getZ() + scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getX()));
-		findingZ.put("zy+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingZ.put("zy-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getZ() - scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -353,7 +353,7 @@ public class Day19 implements IDay {
 		                                                                   .getZ() - scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getY()));
-		findingZ.put("zy-", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingZ.put("zy+", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getZ() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -362,7 +362,7 @@ public class Day19 implements IDay {
 		                                                                   .getZ() + scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getY()));
-		findingZ.put("zz+", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingZ.put("zz-", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getZ() - scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -371,7 +371,7 @@ public class Day19 implements IDay {
 		                                                                   .getZ() - scanners.get(linkedBeacons[1].getSecondScanner())
 		                                                                                     .getBeacon(linkedBeacons[1].getSecondBeacon())
 		                                                                                     .getZ()));
-		findingZ.put("zz-", (scanners.get(linkedBeacons[0].getFirstScanner())
+		findingZ.put("zz+", (scanners.get(linkedBeacons[0].getFirstScanner())
 		                             .getBeacon(linkedBeacons[0].getFirstBeacon())
 		                             .getZ() + scanners.get(linkedBeacons[0].getSecondScanner())
 		                                               .getBeacon(linkedBeacons[0].getSecondBeacon())
@@ -387,37 +387,37 @@ public class Day19 implements IDay {
 				zeroCounter++;
 		}
 		if (zeroCounter != 1)
-			System.out.println("ERROR LOGIC ERROR LOGIC ERROR");
+			System.out.println("ERROR LOGIC Z LOGIC ERROR");
 		if (findingZ.get("zx+") == 0) {
 			scanners.get(pair.getSecondScanner())
 			        .setThird('x');
 			scanners.get(pair.getSecondScanner())
-			        .setSecondReverse(false);
+			        .setThirdReverse(false);
 		} else if (findingZ.get("zx-") == 0) {
 			scanners.get(pair.getSecondScanner())
 			        .setThird('x');
 			scanners.get(pair.getSecondScanner())
-			        .setSecondReverse(true);
+			        .setThirdReverse(true);
 		} else if (findingZ.get("zy+") == 0) {
 			scanners.get(pair.getSecondScanner())
 			        .setThird('y');
 			scanners.get(pair.getSecondScanner())
-			        .setSecondReverse(false);
+			        .setThirdReverse(false);
 		} else if (findingZ.get("zy-") == 0) {
 			scanners.get(pair.getSecondScanner())
 			        .setThird('y');
 			scanners.get(pair.getSecondScanner())
-			        .setSecondReverse(true);
+			        .setThirdReverse(true);
 		} else if (findingZ.get("zz+") == 0) {
 			scanners.get(pair.getSecondScanner())
 			        .setThird('z');
 			scanners.get(pair.getSecondScanner())
-			        .setSecondReverse(false);
+			        .setThirdReverse(false);
 		} else if (findingZ.get("zz-") == 0) {
 			scanners.get(pair.getSecondScanner())
 			        .setThird('z');
 			scanners.get(pair.getSecondScanner())
-			        .setSecondReverse(true);
+			        .setThirdReverse(true);
 		}
 	}
 }
