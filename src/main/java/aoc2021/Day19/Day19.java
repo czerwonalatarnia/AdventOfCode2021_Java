@@ -118,9 +118,6 @@ public class Day19 implements IDay {
 				                                     .plus(scanners.get(pair.getSecondScanner())
 				                                                   .getBeacons()
 				                                                   .get(linkedBeacons[0].getSecondBeacon())));
-				System.out.println(scanners.get(pair.getSecondScanner())
-				                           .getNumber() + ": " + scanners.get(pair.getSecondScanner())
-				                                                         .getScannerPosition());
 			} else if (!scanners.get(pair.getFirstScanner())
 			                    .isOriented() && scanners.get(pair.getSecondScanner())
 			                                             .isOriented()) {
@@ -149,11 +146,6 @@ public class Day19 implements IDay {
 				                                                            .getSecondScanner())
 				                                                   .getBeacons()
 				                                                   .get(linkedBeacons[0].getSecondBeacon())));
-				System.out.println(scanners.get(pair.swap()
-				                                    .getSecondScanner())
-				                           .getNumber() + ": " + scanners.get(pair.swap()
-				                                                                  .getSecondScanner())
-				                                                         .getScannerPosition());
 			}
 		}
 	}
