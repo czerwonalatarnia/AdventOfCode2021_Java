@@ -49,10 +49,12 @@ public class Day19 implements IDay {
 							break;
 						}
 					}
-				}
-				if (counter > 6) {
-					linked.add(new BeaconPair(scan1.getNumber(), i, scan1.getNumber(), j));
-					System.out.println("LINKED: " + scan1.getNumber() + ": " + i + " and " +  scan2.getNumber()+ ": " +j);
+					if (counter > 6) {
+						linked.add(new BeaconPair(scan1.getNumber(), i, scan1.getNumber(), j));
+						System.out.println("LINKED: scanner " + scan1.getNumber() + ": " + i + " and scanner" +  scan2.getNumber()+ ": " +j);
+						System.out.println("\tAmount of linked beacons: " + linked.size());
+						break;
+					}
 				}
 				//System.out.println(Arrays.toString(scan1.distanceBeacon(i)));
 				//System.out.println(Arrays.toString(scan2.distanceBeacon(j)));
