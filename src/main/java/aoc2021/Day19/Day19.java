@@ -6,6 +6,8 @@ import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
 public class Day19 implements IDay {
+	public int scannerPairsCounter = 0;
+
 	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(19));
 		System.out.println("Day 19\nThe answer to part 1 is " + part1(data) + "\nThe answer to part 2 is " + part2(data));
@@ -34,6 +36,8 @@ public class Day19 implements IDay {
 			for (int jt = it + 1; jt < scanners.size(); jt++)
 				beaconPairs.addAll(compareScanners(scanners.get(it), scanners.get(jt)));
 		}
+		System.out.println("Amount of linked scanner pairs: " + scannerPairsCounter);
+		System.out.println("Amount of linked beacon pairs: " + beaconPairs.size());
 		return 0;
 	}
 
@@ -66,6 +70,7 @@ public class Day19 implements IDay {
 		if (linked.size() >= 12) {
 			scan1.addLinked(scan2.getNumber());
 			scan2.addLinked(scan1.getNumber());
+			scannerPairsCounter++;
 			System.out.println(" --- LINKED SCANNERS --- ");
 			System.out.println("scanner " + scan1.getNumber() + " and scanner " + scan2.getNumber());
 		}
