@@ -62,6 +62,10 @@ public class Point implements Comparable<Point> {
 		this.z = z;
 	}
 
+	public long distanceFromZero () {
+		return Math.abs(x) + Math.abs(y) + Math.abs(z);
+	}
+
 	public Point minus(Point other) {
 		return new Point(x - other.x, y - other.y, z - other.z, isZ);
 	}
