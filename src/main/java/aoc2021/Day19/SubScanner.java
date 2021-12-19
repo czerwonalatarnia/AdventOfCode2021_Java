@@ -7,12 +7,23 @@ import aoc2021.own.objects.Point;
 public class SubScanner {
 	private final int number;
 	private final LinkedList<Point> beacons = new LinkedList<>();
-	private final HashSet<Integer> linkedScanners = new HashSet<>();
+	private boolean oriented = false;
+	private final char first = 'x';
+	private final char second = 'y';
+	private final char third = 'z';
+	private final Point scannerPosition = new Point(0, 0, 0);
 	private int size = 0;
 	private int[][] distanceMatrix;
 
 	public SubScanner(int number) {
 		this.number = number;
+		if (number == 0) {
+			oriented = true;
+		}
+	}
+
+	public boolean isOriented() {
+		return oriented;
 	}
 
 	public String getData() {
@@ -64,10 +75,6 @@ public class SubScanner {
 
 	public int distance(int i, int j) {
 		return distanceMatrix[i][j];
-	}
-
-	public void addLinked(int scanner) {
-		linkedScanners.add(scanner);
 	}
 
 	public void addBeacon(String beacon) {
