@@ -16,6 +16,7 @@ public class SubScanner {
 	private boolean thirdReverse = false;
 	private int size = 0;
 	private int[][] distanceMatrix;
+
 	public SubScanner(int number) {
 		this.number = number;
 		if (number == 0) {
@@ -199,7 +200,7 @@ public class SubScanner {
 
 	public void setRelativePosition(Point relation) {
 		scannerPosition = relation;
-		for (var el: beacons) {
+		for (var el : beacons) {
 			el.setX(-(el.getX() - scannerPosition.getX()));
 			el.setY(-(el.getY() - scannerPosition.getY()));
 			el.setZ(-(el.getZ() - scannerPosition.getZ()));
