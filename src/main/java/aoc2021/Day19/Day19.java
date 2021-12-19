@@ -5,6 +5,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Collectors;
 import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
+import aoc2021.own.objects.Point;
 
 public class Day19 implements IDay {
 	public void day() {
@@ -37,7 +38,10 @@ public class Day19 implements IDay {
 				beaconPairs.addAll(compareScanners(scanners.get(it), scanners.get(jt), scannerPairs));
 		}
 		orientation(scanners, scannerPairs, beaconPairs);
-		return 0;
+		HashSet<Point> allTheBeacons = new HashSet<>();
+		for (var el: scanners)
+			allTheBeacons.addAll(el.getBeacons());
+		return allTheBeacons.size();
 	}
 
 	long part2(LinkedList<String> data) {
@@ -71,11 +75,9 @@ public class Day19 implements IDay {
 	private void orientation(LinkedList<SubScanner> scanners, HashSet<ScannerPair> scannerPairs,
 	                         HashSet<BeaconPair> beaconPairs) {
 		ArrayBlockingQueue<ScannerPair> scannersToOrient = new ArrayBlockingQueue<>(scannerPairs.size());
-		int counterDebug = 0;
 		for (var el : scannerPairs)
 			scannersToOrient.offer(el);
-		while (scannersToOrient.size() > 0 && counterDebug < 10) {
-			counterDebug++;
+		while (scannersToOrient.size() > 0) {
 			ScannerPair pair = scannersToOrient.poll();
 			if (!scanners.get(pair.getFirstScanner())
 			             .isOriented() && !scanners.get(pair.getSecondScanner())
