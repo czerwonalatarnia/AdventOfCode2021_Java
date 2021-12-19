@@ -1,5 +1,6 @@
 package aoc2021.Day19;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import aoc2021.IDay;
@@ -17,7 +18,7 @@ public class Day19 implements IDay {
 		for (var el : data) {
 			int index = el.indexOf('r') + 2;
 			if (el.charAt(1) == '-') {
-				if (el.charAt(el.indexOf('r') + 1) == ' ')
+				if (el.charAt(index + 1) == ' ')
 					scanners.add(new SubScanner(Integer.parseInt(String.valueOf(el.charAt(index)))));
 				else
 					scanners.add(new SubScanner(Integer.parseInt(String.valueOf(el.charAt(index)) + el.charAt(index + 1))));
@@ -28,9 +29,8 @@ public class Day19 implements IDay {
 			}
 
 		}
-		for (var el : scanners) {
-			System.out.println(el.getData());
-		}
+		for (var el : scanners)
+			el.fillMatrix();
 		compareScanners(scanners.get(0), scanners.get(1));
 		return 0;
 	}
@@ -40,21 +40,12 @@ public class Day19 implements IDay {
 	}
 
 	private void compareScanners(SubScanner scan1, SubScanner scan2) {
-		PriorityQueue<Point> firstBeacons = new PriorityQueue<>();
-		PriorityQueue<Point> secondBeacons = new PriorityQueue<>();
-		for (int i = 0; i < scan1.getSize(); i++)
-			firstBeacons.offer(scan1.getBeacons()
-			                        .get(i));
-		for (int i = 0; i < scan2.getSize(); i++)
-			secondBeacons.offer(scan2.getBeacons()
-			                         .get(i));
-		PriorityQueue<Point> substract = new PriorityQueue<>();
-		for (int i = 0; i < scan1.getSize() && i < scan2.getSize(); i++) {
-			Point A = firstBeacons.poll();
-			Point B = secondBeacons.poll();
-			substract.offer(new Point(A.getX() - B.getX(), A.getY() + B.getY(), A.getZ() - B.getZ()));
+		for (int i = 0; i < scan1.getSize(); i++) {
+			for (int j = 0; j < scan2.getSize(); j++) {
+				System.out.println(Arrays.toString(scan1.distanceBeacon(i)));
+				System.out.println(Arrays.toString(scan2.distanceBeacon(j)));
+				System.out.println();
+			}
 		}
-		for (int i = 0; i < substract.size(); )
-			System.out.println(substract.poll());
 	}
 }

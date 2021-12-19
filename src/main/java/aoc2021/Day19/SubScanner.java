@@ -7,6 +7,7 @@ public class SubScanner {
 	private final int number;
 	private final LinkedList<Point> beacons = new LinkedList<>();
 	private int size = 0;
+	private int[][] distanceMatrix;
 
 	public SubScanner(int number) {
 		this.number = number;
@@ -14,6 +15,38 @@ public class SubScanner {
 
 	public LinkedList<Point> getBeacons() {
 		return beacons;
+	}
+
+	public void fillMatrix() {
+		distanceMatrix = new int[size][size];
+		for (int i = 0; i < size; i++) {
+			for (int j = i; j < size; j++) {
+				distanceMatrix[i][j] = Math.abs(beacons.get(i)
+				                                       .getX() - beacons.get(j)
+				                                                        .getX()) + Math.abs(beacons.get(i)
+				                                                                                   .getY() - beacons.get(j)
+				                                                                                                    .getY()) + Math.abs(beacons.get(i)
+				                                                                                                                               .getZ() - beacons.get(j)
+				                                                                                                                                                .getZ());
+				distanceMatrix[j][i] = distanceMatrix[i][j];
+			}
+		}
+	}
+
+	public int[] distanceBeacon(int i) {
+		LinkedList<Integer> sortDistances = new LinkedList<>();
+		for (int j = 0; j < size; j++) {
+			if (j != i)
+				sortDistances.add(distance(i, j));
+		}
+		return sortDistances.stream()
+		                    .mapToInt(Integer::intValue)
+		                    .sorted()
+		                    .toArray();
+	}
+
+	public int distance(int i, int j) {
+		return distanceMatrix[i][j];
 	}
 
 	public void addBeacon(String beacon) {
