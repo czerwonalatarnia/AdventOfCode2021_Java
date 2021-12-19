@@ -131,4 +131,63 @@ public class SubScanner {
 		beacons.add(new Point(x, y, z));
 		size++;
 	}
+
+	public void orientate() {
+		for (var el: beacons) {
+			int tempX = el.getX();
+			switch (first) {
+				case 'x':
+					if (firstReverse)
+						el.setX(-tempX);
+					break;
+				case 'y':
+					if (firstReverse)
+						el.setX(-el.getY());
+					else
+						el.setX(el.getY());
+					break;
+				case 'z':
+					if (firstReverse)
+						el.setX(-el.getZ());
+					else
+						el.setX(el.getZ());
+			}
+			int tempY = el.getY();
+			switch (second) {
+				case 'x':
+					if (secondReverse)
+						el.setY(-tempX);
+					else
+						el.setY(tempX);
+					break;
+				case 'y':
+					if (secondReverse)
+						el.setY(-tempY);
+					break;
+				case 'z':
+					if (secondReverse)
+						el.setY(-el.getZ());
+					else
+						el.setY(el.getZ());
+			}
+			switch (third) {
+				case 'x':
+					if (thirdReverse)
+						el.setZ(-tempX);
+					else
+						el.setZ(tempX);
+					break;
+				case 'y':
+					if (thirdReverse)
+						el.setZ(-tempY);
+					else
+						el.setZ(tempY);
+					break;
+				case 'z':
+					if (thirdReverse)
+						el.setZ(-el.getZ());
+			}
+		}
+		oriented = true;
+	}
 }

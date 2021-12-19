@@ -126,6 +126,8 @@ public class Day19 implements IDay {
 				findingXCoordinate(scanners, pair, linkedBeacons);
 				findingYCoordinate(scanners, pair, linkedBeacons);
 				findingZCoordinate(scanners, pair, linkedBeacons);
+				System.out.println(scanners.get(pair.getSecondScanner()).orientation());
+				scanners.get(pair.getSecondScanner()).orientate();
 			}
 		}
 	}
