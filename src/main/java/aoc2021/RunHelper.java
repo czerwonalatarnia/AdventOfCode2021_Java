@@ -6,7 +6,7 @@ import aoc2021.own.exception.FileIsEmpty;
 
 public interface RunHelper {
 	static void runChallenges(int day, int month) {
-		if (month == 12) {
+		if (month == 12 && day < 26) {
 			doDay(day);
 		} else {
 			IntStream.rangeClosed(1, 25)
