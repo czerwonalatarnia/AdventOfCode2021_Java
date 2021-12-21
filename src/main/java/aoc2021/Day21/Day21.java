@@ -53,6 +53,7 @@ public class Day21 implements IDay {
 		                                        .substring(data.get(1)
 		                                                       .lastIndexOf(' ') + 1));
 		doTheRoll(player1start, player1score, player2start, player2score, 1, 1);
+		System.out.println("Player 1 wins " + player1wins + " times\n.Player 2 wins " + player2wins + " times\n.");
 		return Math.max(player1wins, player2wins);
 	}
 
@@ -65,21 +66,21 @@ public class Day21 implements IDay {
 			return;
 		}
 		if (turn % 2 == 1) {
-			doTheRoll((player1pos + 3) % 10, player1score + (player1pos + 3) % 10, player2pos, player2score, 2 - turn, amount);
-			doTheRoll((player1pos + 4) % 10, player1score + (player1pos + 4) % 10, player2pos, player2score, 2 - turn, amount * 3);
-			doTheRoll((player1pos + 5) % 10, player1score + (player1pos + 5) % 10, player2pos, player2score, 2 - turn, amount * 6);
-			doTheRoll((player1pos + 6) % 10, player1score + (player1pos + 6) % 10, player2pos, player2score, 2 - turn, amount * 7);
-			doTheRoll((player1pos + 7) % 10, player1score + (player1pos + 7) % 10, player2pos, player2score, 2 - turn, amount * 6);
-			doTheRoll((player1pos + 8) % 10, player1score + (player1pos + 8) % 10, player2pos, player2score, 2 - turn, amount * 3);
-			doTheRoll((player1pos + 9) % 10, player1score + (player1pos + 9) % 10, player2pos, player2score, 2 - turn, amount);
+			doTheRoll((player1pos + 3) % 10, player1score + (player1pos + 3) % 10 + 1, player2pos, player2score, 2, amount);
+			doTheRoll((player1pos + 4) % 10, player1score + (player1pos + 4) % 10 + 1, player2pos, player2score, 2, amount * 3);
+			doTheRoll((player1pos + 5) % 10, player1score + (player1pos + 5) % 10 + 1, player2pos, player2score, 2, amount * 6);
+			doTheRoll((player1pos + 6) % 10, player1score + (player1pos + 6) % 10 + 1, player2pos, player2score, 2, amount * 7);
+			doTheRoll((player1pos + 7) % 10, player1score + (player1pos + 7) % 10 + 1, player2pos, player2score, 2, amount * 6);
+			doTheRoll((player1pos + 8) % 10, player1score + (player1pos + 8) % 10 + 1, player2pos, player2score, 2, amount * 3);
+			doTheRoll((player1pos + 9) % 10, player1score + (player1pos + 9) % 10 + 1, player2pos, player2score, 2, amount);
 		} else {
-			doTheRoll(player1pos, player1score, (player2pos + 3) % 10, player2score + (player2pos + 3) % 10, 2 - turn, amount);
-			doTheRoll(player1pos, player1score, (player2pos + 4) % 10, player2score + (player2pos + 4) % 10, 2 - turn, amount * 3);
-			doTheRoll(player1pos, player1score, (player2pos + 5) % 10, player2score + (player2pos + 5) % 10, 2 - turn, amount * 6);
-			doTheRoll(player1pos, player1score, (player2pos + 6) % 10, player2score + (player2pos + 6) % 10, 2 - turn, amount * 7);
-			doTheRoll(player1pos, player1score, (player2pos + 7) % 10, player2score + (player2pos + 7) % 10, 2 - turn, amount * 6);
-			doTheRoll(player1pos, player1score, (player2pos + 8) % 10, player2score + (player2pos + 8) % 10, 2 - turn, amount * 3);
-			doTheRoll(player1pos, player1score, (player2pos + 9) % 10, player2score + (player2pos + 9) % 10, 2 - turn, amount);
+			doTheRoll(player1pos, player1score, (player2pos + 3) % 10, player2score + (player2pos + 3) % 10 + 1, 1, amount);
+			doTheRoll(player1pos, player1score, (player2pos + 4) % 10, player2score + (player2pos + 4) % 10 + 1, 1, amount * 3);
+			doTheRoll(player1pos, player1score, (player2pos + 5) % 10, player2score + (player2pos + 5) % 10 + 1, 1, amount * 6);
+			doTheRoll(player1pos, player1score, (player2pos + 6) % 10, player2score + (player2pos + 6) % 10 + 1, 1, amount * 7);
+			doTheRoll(player1pos, player1score, (player2pos + 7) % 10, player2score + (player2pos + 7) % 10 + 1, 1, amount * 6);
+			doTheRoll(player1pos, player1score, (player2pos + 8) % 10, player2score + (player2pos + 8) % 10 + 1, 1, amount * 3);
+			doTheRoll(player1pos, player1score, (player2pos + 9) % 10, player2score + (player2pos + 9) % 10 + 1, 1, amount);
 		}
 	}
 
