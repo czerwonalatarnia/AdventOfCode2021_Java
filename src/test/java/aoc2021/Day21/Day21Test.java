@@ -1,0 +1,20 @@
+package aoc2021.Day21;
+
+import java.nio.file.Path;
+import aoc2021.own.functions.DataReader;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class Day21Test {
+	public static final Path resourcePath = Path.of("src", "test", "resources", "aoc2021", "Day21");
+
+	@Test void testPart1() {
+		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day21test.txt"));
+		assertEquals(739785, new Day21().part1(dataTest));
+	}
+
+	@Test void testPart2() {
+		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day21test.txt"));
+		assertEquals(444356092776315L, new Day21().part2(dataTest));
+	}
+}
