@@ -6,8 +6,10 @@ import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
 public class Day21 implements IDay {
-	static int deterministicDieValue;
-	static long deterministicDieRoll;
+	static int deterministicDieValue = 1;
+	static long deterministicDieRoll = 0;
+	static long player1wins = 0;
+	static long player2wins = 0;
 
 	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(21));
@@ -15,8 +17,6 @@ public class Day21 implements IDay {
 	}
 
 	long part1(LinkedList<String> data) {
-		deterministicDieValue = 1;
-		deterministicDieRoll = 0;
 		ArrayList<Player> players = new ArrayList<>(2);
 		for (int i = 0; i < data.size(); i++)
 			players.add(new Player(Integer.parseInt(data.get(i)
@@ -44,73 +44,42 @@ public class Day21 implements IDay {
 	}
 
 	long part2(LinkedList<String> data) {
-		long player1wins = 0;
-		long player2wins = 0;
-		int size = 50;
-		long check = 1;
-		int[] playerMove = new int[]{0, 0, 0, 1, 3, 6, 7, 6, 3, 1};
-		long[] player1pos = new long[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		long[] player1posNew = new long[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		long[] player2pos = new long[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		long[] player2posNew = new long[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		long[] player1sc = new long[size];
-		long[] player1scNew = new long[size];
-		long[] player2sc = new long[size];
-		long[] player2scNew = new long[size];
-		for (int i = 0; i < size; i++) {
-			player1sc[i] = 0;
-			player1scNew[i] = 0;
-			player2sc[i] = 0;
-			player2scNew[i] = 0;
-		}
-		player1pos[Integer.parseInt(data.get(0)
-		                                .substring(data.get(0)
-		                                               .lastIndexOf(' ') + 1)) - 1] = 1;
-		player2pos[Integer.parseInt(data.get(1)
-		                                .substring(data.get(1)
-		                                               .lastIndexOf(' ') + 1)) - 1] = 1;
-		while (check != 0) {
-			check = 0;
-			doTheMove(size, playerMove, player1pos, player1posNew, player1sc, player1scNew);
-			for (int i = 0; i < size; i++) {
-				if (i < 21 && player1sc[i] > 0)
-					check++;
-				else if (i >= 21) {
-					player1wins += player1sc[i];
-					player1sc[i] = 0;
-				}
-			}
-			if (check != 0) {
-				doTheMove(size, playerMove, player2pos, player2posNew, player2sc, player2scNew);
-				for (int i = 0; i < size; i++) {
-					if (i >= 21) {
-						player2wins += player2sc[i];
-						player2sc[i] = 0;
-					}
-				}
-			}
-			System.out.println("Player 1 wins " + player1wins + " times.\nPlayer 2 wins " + player2wins + " times.\n");
-		}
+		int player1score = 0;
+		int player2score = 0;
+		int player1start = Integer.parseInt(data.get(0)
+		                                        .substring(data.get(0)
+		                                                       .lastIndexOf(' ') + 1));
+		int player2start = Integer.parseInt(data.get(1)
+		                                        .substring(data.get(1)
+		                                                       .lastIndexOf(' ') + 1));
+		doTheRoll(player1start, player1score, player2start, player2score, 1, 1);
 		return Math.max(player1wins, player2wins);
 	}
 
-	private void doTheMove(int size, int[] playerMove, long[] playerPos, long[] playerPosNew, long[] playerSc,
-	                       long[] playerScNew) {
-		for (int pos = 0; pos < 10; pos++) {
-			for (int move = 3; move < 10; move++)
-				playerPosNew[(pos + move) % 10] += playerPos[pos] * playerMove[move];
+	private void doTheRoll(int player1pos, int player1score, int player2pos, int player2score, int turn, long amount) {
+		if (player1score >= 21) {
+			player1wins += amount;
+			return;
+		} else if (player2score >= 21) {
+			player2wins += amount;
+			return;
 		}
-		for (int i = 0; i < size - 10; i++) {
-			for (int pos = 0; pos < 10; pos++)
-				playerScNew[i + pos + 1] += (playerSc[i] + playerPos[pos]);
-		}
-		for (int i = 0; i < size; i++) {
-			playerSc[i] = playerScNew[i];
-			playerScNew[i] = 0;
-		}
-		for (int pos = 0; pos < 10; pos++) {
-			playerPos[pos] = playerPosNew[pos];
-			playerPosNew[pos] = 0;
+		if (turn % 2 == 1) {
+			doTheRoll((player1pos + 3) % 10, player1score + (player1pos + 3) % 10, player2pos, player2score, 2 - turn, amount);
+			doTheRoll((player1pos + 4) % 10, player1score + (player1pos + 4) % 10, player2pos, player2score, 2 - turn, amount * 3);
+			doTheRoll((player1pos + 5) % 10, player1score + (player1pos + 5) % 10, player2pos, player2score, 2 - turn, amount * 6);
+			doTheRoll((player1pos + 6) % 10, player1score + (player1pos + 6) % 10, player2pos, player2score, 2 - turn, amount * 7);
+			doTheRoll((player1pos + 7) % 10, player1score + (player1pos + 7) % 10, player2pos, player2score, 2 - turn, amount * 6);
+			doTheRoll((player1pos + 8) % 10, player1score + (player1pos + 8) % 10, player2pos, player2score, 2 - turn, amount * 3);
+			doTheRoll((player1pos + 9) % 10, player1score + (player1pos + 9) % 10, player2pos, player2score, 2 - turn, amount);
+		} else {
+			doTheRoll(player1pos, player1score, (player2pos + 3) % 10, player2score + (player2pos + 3) % 10, 2 - turn, amount);
+			doTheRoll(player1pos, player1score, (player2pos + 4) % 10, player2score + (player2pos + 4) % 10, 2 - turn, amount * 3);
+			doTheRoll(player1pos, player1score, (player2pos + 5) % 10, player2score + (player2pos + 5) % 10, 2 - turn, amount * 6);
+			doTheRoll(player1pos, player1score, (player2pos + 6) % 10, player2score + (player2pos + 6) % 10, 2 - turn, amount * 7);
+			doTheRoll(player1pos, player1score, (player2pos + 7) % 10, player2score + (player2pos + 7) % 10, 2 - turn, amount * 6);
+			doTheRoll(player1pos, player1score, (player2pos + 8) % 10, player2score + (player2pos + 8) % 10, 2 - turn, amount * 3);
+			doTheRoll(player1pos, player1score, (player2pos + 9) % 10, player2score + (player2pos + 9) % 10, 2 - turn, amount);
 		}
 	}
 
