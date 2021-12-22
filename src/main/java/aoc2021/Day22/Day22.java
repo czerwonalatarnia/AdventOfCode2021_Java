@@ -7,7 +7,7 @@ import aoc2021.own.functions.DataReader;
 public class Day22 implements IDay {
 	boolean added;
 	int add;
-	int REPEAT = 8;
+	int REPEAT = 5;
 	int SPLIT_X = 100000;
 	int SPLIT_Y = 100000;
 	int SPLIT_Z = 100000;
@@ -25,7 +25,7 @@ public class Day22 implements IDay {
 		for (var line : data) {
 			turn = findTheBounds(bound, line);
 			bounds.add(new Bounds(bound, turn));
-			//splitterX(bounds);
+			splitterX(bounds);
 		}
 		for (int repeat = 0; repeat < REPEAT; repeat++) {
 			System.out.println("Repeat numer " + (repeat + 1) + ". Size is " + bounds.size());
@@ -50,8 +50,10 @@ public class Day22 implements IDay {
 					if (eliminate(bounds.get(i), bounds.get(j))) {
 						bounds.remove(j);
 						j--;
-					} else
-						reduce(bounds.get(i), bounds.get(j), bounds, j);
+					} else if (reduce(bounds.get(i), bounds.get(j), bounds, j)) {
+						if (added)
+							j += add;
+					}
 				}
 			}
 		}
@@ -85,6 +87,26 @@ public class Day22 implements IDay {
 		return turn;
 	}
 
+	private void splitterX(LinkedList<Bounds> bounds) {
+		Bounds bound = bounds.pollLast();
+		assert bound != null;
+		int[] cube = bound.getBounds()
+		                  .clone();
+		int splitSize = SPLIT_X;
+		int min = bound.getBounds()[0];
+		int max = bound.getBounds()[1];
+		int split = min - min % splitSize;
+		if (split < min)
+			split += splitSize;
+		for (; split < max; split += splitSize) {
+			cube[1] = split;
+			splitterY(new Bounds(cube, bound.isTurn()), bounds);
+			cube[0] = split + 1;
+		}
+		cube[1] = max;
+		splitterY(new Bounds(cube, bound.isTurn()), bounds);
+	}
+
 	private boolean eliminate(Bounds bounds1, Bounds bounds2) {
 		int[] boundsBig = bounds1.getBounds();
 		int[] boundsSmall = bounds2.getBounds();
@@ -98,514 +120,377 @@ public class Day22 implements IDay {
 		                          .clone();
 		int[] boundsReduce = bounds2.getBounds()
 		                            .clone();
-		if (!(boundsStay[1] < boundsReduce[0] || boundsStay[0] > boundsReduce[1] || boundsStay[3] < boundsReduce[2] || boundsStay[2] > boundsReduce[3] || boundsStay[5] < boundsReduce[4] || boundsStay[4] > boundsReduce[5])) {
-			if (boundsStay[0] <= boundsReduce[0] && boundsStay[1] >= boundsReduce[1]) {
-				if (boundsStay[2] <= boundsReduce[2] && boundsStay[3] >= boundsReduce[3]) {
-					if (boundsStay[4] <= boundsReduce[4])
-						bounds2.setBoundsI(boundsStay[5] + 1, 4);
-					else if (boundsStay[5] >= boundsReduce[5])
-						bounds2.setBoundsI(boundsStay[4] - 1, 5);
-					else {
-						bounds2.setBoundsI(boundsStay[4] - 1, 5);
-						int[] temp = boundsReduce.clone();
-						temp[4] = boundsStay[5] + 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-					}
-					return true;
-				} else if (boundsStay[4] <= boundsReduce[4] && boundsStay[5] >= boundsReduce[5]) {
-					if (boundsStay[2] <= boundsReduce[2])
-						bounds2.setBoundsI(boundsStay[3] + 1, 2);
-					else if (boundsStay[3] >= boundsReduce[3])
-						bounds2.setBoundsI(boundsStay[2] - 1, 3);
-					else {
-						bounds2.setBoundsI(boundsStay[2] - 1, 3);
-						int[] temp = boundsReduce.clone();
-						temp[2] = boundsStay[3] + 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-					}
-					return true;
-				} else {
-					if (boundsStay[2] <= boundsReduce[2] && boundsStay[4] <= boundsReduce[4]) {
-						bounds2.setBoundsI(boundsStay[3] + 1, 2);
-						int[] temp = boundsReduce.clone();
-						temp[3] = boundsStay[3];
-						temp[4] = boundsStay[5] + 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[2] <= boundsReduce[2] && boundsStay[5] >= boundsReduce[5]) {
-						bounds2.setBoundsI(boundsStay[3] + 1, 2);
-						int[] temp = boundsReduce.clone();
-						temp[3] = boundsStay[3];
-						temp[5] = boundsStay[4] - 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[4] <= boundsReduce[4] && boundsStay[3] >= boundsReduce[3]) {
-						bounds2.setBoundsI(boundsStay[5] + 1, 4);
-						int[] temp = boundsReduce.clone();
-						temp[5] = boundsStay[5];
-						temp[3] = boundsStay[2] - 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[5] >= boundsReduce[5] && boundsStay[3] >= boundsReduce[3]) {
-						bounds2.setBoundsI(boundsStay[4] - 1, 5);
-						int[] temp = boundsReduce.clone();
-						temp[4] = boundsStay[4];
-						temp[3] = boundsStay[2] - 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						return true;
-					}
-				}
-			} else if (boundsStay[2] <= boundsReduce[2] && boundsStay[3] >= boundsReduce[3]) {
-				if (boundsStay[4] <= boundsReduce[4] && boundsStay[5] >= boundsReduce[5]) {
-					if (boundsStay[0] <= boundsReduce[0])
-						bounds2.setBoundsI(boundsStay[1] + 1, 0);
-					else if (boundsStay[3] >= boundsReduce[3])
-						bounds2.setBoundsI(boundsStay[0] - 1, 1);
-					else {
-						bounds2.setBoundsI(boundsStay[0] - 1, 1);
-						int[] temp = boundsReduce.clone();
-						temp[0] = boundsStay[1] + 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-					}
-					return true;
-				} else {
-					if (boundsStay[0] <= boundsReduce[0] && boundsStay[4] <= boundsReduce[4]) {
-						bounds2.setBoundsI(boundsStay[1] + 1, 0);
-						int[] temp = boundsReduce.clone();
-						temp[1] = boundsStay[1];
-						temp[4] = boundsStay[5] + 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[0] <= boundsReduce[0] && boundsStay[5] >= boundsReduce[5]) {
-						bounds2.setBoundsI(boundsStay[1] + 1, 0);
-						int[] temp = boundsReduce.clone();
-						temp[1] = boundsStay[1];
-						temp[5] = boundsStay[4] - 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[4] <= boundsReduce[4] && boundsStay[1] >= boundsReduce[1]) {
-						bounds2.setBoundsI(boundsStay[5] + 1, 4);
-						int[] temp = boundsReduce.clone();
-						temp[5] = boundsStay[5];
-						temp[1] = boundsStay[0] - 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[5] >= boundsReduce[5] && boundsStay[1] >= boundsReduce[1]) {
-						bounds2.setBoundsI(boundsStay[4] - 1, 5);
-						int[] temp = boundsReduce.clone();
-						temp[4] = boundsStay[4];
-						temp[1] = boundsStay[0] - 1;
-						added = true;
-						add = 1;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						return true;
-					}
-				}
-			} else if (boundsStay[4] <= boundsReduce[4] && boundsStay[5] >= boundsReduce[5]) {
-				if (boundsStay[0] <= boundsReduce[0] && boundsStay[2] <= boundsReduce[2]) {
+		if (boundsStay[1] < boundsReduce[0] || boundsStay[0] > boundsReduce[1] || boundsStay[3] < boundsReduce[2] || boundsStay[2] > boundsReduce[3] || boundsStay[5] < boundsReduce[4] || boundsStay[4] > boundsReduce[5]) {
+			return false;
+		}
+		if (boundsStay[0] <= boundsReduce[0] && boundsStay[1] >= boundsReduce[1])
+			return firstDimensionFullyIn(bounds2, bounds, pos, boundsStay, boundsReduce);
+		else if (boundsStay[2] <= boundsReduce[2] && boundsStay[3] >= boundsReduce[3]) {
+			return secondDimensionFullyIn(bounds2, bounds, pos, boundsStay, boundsReduce);
+		} else if (boundsStay[4] <= boundsReduce[4] && boundsStay[5] >= boundsReduce[5]) {
+			if (boundsStay[0] <= boundsReduce[0] && boundsStay[2] <= boundsReduce[2]) {
+				bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				int[] temp = boundsReduce.clone();
+				temp[1] = boundsStay[1];
+				temp[2] = boundsStay[3] + 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[0] <= boundsReduce[0] && boundsStay[3] >= boundsReduce[3]) {
+				bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				int[] temp = boundsReduce.clone();
+				temp[1] = boundsStay[1];
+				temp[3] = boundsStay[2] - 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[2] <= boundsReduce[2] && boundsStay[1] >= boundsReduce[1]) {
+				bounds2.setBoundsI(boundsStay[3] + 1, 2);
+				int[] temp = boundsReduce.clone();
+				temp[3] = boundsStay[3];
+				temp[1] = boundsStay[0] - 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[3] >= boundsReduce[3] && boundsStay[1] >= boundsReduce[1]) {
+				bounds2.setBoundsI(boundsStay[2] - 1, 3);
+				int[] temp = boundsReduce.clone();
+				temp[2] = boundsStay[2];
+				temp[1] = boundsStay[0] - 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			}
+		} else {
+			if (boundsStay[1] < boundsReduce[1] && boundsStay[3] < boundsReduce[3] && boundsStay[5] < boundsReduce[5]) {
+				bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				int[] temp = boundsReduce.clone();
+				int[] temp2 = temp.clone();
+				temp[2] = boundsStay[3] + 1;
+				temp[1] = boundsStay[1];
+				temp2[3] = boundsStay[3];
+				temp2[1] = boundsStay[1];
+				temp2[4] = boundsStay[5] + 1;
+				added = true;
+				add = 2;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[1] < boundsReduce[1] && boundsStay[4] > boundsReduce[4] && boundsStay[3] < boundsReduce[3]) {
+				bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				int[] temp = boundsReduce.clone();
+				int[] temp2 = temp.clone();
+				temp[2] = boundsStay[3] + 1;
+				temp[1] = boundsStay[1];
+				temp2[3] = boundsStay[3];
+				temp2[1] = boundsStay[1];
+				temp2[5] = boundsStay[4] - 1;
+				added = true;
+				add = 2;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[1] < boundsReduce[1] && boundsStay[2] > boundsReduce[2] && boundsStay[5] < boundsReduce[5]) {
+				bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				int[] temp = boundsReduce.clone();
+				int[] temp2 = temp.clone();
+				temp[3] = boundsStay[2] - 1;
+				temp[1] = boundsStay[1];
+				temp2[2] = boundsStay[2];
+				temp2[1] = boundsStay[1];
+				temp2[4] = boundsStay[5] + 1;
+				added = true;
+				add = 2;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[0] > boundsReduce[0] && boundsStay[3] < boundsReduce[3] && boundsStay[5] < boundsReduce[5]) {
+				bounds2.setBoundsI(boundsStay[0] - 1, 1);
+				int[] temp = boundsReduce.clone();
+				int[] temp2 = temp.clone();
+				temp[2] = boundsStay[3] + 1;
+				temp[0] = boundsStay[0];
+				temp2[3] = boundsStay[3];
+				temp2[0] = boundsStay[0];
+				temp2[4] = boundsStay[5] + 1;
+				added = true;
+				add = 2;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[0] > boundsReduce[0] && boundsStay[2] > boundsReduce[2] && boundsStay[5] < boundsReduce[5]) {
+				bounds2.setBoundsI(boundsStay[0] - 1, 1);
+				int[] temp = boundsReduce.clone();
+				int[] temp2 = temp.clone();
+				temp[3] = boundsStay[2] - 1;
+				temp[0] = boundsStay[0];
+				temp2[2] = boundsStay[2];
+				temp2[0] = boundsStay[0];
+				temp2[4] = boundsStay[5] + 1;
+				added = true;
+				add = 2;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[0] > boundsReduce[0] && boundsStay[3] < boundsReduce[3] && boundsStay[4] > boundsReduce[4]) {
+				bounds2.setBoundsI(boundsStay[0] - 1, 1);
+				int[] temp = boundsReduce.clone();
+				int[] temp2 = temp.clone();
+				temp[2] = boundsStay[3] + 1;
+				temp[0] = boundsStay[0];
+				temp2[3] = boundsStay[3];
+				temp2[0] = boundsStay[0];
+				temp2[5] = boundsStay[4] - 1;
+				added = true;
+				add = 2;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[0] > boundsReduce[0] && boundsStay[2] > boundsReduce[2] && boundsStay[4] > boundsReduce[4]) {
+				bounds2.setBoundsI(boundsStay[0] - 1, 1);
+				int[] temp = boundsReduce.clone();
+				int[] temp2 = temp.clone();
+				temp[3] = boundsStay[2] - 1;
+				temp[0] = boundsStay[0];
+				temp2[2] = boundsStay[2];
+				temp2[0] = boundsStay[0];
+				temp2[5] = boundsStay[4] - 1;
+				added = true;
+				add = 2;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[1] < boundsReduce[1] && boundsStay[2] > boundsReduce[2] && boundsStay[4] > boundsReduce[4]) {
+				bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				int[] temp = boundsReduce.clone();
+				int[] temp2 = temp.clone();
+				temp[3] = boundsStay[2] - 1;
+				temp[1] = boundsStay[1];
+				temp2[2] = boundsStay[2];
+				temp2[1] = boundsStay[1];
+				temp2[5] = boundsStay[4] - 1;
+				added = true;
+				add = 2;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[0] > boundsReduce[0] && boundsStay[1] < boundsReduce[1]) {
+				if (boundsStay[2] < boundsReduce[2] && boundsStay[4] < boundsReduce[4]) {
 					bounds2.setBoundsI(boundsStay[1] + 1, 0);
 					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[1] = boundsStay[0] - 1;
+					temp[0] = boundsStay[0];
 					temp[1] = boundsStay[1];
+					int[] temp2 = temp.clone();
 					temp[2] = boundsStay[3] + 1;
+					temp2[3] = boundsStay[3];
+					temp2[4] = boundsStay[5] + 1;
 					added = true;
-					add = 1;
+					add = 3;
 					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
 					return true;
-				} else if (boundsStay[0] <= boundsReduce[0] && boundsStay[3] >= boundsReduce[3]) {
+				} else if (boundsStay[2] < boundsReduce[2] && boundsStay[5] > boundsReduce[5]) {
 					bounds2.setBoundsI(boundsStay[1] + 1, 0);
 					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[1] = boundsStay[0] - 1;
+					temp[0] = boundsStay[0];
 					temp[1] = boundsStay[1];
-					temp[3] = boundsStay[2] - 1;
+					int[] temp2 = temp.clone();
+					temp[2] = boundsStay[3] + 1;
+					temp2[3] = boundsStay[3];
+					temp2[5] = boundsStay[4] - 1;
 					added = true;
-					add = 1;
+					add = 3;
 					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
 					return true;
-				} else if (boundsStay[2] <= boundsReduce[2] && boundsStay[1] >= boundsReduce[1]) {
+				} else if (boundsStay[3] < boundsReduce[3] && boundsStay[4] < boundsReduce[4]) {
+					bounds2.setBoundsI(boundsStay[1] + 1, 0);
+					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[1] = boundsStay[0] - 1;
+					temp[0] = boundsStay[0];
+					temp[1] = boundsStay[1];
+					int[] temp2 = temp.clone();
+					temp[3] = boundsStay[2] - 1;
+					temp2[2] = boundsStay[2];
+					temp2[4] = boundsStay[5] + 1;
+					added = true;
+					add = 3;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
+					return true;
+				} else if (boundsStay[3] > boundsReduce[3] && boundsStay[5] > boundsReduce[5]) {
+					bounds2.setBoundsI(boundsStay[1] + 1, 0);
+					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[1] = boundsStay[0] - 1;
+					temp[0] = boundsStay[0];
+					temp[1] = boundsStay[1];
+					int[] temp2 = temp.clone();
+					temp[3] = boundsStay[2] - 1;
+					temp2[2] = boundsStay[2];
+					temp2[5] = boundsStay[4] - 1;
+					added = true;
+					add = 3;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
+					return true;
+				}
+			} else if (boundsStay[2] > boundsReduce[2] && boundsStay[3] < boundsReduce[3]) {
+				if (boundsStay[0] < boundsReduce[0] && boundsStay[4] < boundsReduce[4]) {
 					bounds2.setBoundsI(boundsStay[3] + 1, 2);
 					int[] temp = boundsReduce.clone();
-					temp[3] = boundsStay[3];
-					temp[1] = boundsStay[0] - 1;
-					added = true;
-					add = 1;
-					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-					return true;
-				} else if (boundsStay[3] >= boundsReduce[3] && boundsStay[1] >= boundsReduce[1]) {
-					bounds2.setBoundsI(boundsStay[2] - 1, 3);
-					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[3] = boundsStay[2] - 1;
 					temp[2] = boundsStay[2];
-					temp[1] = boundsStay[0] - 1;
+					temp[3] = boundsStay[3];
+					int[] temp2 = temp.clone();
+					temp[0] = boundsStay[1] + 1;
+					temp2[1] = boundsStay[1];
+					temp2[4] = boundsStay[5] + 1;
 					added = true;
-					add = 1;
+					add = 3;
 					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
+					return true;
+				} else if (boundsStay[0] < boundsReduce[0] && boundsStay[5] > boundsReduce[5]) {
+					bounds2.setBoundsI(boundsStay[3] + 1, 2);
+					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[3] = boundsStay[2] - 1;
+					temp[2] = boundsStay[2];
+					temp[3] = boundsStay[3];
+					int[] temp2 = temp.clone();
+					temp[0] = boundsStay[1] + 1;
+					temp2[1] = boundsStay[1];
+					temp2[5] = boundsStay[4] - 1;
+					added = true;
+					add = 3;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
+					return true;
+				} else if (boundsStay[1] < boundsReduce[1] && boundsStay[4] < boundsReduce[4]) {
+					bounds2.setBoundsI(boundsStay[3] + 1, 2);
+					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[3] = boundsStay[2] - 1;
+					temp[2] = boundsStay[2];
+					temp[3] = boundsStay[3];
+					int[] temp2 = temp.clone();
+					temp[1] = boundsStay[0] - 1;
+					temp2[0] = boundsStay[0];
+					temp2[4] = boundsStay[5] + 1;
+					added = true;
+					add = 3;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
+					return true;
+				} else if (boundsStay[1] > boundsReduce[1] && boundsStay[5] > boundsReduce[5]) {
+					bounds2.setBoundsI(boundsStay[3] + 1, 2);
+					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[3] = boundsStay[2] - 1;
+					temp[2] = boundsStay[2];
+					temp[3] = boundsStay[3];
+					int[] temp2 = temp.clone();
+					temp[1] = boundsStay[0] - 1;
+					temp2[0] = boundsStay[0];
+					temp2[5] = boundsStay[4] - 1;
+					added = true;
+					add = 3;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
 					return true;
 				}
-			} else {
-				if (boundsStay[1] < boundsReduce[1] && boundsStay[3] < boundsReduce[3] && boundsStay[5] < boundsReduce[5]) {
-					bounds2.setBoundsI(boundsStay[1] + 1, 0);
+			} else if (boundsStay[4] > boundsReduce[4] && boundsStay[5] < boundsReduce[5]) {
+				if (boundsStay[0] < boundsReduce[0] && boundsStay[2] < boundsReduce[2]) {
+					bounds2.setBoundsI(boundsStay[5] + 1, 4);
 					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[5] = boundsStay[4] - 1;
+					temp[4] = boundsStay[4];
+					temp[5] = boundsStay[5];
 					int[] temp2 = temp.clone();
-					temp[2] = boundsStay[3] + 1;
-					temp[1] = boundsStay[1];
-					temp2[3] = boundsStay[3];
+					temp[0] = boundsStay[1] + 1;
 					temp2[1] = boundsStay[1];
-					temp2[4] = boundsStay[5] + 1;
+					temp2[2] = boundsStay[3] + 1;
 					added = true;
-					add = 2;
+					add = 3;
 					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
 					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
 					return true;
-				} else if (boundsStay[1] < boundsReduce[1] && boundsStay[4] > boundsReduce[4] && boundsStay[3] < boundsReduce[3]) {
-					bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				} else if (boundsStay[0] < boundsReduce[0] && boundsStay[3] > boundsReduce[3]) {
+					bounds2.setBoundsI(boundsStay[5] + 1, 4);
 					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[5] = boundsStay[4] - 1;
+					temp[4] = boundsStay[4];
+					temp[5] = boundsStay[5];
 					int[] temp2 = temp.clone();
-					temp[2] = boundsStay[3] + 1;
-					temp[1] = boundsStay[1];
-					temp2[3] = boundsStay[3];
+					temp[0] = boundsStay[1] + 1;
 					temp2[1] = boundsStay[1];
-					temp2[5] = boundsStay[4] - 1;
+					temp2[3] = boundsStay[2] - 1;
 					added = true;
-					add = 2;
+					add = 3;
 					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
 					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
 					return true;
-				} else if (boundsStay[1] < boundsReduce[1] && boundsStay[2] > boundsReduce[2] && boundsStay[5] < boundsReduce[5]) {
-					bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				} else if (boundsStay[1] < boundsReduce[1] && boundsStay[2] < boundsReduce[2]) {
+					bounds2.setBoundsI(boundsStay[5] + 1, 4);
 					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[5] = boundsStay[4] - 1;
+					temp[4] = boundsStay[4];
+					temp[5] = boundsStay[5];
 					int[] temp2 = temp.clone();
-					temp[3] = boundsStay[2] - 1;
-					temp[1] = boundsStay[1];
-					temp2[2] = boundsStay[2];
-					temp2[1] = boundsStay[1];
-					temp2[4] = boundsStay[5] + 1;
-					added = true;
-					add = 2;
-					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-					return true;
-				} else if (boundsStay[0] > boundsReduce[0] && boundsStay[3] < boundsReduce[3] && boundsStay[5] < boundsReduce[5]) {
-					bounds2.setBoundsI(boundsStay[0] - 1, 1);
-					int[] temp = boundsReduce.clone();
-					int[] temp2 = temp.clone();
-					temp[2] = boundsStay[3] + 1;
-					temp[0] = boundsStay[0];
-					temp2[3] = boundsStay[3];
+					temp[1] = boundsStay[0] - 1;
 					temp2[0] = boundsStay[0];
-					temp2[4] = boundsStay[5] + 1;
+					temp2[2] = boundsStay[3] + 1;
 					added = true;
-					add = 2;
+					add = 3;
 					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
 					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
 					return true;
-				} else if (boundsStay[0] > boundsReduce[0] && boundsStay[2] > boundsReduce[2] && boundsStay[5] < boundsReduce[5]) {
-					bounds2.setBoundsI(boundsStay[0] - 1, 1);
+				} else if (boundsStay[1] > boundsReduce[1] && boundsStay[3] > boundsReduce[3]) {
+					bounds2.setBoundsI(boundsStay[5] + 1, 4);
 					int[] temp = boundsReduce.clone();
+					int[] temp3 = boundsReduce.clone();
+					temp3[5] = boundsStay[4] - 1;
+					temp[4] = boundsStay[4];
+					temp[5] = boundsStay[5];
 					int[] temp2 = temp.clone();
-					temp[3] = boundsStay[2] - 1;
-					temp[0] = boundsStay[0];
-					temp2[2] = boundsStay[2];
+					temp[1] = boundsStay[0] - 1;
 					temp2[0] = boundsStay[0];
-					temp2[4] = boundsStay[5] + 1;
+					temp2[3] = boundsStay[2] - 1;
 					added = true;
-					add = 2;
+					add = 3;
 					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
 					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
+					bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
 					return true;
-				} else if (boundsStay[0] > boundsReduce[0] && boundsStay[3] < boundsReduce[3] && boundsStay[4] > boundsReduce[4]) {
-					bounds2.setBoundsI(boundsStay[0] - 1, 1);
-					int[] temp = boundsReduce.clone();
-					int[] temp2 = temp.clone();
-					temp[2] = boundsStay[3] + 1;
-					temp[0] = boundsStay[0];
-					temp2[3] = boundsStay[3];
-					temp2[0] = boundsStay[0];
-					temp2[5] = boundsStay[4] - 1;
-					added = true;
-					add = 2;
-					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-					return true;
-				} else if (boundsStay[0] > boundsReduce[0] && boundsStay[2] > boundsReduce[2] && boundsStay[4] > boundsReduce[4]) {
-					bounds2.setBoundsI(boundsStay[0] - 1, 1);
-					int[] temp = boundsReduce.clone();
-					int[] temp2 = temp.clone();
-					temp[3] = boundsStay[2] - 1;
-					temp[0] = boundsStay[0];
-					temp2[2] = boundsStay[2];
-					temp2[0] = boundsStay[0];
-					temp2[5] = boundsStay[4] - 1;
-					added = true;
-					add = 2;
-					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-					return true;
-				} else if (boundsStay[1] < boundsReduce[1] && boundsStay[2] > boundsReduce[2] && boundsStay[4] > boundsReduce[4]) {
-					bounds2.setBoundsI(boundsStay[1] + 1, 0);
-					int[] temp = boundsReduce.clone();
-					int[] temp2 = temp.clone();
-					temp[3] = boundsStay[2] - 1;
-					temp[1] = boundsStay[1];
-					temp2[2] = boundsStay[2];
-					temp2[1] = boundsStay[1];
-					temp2[5] = boundsStay[4] - 1;
-					added = true;
-					add = 2;
-					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-					bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-					return true;
-				} else if (boundsStay[0] > boundsReduce[0] && boundsStay[1] < boundsReduce[1]) {
-					if (boundsStay[2] < boundsReduce[2] && boundsStay[4] < boundsReduce[4]) {
-						bounds2.setBoundsI(boundsStay[1] + 1, 0);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[1] = boundsStay[0] - 1;
-						temp[0] = boundsStay[0];
-						temp[1] = boundsStay[1];
-						int[] temp2 = temp.clone();
-						temp[2] = boundsStay[3] + 1;
-						temp2[3] = boundsStay[3];
-						temp2[4] = boundsStay[5] + 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[2] < boundsReduce[2] && boundsStay[5] > boundsReduce[5]) {
-						bounds2.setBoundsI(boundsStay[1] + 1, 0);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[1] = boundsStay[0] - 1;
-						temp[0] = boundsStay[0];
-						temp[1] = boundsStay[1];
-						int[] temp2 = temp.clone();
-						temp[2] = boundsStay[3] + 1;
-						temp2[3] = boundsStay[3];
-						temp2[5] = boundsStay[4] - 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[3] < boundsReduce[3] && boundsStay[4] < boundsReduce[4]) {
-						bounds2.setBoundsI(boundsStay[1] + 1, 0);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[1] = boundsStay[0] - 1;
-						temp[0] = boundsStay[0];
-						temp[1] = boundsStay[1];
-						int[] temp2 = temp.clone();
-						temp[3] = boundsStay[2] - 1;
-						temp2[2] = boundsStay[2];
-						temp2[4] = boundsStay[5] + 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[3] > boundsReduce[3] && boundsStay[5] > boundsReduce[5]) {
-						bounds2.setBoundsI(boundsStay[1] + 1, 0);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[1] = boundsStay[0] - 1;
-						temp[0] = boundsStay[0];
-						temp[1] = boundsStay[1];
-						int[] temp2 = temp.clone();
-						temp[3] = boundsStay[2] - 1;
-						temp2[2] = boundsStay[2];
-						temp2[5] = boundsStay[4] - 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					}
-				} else if (boundsStay[2] > boundsReduce[2] && boundsStay[3] < boundsReduce[3]) {
-					if (boundsStay[0] < boundsReduce[0] && boundsStay[4] < boundsReduce[4]) {
-						bounds2.setBoundsI(boundsStay[3] + 1, 2);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[3] = boundsStay[2] - 1;
-						temp[2] = boundsStay[2];
-						temp[3] = boundsStay[3];
-						int[] temp2 = temp.clone();
-						temp[0] = boundsStay[1] + 1;
-						temp2[1] = boundsStay[1];
-						temp2[4] = boundsStay[5] + 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[0] < boundsReduce[0] && boundsStay[5] > boundsReduce[5]) {
-						bounds2.setBoundsI(boundsStay[3] + 1, 2);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[3] = boundsStay[2] - 1;
-						temp[2] = boundsStay[2];
-						temp[3] = boundsStay[3];
-						int[] temp2 = temp.clone();
-						temp[0] = boundsStay[1] + 1;
-						temp2[1] = boundsStay[1];
-						temp2[5] = boundsStay[4] - 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[1] < boundsReduce[1] && boundsStay[4] < boundsReduce[4]) {
-						bounds2.setBoundsI(boundsStay[3] + 1, 2);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[3] = boundsStay[2] - 1;
-						temp[2] = boundsStay[2];
-						temp[3] = boundsStay[3];
-						int[] temp2 = temp.clone();
-						temp[1] = boundsStay[0] - 1;
-						temp2[0] = boundsStay[0];
-						temp2[4] = boundsStay[5] + 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[1] > boundsReduce[1] && boundsStay[5] > boundsReduce[5]) {
-						bounds2.setBoundsI(boundsStay[3] + 1, 2);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[3] = boundsStay[2] - 1;
-						temp[2] = boundsStay[2];
-						temp[3] = boundsStay[3];
-						int[] temp2 = temp.clone();
-						temp[1] = boundsStay[0] - 1;
-						temp2[0] = boundsStay[0];
-						temp2[5] = boundsStay[4] - 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					}
-				} else if (boundsStay[4] > boundsReduce[4] && boundsStay[5] < boundsReduce[5]) {
-					if (boundsStay[0] < boundsReduce[0] && boundsStay[2] < boundsReduce[2]) {
-						bounds2.setBoundsI(boundsStay[5] + 1, 4);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[5] = boundsStay[4] - 1;
-						temp[4] = boundsStay[4];
-						temp[5] = boundsStay[5];
-						int[] temp2 = temp.clone();
-						temp[0] = boundsStay[1] + 1;
-						temp2[1] = boundsStay[1];
-						temp2[2] = boundsStay[3] + 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[0] < boundsReduce[0] && boundsStay[3] > boundsReduce[3]) {
-						bounds2.setBoundsI(boundsStay[5] + 1, 4);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[5] = boundsStay[4] - 1;
-						temp[4] = boundsStay[4];
-						temp[5] = boundsStay[5];
-						int[] temp2 = temp.clone();
-						temp[0] = boundsStay[1] + 1;
-						temp2[1] = boundsStay[1];
-						temp2[3] = boundsStay[2] - 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[1] < boundsReduce[1] && boundsStay[2] < boundsReduce[2]) {
-						bounds2.setBoundsI(boundsStay[5] + 1, 4);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[5] = boundsStay[4] - 1;
-						temp[4] = boundsStay[4];
-						temp[5] = boundsStay[5];
-						int[] temp2 = temp.clone();
-						temp[1] = boundsStay[0] - 1;
-						temp2[0] = boundsStay[0];
-						temp2[2] = boundsStay[3] + 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					} else if (boundsStay[1] > boundsReduce[1] && boundsStay[3] > boundsReduce[3]) {
-						bounds2.setBoundsI(boundsStay[5] + 1, 4);
-						int[] temp = boundsReduce.clone();
-						int[] temp3 = boundsReduce.clone();
-						temp3[5] = boundsStay[4] - 1;
-						temp[4] = boundsStay[4];
-						temp[5] = boundsStay[5];
-						int[] temp2 = temp.clone();
-						temp[1] = boundsStay[0] - 1;
-						temp2[0] = boundsStay[0];
-						temp2[3] = boundsStay[2] - 1;
-						added = true;
-						add = 3;
-						bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp2, bounds2.isTurn()));
-						bounds.add(pos, new Bounds(temp3, bounds2.isTurn()));
-						return true;
-					}
 				}
 			}
 		}
 		return false;
-	}
-
-	private void splitterX(LinkedList<Bounds> bounds) {
-		Bounds bound = bounds.pollLast();
-		assert bound != null;
-		int[] cube = bound.getBounds()
-		                  .clone();
-		int splitSize = SPLIT_X;
-		int min = bound.getBounds()[0];
-		int max = bound.getBounds()[1];
-		int split = min - min % splitSize;
-		if (split < min)
-			split += splitSize;
-		for (; split <= max; split += splitSize) {
-			cube[1] = split;
-			splitterY(new Bounds(cube, bound.isTurn()), bounds);
-			cube[0] = split + 1;
-		}
-		cube[1] = max;
-		splitterY(new Bounds(cube, bound.isTurn()), bounds);
 	}
 
 	private void splitterY(Bounds bound, LinkedList<Bounds> bounds) {
@@ -617,13 +502,176 @@ public class Day22 implements IDay {
 		int split = min - min % splitSize;
 		if (split < min)
 			split += splitSize;
-		for (; split <= max; split += splitSize) {
+		for (; split < max; split += splitSize) {
 			cube[3] = split;
 			splitterZ(new Bounds(cube, bound.isTurn()), bounds);
 			cube[2] = split + 1;
 		}
 		cube[3] = max;
 		splitterZ(new Bounds(cube, bound.isTurn()), bounds);
+	}
+
+	private boolean firstDimensionFullyIn(Bounds bounds2, LinkedList<Bounds> bounds, int pos, int[] boundsStay,
+	                                      int[] boundsReduce) {
+		if (boundsStay[2] <= boundsReduce[2] && boundsStay[3] >= boundsReduce[3]) {
+			firstTwoDimensionsIn(bounds2, bounds, pos, boundsStay, boundsReduce);
+			return true;
+		} else if (boundsStay[4] <= boundsReduce[4] && boundsStay[5] >= boundsReduce[5]) {
+			middleDimensionOnlyNotIn(bounds2, bounds, pos, boundsStay, boundsReduce);
+			return true;
+		} else if (boundsStay[2] <= boundsReduce[2] && boundsStay[4] <= boundsReduce[4]) {
+			bounds2.setBoundsI(boundsStay[3] + 1, 2);
+			int[] temp = boundsReduce.clone();
+			temp[3] = boundsStay[3];
+			temp[4] = boundsStay[5] + 1;
+			added = true;
+			add = 1;
+			bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+			return true;
+		} else if (boundsStay[2] <= boundsReduce[2] && boundsStay[5] >= boundsReduce[5]) {
+			bounds2.setBoundsI(boundsStay[3] + 1, 2);
+			int[] temp = boundsReduce.clone();
+			temp[3] = boundsStay[3];
+			temp[5] = boundsStay[4] - 1;
+			added = true;
+			add = 1;
+			bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+			return true;
+		} else if (boundsStay[4] <= boundsReduce[4] && boundsStay[3] >= boundsReduce[3]) {
+			bounds2.setBoundsI(boundsStay[5] + 1, 4);
+			int[] temp = boundsReduce.clone();
+			temp[5] = boundsStay[5];
+			temp[3] = boundsStay[2] - 1;
+			added = true;
+			add = 1;
+			bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+			return true;
+		} else if (boundsStay[5] >= boundsReduce[5] && boundsStay[3] >= boundsReduce[3]) {
+			bounds2.setBoundsI(boundsStay[4] - 1, 5);
+			int[] temp = boundsReduce.clone();
+			temp[4] = boundsStay[4];
+			temp[3] = boundsStay[2] - 1;
+			added = true;
+			add = 1;
+			bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+			return true;
+		} else {
+			if (boundsStay[2] <= boundsReduce[3] && boundsStay[2] > boundsReduce[2]) {
+				bounds2.setBoundsI(boundsStay[2], 2);
+				int[] temp = boundsReduce.clone();
+				temp[3] = boundsStay[2] - 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[3] >= boundsReduce[2] && boundsStay[3] < boundsReduce[3]) {
+				bounds2.setBoundsI(boundsStay[3], 3);
+				int[] temp = boundsReduce.clone();
+				temp[2] = boundsStay[3] + 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[4] <= boundsReduce[5] && boundsStay[4] > boundsReduce[4]) {
+				bounds2.setBoundsI(boundsStay[4], 4);
+				int[] temp = boundsReduce.clone();
+				temp[5] = boundsStay[4] - 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[5] >= boundsReduce[4] && boundsStay[5] < boundsReduce[5]) {
+				bounds2.setBoundsI(boundsStay[5], 5);
+				int[] temp = boundsReduce.clone();
+				temp[4] = boundsStay[5] + 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean secondDimensionFullyIn(Bounds bounds2, LinkedList<Bounds> bounds, int pos, int[] boundsStay,
+	                                       int[] boundsReduce) {
+		if (boundsStay[4] <= boundsReduce[4] && boundsStay[5] >= boundsReduce[5]) {
+			lastTwoDimensionsFullyIn(bounds2, bounds, pos, boundsStay, boundsReduce);
+			return true;
+		} else {
+			if (boundsStay[0] <= boundsReduce[0] && boundsStay[4] <= boundsReduce[4]) {
+				bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				int[] temp = boundsReduce.clone();
+				temp[1] = boundsStay[1];
+				temp[4] = boundsStay[5] + 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[0] <= boundsReduce[0] && boundsStay[5] >= boundsReduce[5]) {
+				bounds2.setBoundsI(boundsStay[1] + 1, 0);
+				int[] temp = boundsReduce.clone();
+				temp[1] = boundsStay[1];
+				temp[5] = boundsStay[4] - 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[4] <= boundsReduce[4] && boundsStay[1] >= boundsReduce[1]) {
+				bounds2.setBoundsI(boundsStay[5] + 1, 4);
+				int[] temp = boundsReduce.clone();
+				temp[5] = boundsStay[5];
+				temp[1] = boundsStay[0] - 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else if (boundsStay[5] >= boundsReduce[5] && boundsStay[1] >= boundsReduce[1]) {
+				bounds2.setBoundsI(boundsStay[4] - 1, 5);
+				int[] temp = boundsReduce.clone();
+				temp[4] = boundsStay[4];
+				temp[1] = boundsStay[0] - 1;
+				added = true;
+				add = 1;
+				bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+				return true;
+			} else {
+				if (boundsStay[4] <= boundsReduce[5] && boundsStay[4] > boundsReduce[4]) {
+					bounds2.setBoundsI(boundsStay[4], 4);
+					int[] temp = boundsReduce.clone();
+					temp[5] = boundsStay[4] - 1;
+					added = true;
+					add = 1;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					return true;
+				} else if (boundsStay[5] >= boundsReduce[4] && boundsStay[5] < boundsReduce[5]) {
+					bounds2.setBoundsI(boundsStay[5], 5);
+					int[] temp = boundsReduce.clone();
+					temp[4] = boundsStay[5] + 1;
+					added = true;
+					add = 1;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					return true;
+				} else if (boundsStay[0] <= boundsReduce[1] && boundsStay[0] > boundsReduce[0]) {
+					bounds2.setBoundsI(boundsStay[0], 0);
+					int[] temp = boundsReduce.clone();
+					temp[1] = boundsStay[0] - 1;
+					added = true;
+					add = 1;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					return true;
+				} else if (boundsStay[1] >= boundsReduce[0] && boundsStay[1] < boundsReduce[1]) {
+					bounds2.setBoundsI(boundsStay[1], 1);
+					int[] temp = boundsReduce.clone();
+					temp[0] = boundsStay[1] + 1;
+					added = true;
+					add = 1;
+					bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private void splitterZ(Bounds bound, LinkedList<Bounds> bounds) {
@@ -635,12 +683,60 @@ public class Day22 implements IDay {
 		int split = min - min % splitSize;
 		if (split < min)
 			split += splitSize;
-		for (; split <= max; split += splitSize) {
+		for (; split < max; split += splitSize) {
 			cube[5] = split;
 			bounds.add(new Bounds(cube, bound.isTurn()));
 			cube[4] = split + 1;
 		}
 		cube[5] = max;
 		bounds.add(new Bounds(cube, bound.isTurn()));
+	}
+
+	private void firstTwoDimensionsIn(Bounds bounds2, LinkedList<Bounds> bounds, int pos, int[] boundsStay,
+	                                  int[] boundsReduce) {
+		if (boundsStay[4] <= boundsReduce[4])
+			bounds2.setBoundsI(boundsStay[5] + 1, 4);
+		else if (boundsStay[5] >= boundsReduce[5])
+			bounds2.setBoundsI(boundsStay[4] - 1, 5);
+		else {
+			bounds2.setBoundsI(boundsStay[4] - 1, 5);
+			int[] temp = boundsReduce.clone();
+			temp[4] = boundsStay[5] + 1;
+			added = true;
+			add = 1;
+			bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+		}
+	}
+
+	private void middleDimensionOnlyNotIn(Bounds bounds2, LinkedList<Bounds> bounds, int pos, int[] boundsStay,
+	                                      int[] boundsReduce) {
+		if (boundsStay[2] <= boundsReduce[2])
+			bounds2.setBoundsI(boundsStay[3] + 1, 2);
+		else if (boundsStay[3] >= boundsReduce[3])
+			bounds2.setBoundsI(boundsStay[2] - 1, 3);
+		else {
+			bounds2.setBoundsI(boundsStay[2] - 1, 3);
+			int[] temp = boundsReduce.clone();
+			temp[2] = boundsStay[3] + 1;
+			added = true;
+			add = 1;
+			bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+		}
+	}
+
+	private void lastTwoDimensionsFullyIn(Bounds bounds2, LinkedList<Bounds> bounds, int pos, int[] boundsStay,
+	                                      int[] boundsReduce) {
+		if (boundsStay[0] <= boundsReduce[0])
+			bounds2.setBoundsI(boundsStay[1] + 1, 0);
+		else if (boundsStay[1] >= boundsReduce[1])
+			bounds2.setBoundsI(boundsStay[0] - 1, 1);
+		else {
+			bounds2.setBoundsI(boundsStay[0] - 1, 1);
+			int[] temp = boundsReduce.clone();
+			temp[0] = boundsStay[1] + 1;
+			added = true;
+			add = 1;
+			bounds.add(pos, new Bounds(temp, bounds2.isTurn()));
+		}
 	}
 }
