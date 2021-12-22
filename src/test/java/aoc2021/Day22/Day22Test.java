@@ -10,21 +10,21 @@ class Day22Test {
 
 	@Test void testPart1A() {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day22testA.txt"));
-		assertEquals(39, new Day22().part1(dataTest));
+		assertEquals(39, new Day22().part(dataTest, 1));
 	}
 
 	@Test void testPart1B() {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day22testB.txt"));
-		assertEquals(590784, new Day22().part1(dataTest));
+		assertEquals(590784, new Day22().part(dataTest, 1));
 	}
 
 	@Test void testPart1C() {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day22testC.txt"));
-		assertEquals(474140, new Day22().part1(dataTest));
+		assertEquals(474140, new Day22().part(dataTest, 1));
 	}
 
 	@Test void testPart2() {
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day22testC.txt"));
-		assertEquals(2758514936282235L, new Day22().part2(dataTest));
+		assertEquals(2758514936282235L, new Day22().part(dataTest, 2));
 	}
 }
