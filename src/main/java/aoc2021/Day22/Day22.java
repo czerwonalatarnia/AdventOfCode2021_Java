@@ -18,9 +18,20 @@ public class Day22 implements IDay {
 		int[] bound = new int[6];
 		for (var line : data) {
 			turn = findTheBounds(bound, line);
-			bounds.add(new Bounds(bound, turn));
+			Bounds toAdd = new Bounds(bound, turn);
+			for (int j = bounds.size() - 1; j >= 0; j--) {
+				if (toAdd.contains(bounds.get(j)))
+					bounds.remove(j);
+				if (toAdd.intersect(bounds.get(j))) {
+					LinkedList<Bounds> temp = toAdd.dissect(bounds.get(j));
+					bounds.remove(j);
+					bounds.addAll(j, temp);
+				}
+			}
+			if (turn)
+				bounds.add(toAdd);
 		}
-		for (int repeat = 0; CHANGED; repeat++) {
+		while (CHANGED) {
 			CHANGED = false;
 			for (int i = bounds.size() - 1; i > 0; i--) {
 				for (int j = i - 1; j >= 0; j--) {
