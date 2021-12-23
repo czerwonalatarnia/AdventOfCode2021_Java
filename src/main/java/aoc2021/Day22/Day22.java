@@ -16,7 +16,10 @@ public class Day22 implements IDay {
 		LinkedList<Bounds> bounds = new LinkedList<>();
 		boolean turn;
 		int[] bound = new int[6];
+		int counter = 0;
 		for (var line : data) {
+			counter++;
+			System.out.println("We are at line " + counter);
 			turn = findTheBounds(bound, line);
 			Bounds toAdd = new Bounds(bound, turn);
 			for (int j = bounds.size() - 1; j >= 0; j--) {
@@ -31,7 +34,7 @@ public class Day22 implements IDay {
 			if (turn) {
 				bounds.add(toAdd);
 				for (int i = bounds.size() - 1; i > 0; i--) {
-					System.out.println("We are at " + i + " left to check.");
+					System.out.println("\tWe are at " + i + " left to check.");
 					for (int j = i - 1; j >= 0; j--) {
 						if (bounds.get(i)
 						          .contains(bounds.get(j))) {
