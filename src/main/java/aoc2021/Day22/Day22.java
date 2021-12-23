@@ -28,12 +28,33 @@ public class Day22 implements IDay {
 					bounds.addAll(j, temp);
 				}
 			}
-			if (turn)
+			if (turn) {
 				bounds.add(toAdd);
+				for (int i = bounds.size() - 1; i > 0; i--) {
+					System.out.println("We are at " + i + " left to check.");
+					for (int j = i - 1; j >= 0; j--) {
+						if (bounds.get(i)
+						          .contains(bounds.get(j))) {
+							bounds.remove(j);
+							i--;
+							continue;
+						}
+						if (bounds.get(i)
+						          .intersect(bounds.get(j))) {
+							LinkedList<Bounds> temp = bounds.get(i)
+							                                .dissect(bounds.get(j));
+							bounds.remove(j);
+							bounds.addAll(j, temp);
+							i += temp.size() - 1;
+						}
+					}
+				}
+			}
 		}
 		while (CHANGED) {
 			CHANGED = false;
 			for (int i = bounds.size() - 1; i > 0; i--) {
+				System.out.println("We are at " + i + " left to check.");
 				for (int j = i - 1; j >= 0; j--) {
 					if (bounds.get(i)
 					          .contains(bounds.get(j))) {
