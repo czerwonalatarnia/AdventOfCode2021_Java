@@ -1,0 +1,3 @@
+First part done on paper.
+
+Second part done in Excel, where the only code of today (for now) is contained - the SUM ("suma" function) so I don't have to add all numbers by myself on calculator and the IF ("jeżeli) funtion checking if I correctly retyped the result of SUM to copy-paste into AoC site.
