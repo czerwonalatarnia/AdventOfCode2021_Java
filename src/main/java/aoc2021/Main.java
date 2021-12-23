@@ -11,6 +11,6 @@ public class Main {
 		System.out.println("Welcome to Advent of Code 2021!\n");
 		int DAY = LocalDate.now(ZoneId.of("Europe/Warsaw")).getDayOfMonth();
 		int MONTH = LocalDate.now(ZoneId.of("Europe/Warsaw")).getMonthValue();
-		RunHelper.runChallenges(DAY, MONTH);
+		RunHelper.runChallenges(22, MONTH);
 	}
 }
