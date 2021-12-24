@@ -14,11 +14,11 @@ public class Day24 implements IDay {
 	long part1(LinkedList<String> data) {
 		int[] dimensions = new int[]{0, 0, 0, 1};
 		long monad = 100_000_000_000_000L;
-		String MONAD = String.valueOf(monad);
+		String MONAD;
 		int from;
 		int to;
 		while (dimensions[3] != 0) {
-			dimensions = new int[]{0, 0, 0, 1};
+			dimensions = new int[]{0, 0, 0, 0};
 			int error = 0;
 			int charAt = 0;
 			monad--;
@@ -27,10 +27,10 @@ public class Day24 implements IDay {
 				monad--;
 				MONAD = String.valueOf(monad);
 			}
-			System.out.println(MONAD);
+			System.out.println(monad);
 			for (var line : data) {
 				switch (line.substring(0, 3)) {
-					case "inp":
+					case "inp" -> {
 						switch (line.charAt(4)) {
 							case 'w' -> dimensions[0] = MONAD.charAt(charAt) - '0';
 							case 'x' -> dimensions[1] = MONAD.charAt(charAt) - '0';
@@ -38,24 +38,24 @@ public class Day24 implements IDay {
 							case 'z' -> dimensions[3] = MONAD.charAt(charAt) - '0';
 						}
 						charAt++;
-						break;
-					case "add":
+					}
+					case "add" -> {
 						to = getTo(line);
 						from = getFrom(line);
 						if (from < 0)
 							dimensions[to] += Integer.parseInt(line.substring(6));
 						else
 							dimensions[to] += dimensions[from];
-						break;
-					case "mul":
+					}
+					case "mul" -> {
 						to = getTo(line);
 						from = getFrom(line);
 						if (from < 0)
 							dimensions[to] *= Integer.parseInt(line.substring(6));
 						else
 							dimensions[to] *= dimensions[from];
-						break;
-					case "div":
+					}
+					case "div" -> {
 						to = getTo(line);
 						from = getFrom(line);
 						if (from < 0)
@@ -66,8 +66,8 @@ public class Day24 implements IDay {
 							error = -1;
 						else
 							dimensions[to] /= from;
-						break;
-					case "mod":
+					}
+					case "mod" -> {
 						to = getTo(line);
 						from = getFrom(line);
 						if (from < 0)
@@ -80,15 +80,15 @@ public class Day24 implements IDay {
 							error = -21;
 						else
 							dimensions[to] /= from;
-						break;
-					case "eql":
+					}
+					case "eql" -> {
 						to = getTo(line);
 						from = getFrom(line);
 						if (from < 0)
 							dimensions[to] = dimensions[to] == Integer.parseInt(line.substring(6)) ? 1 : 0;
 						else
 							dimensions[to] = dimensions[to] == dimensions[from] ? 1 : 0;
-						break;
+					}
 				}
 				if (error < 0)
 					break;
