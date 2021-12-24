@@ -13,52 +13,21 @@ public class Day22 implements IDay {
 	long part(LinkedList<String> data, int part) {
 		LinkedList<Bounds> bounds = new LinkedList<>();
 		boolean turn;
-		int[] bound = new int[6];
+		long[] bound = new long[6];
 		for (var line : data) {
 			turn = findTheBounds(bound, line);
 			Bounds toAdd = new Bounds(bound, turn);
 			for (int j = bounds.size() - 1; j >= 0; j--) {
-				if (toAdd.contains(bounds.get(j))) {
+				if (toAdd.contains(bounds.get(j)))
 					bounds.remove(j);
-					continue;
-				}
-				if (toAdd.intersect(bounds.get(j))) {
+				else if (toAdd.intersect(bounds.get(j))) {
 					LinkedList<Bounds> temp = toAdd.dissect(bounds.get(j));
 					bounds.remove(j);
-					bounds.addAll(j, temp);
-				}
-			}
-			for (int j = bounds.size() - 1; j >= 0; j--) {
-				if (toAdd.contains(bounds.get(j))) {
-					bounds.remove(j);
-					continue;
-				}
-				if (toAdd.intersect(bounds.get(j))) {
-					LinkedList<Bounds> temp = toAdd.dissect(bounds.get(j));
-					bounds.remove(j);
-					bounds.addAll(j, temp);
+					bounds.addAll(temp);
 				}
 			}
 			if (toAdd.isTurn())
 				bounds.add(toAdd);
-			/*for (int i = bounds.size() - 1; i > 0; i--) {
-				for (int j = i - 1; j >= 0; j--) {
-					if (bounds.get(i)
-					          .contains(bounds.get(j))) {
-						bounds.remove(j);
-						i--;
-						continue;
-					}
-					if (bounds.get(i)
-					          .intersect(bounds.get(j))) {
-						LinkedList<Bounds> temp = bounds.get(i)
-						                                .dissect(bounds.get(j));
-						bounds.remove(j);
-						bounds.addAll(j, temp);
-						i += temp.size() - 1;
-					}
-				}
-			}*/
 		}
 		long result = 0;
 		long smallResult = 0;
@@ -78,18 +47,18 @@ public class Day22 implements IDay {
 			return result;
 	}
 
-	private boolean findTheBounds(int[] bounds, String line) {
+	private boolean findTheBounds(long[] bounds, String line) {
 		boolean turn;
 		turn = line.charAt(1) == 'n';
-		bounds[0] = Integer.parseInt(line.substring(line.indexOf('=') + 1, line.indexOf('.')));
+		bounds[0] = Long.parseLong(line.substring(line.indexOf('=') + 1, line.indexOf('.')));
 		line = line.substring(line.indexOf('.') + 2);
-		bounds[1] = Integer.parseInt(line.substring(0, line.indexOf(',')));
-		bounds[2] = Integer.parseInt(line.substring(line.indexOf('=') + 1, line.indexOf('.')));
+		bounds[1] = Long.parseLong(line.substring(0, line.indexOf(',')));
+		bounds[2] = Long.parseLong(line.substring(line.indexOf('=') + 1, line.indexOf('.')));
 		line = line.substring(line.indexOf('.') + 2);
-		bounds[3] = Integer.parseInt(line.substring(0, line.indexOf(',')));
-		bounds[4] = Integer.parseInt(line.substring(line.indexOf('=') + 1, line.indexOf('.')));
+		bounds[3] = Long.parseLong(line.substring(0, line.indexOf(',')));
+		bounds[4] = Long.parseLong(line.substring(line.indexOf('=') + 1, line.indexOf('.')));
 		line = line.substring(line.lastIndexOf('.') + 1);
-		bounds[5] = Integer.parseInt(line);
+		bounds[5] = Long.parseLong(line);
 		return turn;
 	}
 }
