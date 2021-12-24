@@ -101,7 +101,6 @@ public class Bounds implements Comparable<Bounds> {
 			xAxis = new int[]{otherBounds[0], otherBounds[1]};
 		else
 			System.out.println("ERROR - somehow you missed X axis");
-
 		if (otherBounds[2] < bounds[2] && otherBounds[3] > bounds[3])
 			yAxis = new int[]{otherBounds[2], bounds[2] - 1, bounds[2], bounds[3], bounds[3] + 1, otherBounds[3]};
 		else if (otherBounds[2] < bounds[2] && otherBounds[3] <= bounds[3])
@@ -112,7 +111,6 @@ public class Bounds implements Comparable<Bounds> {
 			yAxis = new int[]{otherBounds[2], otherBounds[3]};
 		else
 			System.out.println("ERROR - somehow you missed Y axis");
-
 		if (otherBounds[4] < bounds[4] && otherBounds[5] > bounds[5])
 			zAxis = new int[]{otherBounds[4], bounds[4] - 1, bounds[4], bounds[5], bounds[5] + 1, otherBounds[5]};
 		else if (otherBounds[4] < bounds[4] && otherBounds[5] <= bounds[5])
@@ -150,8 +148,7 @@ public class Bounds implements Comparable<Bounds> {
 						temp[3] = yAxis[y + 1];
 						temp[4] = zAxis[z];
 						temp[5] = zAxis[z + 1];
-						if (checkBounds(temp))
-							returnToSender.add(new Bounds(temp, otherTurn));
+						returnToSender.add(new Bounds(temp, otherTurn));
 					}
 				}
 			}
@@ -161,9 +158,5 @@ public class Bounds implements Comparable<Bounds> {
 
 	public boolean isTurn() {
 		return turn;
-	}
-
-	private boolean checkBounds(int[] temp) {
-		return temp[0] <= temp[1] && temp[2] <= temp[3] && temp[4] <= temp[5];
 	}
 }

@@ -28,7 +28,13 @@ class Day22Test {
 		assertEquals(2758514936282235L, new Day22().part(dataTest, 2));
 	}
 
-	@Test void testPart3() {
+	@Test void testPart1Puzzle() {
+		Path resourcePath = Path.of("src", "main", "resources");
+		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day22.txt"));
+		assertEquals(647062, new Day22().part(dataTest, 1));
+	}
+
+	@Test void testPuzzle() {
 		Path resourcePath = Path.of("src", "main", "resources");
 		var dataTest = DataReader.readAlchemyString(resourcePath.resolve("day22.txt"));
 		assertEquals(0, new Day22().part(dataTest, 3));

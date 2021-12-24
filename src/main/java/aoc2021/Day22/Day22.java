@@ -5,8 +5,6 @@ import aoc2021.IDay;
 import aoc2021.own.functions.DataReader;
 
 public class Day22 implements IDay {
-	boolean CHANGED = true;
-
 	public void day() {
 		LinkedList<String> data = DataReader.readAlchemyString(DataReader.createFilePath(22));
 		part(data, 3);
@@ -16,54 +14,39 @@ public class Day22 implements IDay {
 		LinkedList<Bounds> bounds = new LinkedList<>();
 		boolean turn;
 		int[] bound = new int[6];
-		int counter = 0;
 		for (var line : data) {
-			counter++;
-			System.out.println("We are at line " + counter);
 			turn = findTheBounds(bound, line);
 			Bounds toAdd = new Bounds(bound, turn);
 			for (int j = bounds.size() - 1; j >= 0; j--) {
-				if (toAdd.contains(bounds.get(j)))
+				if (toAdd.contains(bounds.get(j))) {
 					bounds.remove(j);
+					continue;
+				}
 				if (toAdd.intersect(bounds.get(j))) {
 					LinkedList<Bounds> temp = toAdd.dissect(bounds.get(j));
 					bounds.remove(j);
 					bounds.addAll(j, temp);
 				}
 			}
-			if (turn) {
-				bounds.add(toAdd);
-				for (int i = bounds.size() - 1; i > 0; i--) {
-					System.out.println("\tWe are at " + i + " left to check.");
-					for (int j = i - 1; j >= 0; j--) {
-						if (bounds.get(i)
-						          .contains(bounds.get(j))) {
-							bounds.remove(j);
-							i--;
-							continue;
-						}
-						if (bounds.get(i)
-						          .intersect(bounds.get(j))) {
-							LinkedList<Bounds> temp = bounds.get(i)
-							                                .dissect(bounds.get(j));
-							bounds.remove(j);
-							bounds.addAll(j, temp);
-							i += temp.size() - 1;
-						}
-					}
+			for (int j = bounds.size() - 1; j >= 0; j--) {
+				if (toAdd.contains(bounds.get(j))) {
+					bounds.remove(j);
+					continue;
+				}
+				if (toAdd.intersect(bounds.get(j))) {
+					LinkedList<Bounds> temp = toAdd.dissect(bounds.get(j));
+					bounds.remove(j);
+					bounds.addAll(j, temp);
 				}
 			}
-		}
-		while (CHANGED) {
-			CHANGED = false;
-			for (int i = bounds.size() - 1; i > 0; i--) {
-				System.out.println("We are at " + i + " left to check.");
+			if (toAdd.isTurn())
+				bounds.add(toAdd);
+			/*for (int i = bounds.size() - 1; i > 0; i--) {
 				for (int j = i - 1; j >= 0; j--) {
 					if (bounds.get(i)
 					          .contains(bounds.get(j))) {
 						bounds.remove(j);
 						i--;
-						CHANGED = true;
 						continue;
 					}
 					if (bounds.get(i)
@@ -72,11 +55,10 @@ public class Day22 implements IDay {
 						                                .dissect(bounds.get(j));
 						bounds.remove(j);
 						bounds.addAll(j, temp);
-						CHANGED = true;
 						i += temp.size() - 1;
 					}
 				}
-			}
+			}*/
 		}
 		long result = 0;
 		long smallResult = 0;
