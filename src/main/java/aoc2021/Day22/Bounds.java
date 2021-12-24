@@ -91,53 +91,68 @@ public class Bounds implements Comparable<Bounds> {
 		int[] xAxis = new int[0];
 		int[] yAxis = new int[0];
 		int[] zAxis = new int[0];
-		if (otherBounds[0] <= bounds[0] && otherBounds[1] >= bounds[1])
+		if (otherBounds[0] < bounds[0] && otherBounds[1] > bounds[1])
 			xAxis = new int[]{otherBounds[0], bounds[0] - 1, bounds[0], bounds[1], bounds[1] + 1, otherBounds[1]};
-		else if (otherBounds[0] <= bounds[0] && otherBounds[1] < bounds[1])
+		else if (otherBounds[0] < bounds[0] && otherBounds[1] <= bounds[1])
 			xAxis = new int[]{otherBounds[0], bounds[0] - 1, bounds[0], otherBounds[1]};
-		else if (otherBounds[0] > bounds[0] && otherBounds[1] >= bounds[1])
+		else if (otherBounds[0] >= bounds[0] && otherBounds[1] > bounds[1])
 			xAxis = new int[]{otherBounds[0], bounds[1], bounds[1] + 1, otherBounds[1]};
-		else if (otherBounds[0] > bounds[0] && otherBounds[1] < bounds[1])
+		else if (otherBounds[0] >= bounds[0] && otherBounds[1] <= bounds[1])
 			xAxis = new int[]{otherBounds[0], otherBounds[1]};
 		else
 			System.out.println("ERROR - somehow you missed X axis");
 
-		if (otherBounds[2] <= bounds[2] && otherBounds[3] >= bounds[3])
+		if (otherBounds[2] < bounds[2] && otherBounds[3] > bounds[3])
 			yAxis = new int[]{otherBounds[2], bounds[2] - 1, bounds[2], bounds[3], bounds[3] + 1, otherBounds[3]};
-		else if (otherBounds[2] <= bounds[2] && otherBounds[3] < bounds[3])
+		else if (otherBounds[2] < bounds[2] && otherBounds[3] <= bounds[3])
 			yAxis = new int[]{otherBounds[2], bounds[2] - 1, bounds[2], otherBounds[3]};
-		else if (otherBounds[2] > bounds[2] && otherBounds[3] >= bounds[3])
+		else if (otherBounds[2] >= bounds[2] && otherBounds[3] > bounds[3])
 			yAxis = new int[]{otherBounds[2], bounds[3], bounds[3] + 1, otherBounds[3]};
-		else if (otherBounds[2] > bounds[2] && otherBounds[3] < bounds[3])
+		else if (otherBounds[2] >= bounds[2] && otherBounds[3] <= bounds[3])
 			yAxis = new int[]{otherBounds[2], otherBounds[3]};
 		else
 			System.out.println("ERROR - somehow you missed Y axis");
 
-		if (otherBounds[4] <= bounds[4] && otherBounds[5] >= bounds[5])
+		if (otherBounds[4] < bounds[4] && otherBounds[5] > bounds[5])
 			zAxis = new int[]{otherBounds[4], bounds[4] - 1, bounds[4], bounds[5], bounds[5] + 1, otherBounds[5]};
-		else if (otherBounds[4] <= bounds[4] && otherBounds[5] < bounds[5])
+		else if (otherBounds[4] < bounds[4] && otherBounds[5] <= bounds[5])
 			zAxis = new int[]{otherBounds[4], bounds[4] - 1, bounds[4], otherBounds[5]};
-		else if (otherBounds[4] > bounds[4] && otherBounds[5] >= bounds[5])
+		else if (otherBounds[4] >= bounds[4] && otherBounds[5] > bounds[5])
 			zAxis = new int[]{otherBounds[4], bounds[5], bounds[5] + 1, otherBounds[5]};
-		else if (otherBounds[4] > bounds[4] && otherBounds[5] < bounds[5])
+		else if (otherBounds[4] >= bounds[4] && otherBounds[5] <= bounds[5])
 			zAxis = new int[]{otherBounds[4], otherBounds[5]};
 		else
 			System.out.println("ERROR - somehow you missed Z axis");
 		int[] temp = new int[6];
-		for (int x = 0; x < xAxis.length; x += 2) {
-			for (int y = 0; y < yAxis.length; y += 2) {
-				for (int z = 0; z < zAxis.length; z += 2) {
-					if (xAxis[x] >= bounds[0] && xAxis[x + 1] <= bounds[1] && yAxis[y] >= bounds[2] &&
-					    yAxis[y + 1] <= bounds[3] && zAxis[z] >= bounds[4] && zAxis[z + 1] <= bounds[5])
-						continue;
-					temp[0] = xAxis[x];
-					temp[1] = xAxis[x + 1];
-					temp[2] = yAxis[y];
-					temp[3] = yAxis[y + 1];
-					temp[4] = zAxis[z];
-					temp[5] = zAxis[z + 1];
-					if (checkBounds(temp))
-						returnToSender.add(new Bounds(temp, otherTurn));
+		if (xAxis.length + yAxis.length + zAxis.length == 18) {
+			returnToSender.add(new Bounds(new int[]{otherBounds[0], otherBounds[1], otherBounds[2], otherBounds[3],
+			                                        otherBounds[4], bounds[4] - 1}, otherTurn));
+			returnToSender.add(new Bounds(new int[]{otherBounds[0], otherBounds[1], otherBounds[2], otherBounds[3],
+			                                        bounds[5] - 1, otherBounds[5]}, otherTurn));
+			returnToSender.add(new Bounds(new int[]{otherBounds[0], otherBounds[1], otherBounds[2], bounds[2] - 1,
+			                                        bounds[4], bounds[5]}, otherTurn));
+			returnToSender.add(new Bounds(new int[]{otherBounds[0], otherBounds[1], bounds[3] + 1, otherBounds[3],
+			                                        bounds[4], bounds[5]}, otherTurn));
+			returnToSender.add(new Bounds(new int[]{otherBounds[0], bounds[0] - 1, bounds[2], bounds[3], bounds[4],
+			                                        bounds[5]}, otherTurn));
+			returnToSender.add(new Bounds(new int[]{bounds[1] + 1, otherBounds[1], bounds[2], bounds[3], bounds[4],
+			                                        bounds[5]}, otherTurn));
+		} else {
+			for (int x = 0; x < xAxis.length; x += 2) {
+				for (int y = 0; y < yAxis.length; y += 2) {
+					for (int z = 0; z < zAxis.length; z += 2) {
+						if (xAxis[x] >= bounds[0] && xAxis[x + 1] <= bounds[1] && yAxis[y] >= bounds[2] &&
+						    yAxis[y + 1] <= bounds[3] && zAxis[z] >= bounds[4] && zAxis[z + 1] <= bounds[5])
+							continue;
+						temp[0] = xAxis[x];
+						temp[1] = xAxis[x + 1];
+						temp[2] = yAxis[y];
+						temp[3] = yAxis[y + 1];
+						temp[4] = zAxis[z];
+						temp[5] = zAxis[z + 1];
+						if (checkBounds(temp))
+							returnToSender.add(new Bounds(temp, otherTurn));
+					}
 				}
 			}
 		}
