@@ -36,46 +36,7 @@ public class Day24 implements IDay {
 
 	// All dependencies on each position of the string were found out by ALUTestUnit and ALUTesting.
 
-	long part2(LinkedList<String> data) {
-		return 0;
-	}
 
-	private String getMonadString(long monad) {
-		// different: 1, 2, 3, 6, 7, 10, 14
-		// the same: 4, 5, 8, 9, 11, 12, 13
-		String monadString = String.valueOf(monad);
-		return String.valueOf(monadString.charAt(0)) + monadString.charAt(1) + monadString.charAt(2) + "99" +
-		       monadString.charAt(3) + monadString.charAt(4) + "99" + monadString.charAt(5) + "999" +
-		       monadString.charAt(6);
-	}
-
-	private boolean ALU(LinkedList<String> data, long[] dimensions, String MONAD) {
-		int charAt = 0;
-		for (var line : data) {
-			switch (line.substring(0, 3)) {
-				case "inp" -> {
-					input(dimensions, MONAD, charAt, line);
-					charAt++;
-				}
-				case "add" -> addition(dimensions, line);
-				case "mul" -> multiply(dimensions, line);
-				case "div" -> {
-					if (!division(dimensions, line))
-						return false;
-				}
-				case "mod" -> {
-					if (!modulo(dimensions, line))
-						return false;
-				}
-				case "eql" -> equals(dimensions, line);
-				default -> {
-					System.out.println("ERROR ERROR ERROR ERROR");
-					return false;
-				}
-			}
-		}
-		return true;
-	}
 
 	private void input(long[] dimensions, String MONAD, int charAt, String line) {
 		switch (line.charAt(4)) {
@@ -118,11 +79,11 @@ public class Day24 implements IDay {
 			substitute = Long.parseLong(line.substring(6));
 		else
 			substitute = dimensions[from];
-		if (from == 0)
-			return false;
+		if (substitute == 0)
+			return true;
 		else
 			dimensions[to] /= substitute;
-		return true;
+		return false;
 	}
 
 	private boolean modulo(long[] dimensions, String line) {
@@ -135,13 +96,13 @@ public class Day24 implements IDay {
 			substitute = Long.parseLong(line.substring(6));
 		else
 			substitute = dimensions[from];
-		if (from <= 0)
-			return false;
+		if (substitute <= 0)
+			return true;
 		else if (dimensions[to] < 0)
-			return false;
+			return true;
 		else
-			dimensions[to] /= substitute;
-		return true;
+			dimensions[to] %= substitute;
+		return false;
 	}
 
 	private void equals(long[] dimensions, String line) {
@@ -177,37 +138,37 @@ public class Day24 implements IDay {
 		return from;
 	}
 
-	void ALUTestUnit(LinkedList<String> data) {
-		long[] dimensions;
-		long counter = 1;
-		LinkedList<String> testingUnit = new LinkedList<>();
-		testingUnit.add("91111111111111");
-		testingUnit.add("19111111111111");
-		testingUnit.add("11911111111111");
-		testingUnit.add("11191111111111");
-		testingUnit.add("11119111111111");
-		testingUnit.add("11111911111111");
-		testingUnit.add("11111191111111");
-		testingUnit.add("55582558858885");
-		testingUnit.add("55599559959395");
-		testingUnit.add("11199119919991");
-		for (var el : testingUnit) {
+	long part1(LinkedList<String> data) {
+		long[] dimensions = new long[]{0, 0, 0, 1};
+		// monad need to be 7 digits long
+		long monad = 10_000_000L;
+		String MONAD;
+		while (dimensions[3] != 0 && monad > 1_111_111) {
 			dimensions = new long[]{0, 0, 0, 0};
-			System.out.println(counter + ": " + ALUTesting(data, dimensions, el));
-			counter++;
-		}
-		/*long monad = 28_347_585_311_110L;
-		boolean error = true;
-		while (error && monad < 100_000_000_000_000L) {
-			error = false;
-			dimensions = new long[]{0, 0, 0, 0};
-			monad++;
-			while (String.valueOf(monad).contains("0")) {
-				monad++;
+			monad--;
+			MONAD = getMonadString(monad);
+			while (MONAD.contains("0") && monad >= 1_111_111) {
+				monad--;
+				MONAD = getMonadString(monad);
 			}
-			if (!ALU(data, dimensions, String.valueOf(monad)))
-				error = true;
-		}*/
+			if (ALU(data, dimensions, MONAD))
+				dimensions[3] = 1;
+			else
+				System.out.println(dimensions[3]);
+		}
+		System.out.println(monad);
+		return Long.parseLong(getMonadString(monad));
+	}
+
+	private String getMonadString(long monad) {
+		String monadString = String.valueOf(monad);
+		return String.valueOf(monadString.charAt(0)) + monadString.charAt(1) + monadString.charAt(2) + "99" +
+		       monadString.charAt(3) + monadString.charAt(4) + "99" + monadString.charAt(5) + "999" +
+		       monadString.charAt(6);
+	}
+
+	long part2(LinkedList<String> data) {
+		return 0;
 	}
 
 	private long ALUTesting(LinkedList<String> data, long[] dimensions, String MONAD) {
@@ -229,8 +190,37 @@ public class Day24 implements IDay {
 						System.out.println("\tModulo error");
 				}
 				case "eql" -> equals(dimensions, line);
+				default -> System.out.println("ERROR ERROR ERROR ERROR");
 			}
 		}
 		return dimensions[3];
+	}
+
+	private boolean ALU(LinkedList<String> data, long[] dimensions, String MONAD) {
+		int charAt = 0;
+		for (var line : data) {
+			switch (line.substring(0, 3)) {
+				case "inp" -> {
+					input(dimensions, MONAD, charAt, line);
+					charAt++;
+				}
+				case "add" -> addition(dimensions, line);
+				case "mul" -> multiply(dimensions, line);
+				case "div" -> {
+					if (division(dimensions, line))
+						return true;
+				}
+				case "mod" -> {
+					if (modulo(dimensions, line))
+						return true;
+				}
+				case "eql" -> equals(dimensions, line);
+				default -> {
+					System.out.println("ERROR ERROR ERROR ERROR");
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
